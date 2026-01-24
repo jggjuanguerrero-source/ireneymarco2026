@@ -15,15 +15,32 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden bg-background">
-      {/* Content area - top portion with less padding */}
-      <div className="relative z-10 flex flex-col items-center justify-start px-6 pt-24 pb-4">
+    <section className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden bg-background">
+      {/* Watercolor background - positioned to show behind text like the invitation */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 1.2 }}
+        className="absolute inset-0 flex items-end justify-center"
+      >
+        <img 
+          src={veniceWatercolor} 
+          alt="Venice watercolor illustration" 
+          className="w-full max-w-5xl h-auto object-contain object-bottom"
+          style={{ marginBottom: '-5%' }}
+        />
+        {/* Subtle gradient overlay for better text readability at top */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/40 to-transparent" />
+      </motion.div>
+
+      {/* Content area - positioned at top */}
+      <div className="relative z-10 flex flex-col items-center text-center px-6 pt-28 md:pt-32">
         {/* Save the date - italic serif */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="font-body italic text-base md:text-lg text-muted-foreground tracking-widest mb-4"
+          className="font-body italic text-base md:text-lg text-muted-foreground tracking-widest mb-6"
         >
           save the date
         </motion.p>
@@ -33,7 +50,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="font-script text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-foreground mb-6 leading-tight"
+          className="font-script text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-foreground mb-8 leading-tight"
         >
           Irene
           <span className="text-primary mx-2 md:mx-4">&</span>
@@ -45,11 +62,11 @@ const Hero = () => {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ delay: 0.7, duration: 0.8 }}
-          className="flex items-center justify-center gap-4 mb-4"
+          className="flex items-center justify-center gap-4 mb-5"
         >
-          <div className="w-16 md:w-24 h-px bg-primary/50" />
-          <span className="text-primary/70 text-xs">✦</span>
-          <div className="w-16 md:w-24 h-px bg-primary/50" />
+          <div className="w-16 md:w-24 h-px bg-primary/60" />
+          <span className="text-primary/80 text-xs">✦</span>
+          <div className="w-16 md:w-24 h-px bg-primary/60" />
         </motion.div>
 
         {/* Date */}
@@ -57,7 +74,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.8 }}
-          className="font-serif text-lg md:text-xl lg:text-2xl tracking-[0.1em] text-foreground mb-2"
+          className="font-serif text-lg md:text-xl lg:text-2xl tracking-[0.1em] text-foreground mb-3"
         >
           {t('hero.date')}
         </motion.p>
@@ -67,9 +84,9 @@ const Hero = () => {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ delay: 1, duration: 0.6 }}
-          className="flex items-center justify-center gap-4 mb-2"
+          className="flex items-center justify-center gap-4 mb-3"
         >
-          <div className="w-10 md:w-14 h-px bg-primary/40" />
+          <div className="w-10 md:w-14 h-px bg-primary/50" />
         </motion.div>
 
         {/* Location - italicized script style */}
@@ -77,7 +94,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.8 }}
-          className="font-script text-2xl md:text-3xl text-primary mb-6"
+          className="font-script text-2xl md:text-3xl text-primary mb-10"
         >
           Venecia
         </motion.p>
@@ -85,22 +102,6 @@ const Hero = () => {
         {/* Countdown */}
         <Countdown />
       </div>
-
-      {/* Watercolor illustration - fills remaining space */}
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 1 }}
-        className="relative flex-1 w-full min-h-[300px]"
-      >
-        <img 
-          src={veniceWatercolor} 
-          alt="Venice watercolor illustration" 
-          className="w-full h-full object-cover object-top"
-        />
-        {/* Gradient fade to blend with background */}
-        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-background via-background/80 to-transparent" />
-      </motion.div>
 
       {/* Scroll indicator */}
       <motion.button
