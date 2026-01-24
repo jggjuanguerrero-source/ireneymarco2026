@@ -16,23 +16,23 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden bg-background">
-      {/* Watercolor background - anchored to bottom like the physical invitation */}
+      {/* Watercolor image - fixed to bottom 45% of screen as decorative footer */}
       <motion.div 
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.85 }}
+        animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 1.2 }}
-        className="absolute bottom-0 left-0 right-0 flex items-end justify-center pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-[45vh] pointer-events-none"
       >
-        {/* Gradient mask from solid background to image */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-transparent z-10" />
+        {/* Gradient overlay to blend image into solid background above */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/70 to-transparent z-10" />
         <img 
           src={veniceWatercolor} 
           alt="Venice watercolor illustration" 
-          className="w-full max-w-5xl h-auto object-contain object-bottom"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full object-cover object-bottom"
         />
       </motion.div>
 
-      {/* Content area - positioned at top with clean background */}
+      {/* Content area - positioned at top with clean solid background */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 pt-28 md:pt-32">
         {/* Save the date - italic serif */}
         <motion.p
@@ -44,7 +44,7 @@ const Hero = () => {
           save the date
         </motion.p>
 
-        {/* Names - elegant script with serif ampersand */}
+        {/* Names - elegant script with light classic serif ampersand */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -52,7 +52,16 @@ const Hero = () => {
           className="font-script text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-foreground mb-8 leading-tight"
         >
           Irene
-          <span className="font-serif text-primary mx-2 md:mx-4">&</span>
+          <span 
+            className="text-primary mx-2 md:mx-4"
+            style={{ 
+              fontFamily: "'Playfair Display', serif",
+              fontWeight: 300,
+              fontStyle: 'italic'
+            }}
+          >
+            &
+          </span>
           Marco
         </motion.h1>
 
