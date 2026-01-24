@@ -1,12 +1,55 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useTranslation } from 'react-i18next';
+import Navbar from '@/components/wedding/Navbar';
+import Hero from '@/components/wedding/Hero';
+import Section from '@/components/wedding/Section';
+import Footer from '@/components/wedding/Footer';
 
 const Index = () => {
+  const { t } = useTranslation();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      
+      {/* Hero Section */}
+      <Hero />
+
+      {/* La Boda Section */}
+      <Section
+        id="wedding"
+        title={t('sections.wedding.title')}
+        subtitle={t('sections.wedding.subtitle')}
+        description={t('sections.wedding.description')}
+      />
+
+      {/* Viaje & Hoteles Section */}
+      <Section
+        id="travel"
+        title={t('sections.travel.title')}
+        subtitle={t('sections.travel.subtitle')}
+        description={t('sections.travel.description')}
+        variant="alternate"
+      />
+
+      {/* RSVP Section */}
+      <Section
+        id="rsvp"
+        title={t('sections.rsvp.title')}
+        subtitle={t('sections.rsvp.subtitle')}
+        description={t('sections.rsvp.description')}
+      />
+
+      {/* Música Section */}
+      <Section
+        id="music"
+        title={t('sections.music.title')}
+        subtitle={t('sections.music.subtitle')}
+        description={t('sections.music.description')}
+        variant="alternate"
+      />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

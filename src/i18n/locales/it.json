@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "wedding": "Il Matrimonio",
+    "travel": "Viaggio & Hotel",
+    "rsvp": "RSVP",
+    "music": "Musica"
+  },
+  "hero": {
+    "date": "10 Ottobre, 2026",
+    "location": "Venezia, Italia",
+    "scrollDown": "Scopri di più"
+  },
+  "countdown": {
+    "days": "Giorni",
+    "hours": "Ore",
+    "minutes": "Minuti",
+    "seconds": "Secondi"
+  },
+  "sections": {
+    "wedding": {
+      "title": "Il Matrimonio",
+      "subtitle": "Festeggia con noi nella città più romantica del mondo",
+      "description": "Ci sposiamo a Venezia, dove ogni canale racconta una storia d'amore. Vogliamo condividere questo giorno speciale con te."
+    },
+    "travel": {
+      "title": "Viaggio & Hotel",
+      "subtitle": "Tutto quello che devi sapere per il tuo soggiorno a Venezia",
+      "description": "Abbiamo preparato una selezione di hotel e consigli di viaggio per rendere la tua esperienza indimenticabile."
+    },
+    "rsvp": {
+      "title": "Conferma la tua Presenza",
+      "subtitle": "Speriamo di contare su di te per questo giorno speciale",
+      "description": "Per favore, conferma la tua presenza entro il 1° Luglio 2026."
+    },
+    "music": {
+      "title": "Suggerisci una Canzone",
+      "subtitle": "Aiutaci a creare la playlist perfetta",
+      "description": "Quale canzone non può mancare alla nostra festa? Diccelo."
+    }
+  },
+  "footer": {
+    "madeWith": "Con amore da Venezia"
+  }
+}

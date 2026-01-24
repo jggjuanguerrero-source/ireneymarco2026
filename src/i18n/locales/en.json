@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "wedding": "The Wedding",
+    "travel": "Travel & Hotels",
+    "rsvp": "RSVP",
+    "music": "Music"
+  },
+  "hero": {
+    "date": "October 10th, 2026",
+    "location": "Venice, Italy",
+    "scrollDown": "Discover more"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+  "sections": {
+    "wedding": {
+      "title": "The Wedding",
+      "subtitle": "Celebrate with us in the most romantic city in the world",
+      "description": "We're getting married in Venice, where every canal tells a love story. We want to share this special day with you."
+    },
+    "travel": {
+      "title": "Travel & Hotels",
+      "subtitle": "Everything you need to know for your stay in Venice",
+      "description": "We have prepared a selection of hotels and travel tips to make your experience unforgettable."
+    },
+    "rsvp": {
+      "title": "Confirm Your Attendance",
+      "subtitle": "We hope to count on you for this special day",
+      "description": "Please confirm your attendance before July 1st, 2026."
+    },
+    "music": {
+      "title": "Suggest a Song",
+      "subtitle": "Help us create the perfect playlist",
+      "description": "What song cannot be missing from our party? Tell us."
+    }
+  },
+  "footer": {
+    "madeWith": "With love from Venice"
+  }
+}
