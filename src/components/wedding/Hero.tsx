@@ -16,24 +16,23 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-start overflow-hidden bg-background">
-      {/* Watercolor background - positioned to show behind text like the invitation */}
+      {/* Watercolor background - anchored to bottom like the physical invitation */}
       <motion.div 
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: 0.85 }}
         transition={{ delay: 0.3, duration: 1.2 }}
-        className="absolute inset-0 flex items-end justify-center"
+        className="absolute bottom-0 left-0 right-0 flex items-end justify-center pointer-events-none"
       >
+        {/* Gradient mask from solid background to image */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-transparent z-10" />
         <img 
           src={veniceWatercolor} 
           alt="Venice watercolor illustration" 
           className="w-full max-w-5xl h-auto object-contain object-bottom"
-          style={{ marginBottom: '-5%' }}
         />
-        {/* Subtle gradient overlay for better text readability at top */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/40 to-transparent" />
       </motion.div>
 
-      {/* Content area - positioned at top */}
+      {/* Content area - positioned at top with clean background */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 pt-28 md:pt-32">
         {/* Save the date - italic serif */}
         <motion.p
@@ -45,7 +44,7 @@ const Hero = () => {
           save the date
         </motion.p>
 
-        {/* Names - elegant script */}
+        {/* Names - elegant script with serif ampersand */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,7 +52,7 @@ const Hero = () => {
           className="font-script text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-foreground mb-8 leading-tight"
         >
           Irene
-          <span className="text-primary mx-2 md:mx-4">&</span>
+          <span className="font-serif text-primary mx-2 md:mx-4">&</span>
           Marco
         </motion.h1>
 
@@ -89,14 +88,14 @@ const Hero = () => {
           <div className="w-10 md:w-14 h-px bg-primary/50" />
         </motion.div>
 
-        {/* Location - italicized script style */}
+        {/* Location - connected to i18n */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.8 }}
           className="font-script text-2xl md:text-3xl text-primary mb-10"
         >
-          Venecia
+          {t('hero.location')}
         </motion.p>
 
         {/* Countdown */}
