@@ -23,9 +23,20 @@
       "description": "Ci sposiamo a Venezia, dove ogni canale racconta una storia d'amore. Vogliamo condividere questo giorno speciale con te."
     },
     "travel": {
-      "title": "Viaggio & Hotel",
+      "title": "Viaggio & Alloggio",
       "subtitle": "Tutto quello che devi sapere per il tuo soggiorno a Venezia",
-      "description": "Abbiamo preparato una selezione di hotel e consigli di viaggio per rendere la tua esperienza indimenticabile."
+      "howToArrive": "Come Arrivare",
+      "whereToStay": "Dove Dormire",
+      "viewRoute": "Vedi Percorso su Maps",
+      "busSchedules": "Orari Autobus",
+      "bookNow": "Prenota",
+      "discountCode": "Codice Sconto",
+      "fromAirport": "dall'aeroporto",
+      "categories": {
+        "luxury": "Lusso & Relax",
+        "smart": "Smart Choice",
+        "budget": "Squad / Giovani"
+      }
     },
     "rsvp": {
       "title": "Conferma la tua Presenza",
