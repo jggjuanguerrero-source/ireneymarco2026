@@ -154,7 +154,7 @@ const Navbar = () => {
               
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="transition-colors hover:opacity-70"
+                className="group transition-all duration-300 hover:opacity-70"
                 style={{ color: '#1C1917' }}
                 aria-label="Close menu"
               >
@@ -167,6 +167,7 @@ const Navbar = () => {
                   strokeWidth="1.5" 
                   strokeLinecap="round" 
                   strokeLinejoin="round"
+                  className="transition-transform duration-300 ease-out group-hover:rotate-90"
                 >
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
