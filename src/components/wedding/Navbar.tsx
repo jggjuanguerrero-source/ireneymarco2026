@@ -125,18 +125,23 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 z-50 bg-[#FAFAF9] flex flex-col"
+            className="md:hidden fixed inset-0 flex flex-col"
+            style={{ 
+              zIndex: 9999, 
+              backgroundColor: '#FAFAF9',
+            }}
           >
-            {/* Close Button */}
-            <div className="flex justify-end p-6">
+            {/* Close Button - positioned top right */}
+            <div className="absolute top-6 right-6">
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 text-foreground hover:text-primary transition-colors"
+                className="p-2 transition-colors"
+                style={{ color: '#1c1917' }}
                 aria-label="Close menu"
               >
                 <svg 
-                  width="28" 
-                  height="28" 
+                  width="32" 
+                  height="32" 
                   viewBox="0 0 24 24" 
                   fill="none" 
                   stroke="currentColor" 
@@ -151,7 +156,7 @@ const Navbar = () => {
             </div>
 
             {/* Centered Navigation Links */}
-            <div className="flex-1 flex flex-col items-center justify-center gap-8 pb-20">
+            <div className="flex-1 flex flex-col items-center justify-center gap-10 pb-20">
               {navLinks.map((link, index) => (
                 <motion.button
                   key={link.href}
@@ -159,7 +164,8 @@ const Navbar = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.08, duration: 0.4 }}
                   onClick={() => scrollToSection(link.href)}
-                  className="font-serif text-2xl tracking-wide text-foreground hover:text-primary transition-colors"
+                  className="font-serif text-3xl tracking-wide transition-colors hover:opacity-70"
+                  style={{ color: '#1c1917' }}
                 >
                   {link.label}
                 </motion.button>
@@ -170,7 +176,7 @@ const Navbar = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: navLinks.length * 0.08, duration: 0.4 }}
-                className="mt-4"
+                className="mt-6"
               >
                 <LanguageSelector />
               </motion.div>
