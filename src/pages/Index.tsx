@@ -3,6 +3,8 @@ import Navbar from '@/components/wedding/Navbar';
 import Hero from '@/components/wedding/Hero';
 import Section from '@/components/wedding/Section';
 import TravelSection from '@/components/wedding/TravelSection';
+import RSVPSection from '@/components/wedding/RSVPSection';
+import MusicSection from '@/components/wedding/MusicSection';
 import Footer from '@/components/wedding/Footer';
 
 const Index = () => {
@@ -23,25 +25,14 @@ const Index = () => {
         description={t('sections.wedding.description')}
       />
 
-      {/* Viaje & Hoteles Section - Custom Component */}
+      {/* Viaje & Hoteles Section */}
       <TravelSection />
 
       {/* RSVP Section */}
-      <Section
-        id="rsvp"
-        title={t('sections.rsvp.title')}
-        subtitle={t('sections.rsvp.subtitle')}
-        description={t('sections.rsvp.description')}
-      />
+      <RSVPSection />
 
       {/* Música Section */}
-      <Section
-        id="music"
-        title={t('sections.music.title')}
-        subtitle={t('sections.music.subtitle')}
-        description={t('sections.music.description')}
-        variant="alternate"
-      />
+      <MusicSection />
 
       {/* Footer */}
       <Footer />

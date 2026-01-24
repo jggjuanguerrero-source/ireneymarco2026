@@ -41,12 +41,40 @@
     "rsvp": {
       "title": "Confirma tu Asistencia",
       "subtitle": "Esperamos contar contigo en este día tan especial",
-      "description": "Por favor, confirma tu asistencia antes del 1 de Julio de 2026."
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "email": "Email",
+      "willAttend": "¿Asistirás?",
+      "attending": "¡Sí, allí estaré!",
+      "notAttending": "Lamentablemente no",
+      "plusOne": "¿Vienes acompañado/a?",
+      "plusOneName": "Nombre del acompañante",
+      "guests": "Número de acompañantes",
+      "dietary": "Alergias o restricciones alimentarias",
+      "dietaryPlaceholder": "Ej: vegetariano, sin gluten, alergia a frutos secos...",
+      "submit": "Confirmar Asistencia",
+      "submitting": "Enviando...",
+      "successTitle": "¡Gracias por confirmar!",
+      "successMessage": "Hemos recibido tu confirmación. ¡Nos vemos en Venecia!",
+      "successNotAttending": "Lamentamos que no puedas acompañarnos. ¡Estarás en nuestros corazones!",
+      "errorTitle": "Error al enviar",
+      "errorMessage": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
+      "required": "Este campo es obligatorio",
+      "invalidEmail": "Por favor, introduce un email válido"
     },
     "music": {
-      "title": "Sugiere una Canción",
-      "subtitle": "Ayúdanos a crear la playlist perfecta",
-      "description": "¿Qué canción no puede faltar en nuestra fiesta? Cuéntanos."
+      "title": "DJ & Fiesta",
+      "subtitle": "Ayúdanos a crear la playlist perfecta para la noche",
+      "spotifyTitle": "¿Tienes Spotify?",
+      "spotifyDescription": "Añade canciones directamente a nuestra playlist colaborativa",
+      "spotifyButton": "Añadir a la Playlist",
+      "manualTitle": "Sugerir canción manualmente",
+      "manualDescription": "¿No usas Spotify? Cuéntanos qué canción no puede faltar",
+      "songPlaceholder": "Artista - Nombre de la canción",
+      "sendSuggestion": "Enviar Sugerencia",
+      "sending": "Enviando...",
+      "thankYou": "¡Gracias por tu sugerencia!",
+      "songAdded": "Hemos añadido tu canción a nuestra lista."
     }
   },
   "footer": {
