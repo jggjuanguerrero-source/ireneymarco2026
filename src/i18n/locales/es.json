@@ -23,9 +23,20 @@
       "description": "Nos casamos en Venecia, donde cada canal cuenta una historia de amor. Queremos compartir este día tan especial contigo."
     },
     "travel": {
-      "title": "Viaje & Hoteles",
+      "title": "Viaje & Alojamiento",
       "subtitle": "Todo lo que necesitas saber para tu estancia en Venecia",
-      "description": "Hemos preparado una selección de hoteles y consejos de viaje para que tu experiencia sea inolvidable."
+      "howToArrive": "Cómo Llegar",
+      "whereToStay": "Dónde Dormir",
+      "viewRoute": "Ver Ruta en Maps",
+      "busSchedules": "Horarios Autobuses",
+      "bookNow": "Reservar",
+      "discountCode": "Código Descuento",
+      "fromAirport": "desde el aeropuerto",
+      "categories": {
+        "luxury": "Lujo & Relax",
+        "smart": "Smart Choice",
+        "budget": "Squad / Joven"
+      }
     },
     "rsvp": {
       "title": "Confirma tu Asistencia",

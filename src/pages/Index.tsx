@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import Navbar from '@/components/wedding/Navbar';
 import Hero from '@/components/wedding/Hero';
 import Section from '@/components/wedding/Section';
+import TravelSection from '@/components/wedding/TravelSection';
 import Footer from '@/components/wedding/Footer';
 
 const Index = () => {
@@ -22,14 +23,8 @@ const Index = () => {
         description={t('sections.wedding.description')}
       />
 
-      {/* Viaje & Hoteles Section */}
-      <Section
-        id="travel"
-        title={t('sections.travel.title')}
-        subtitle={t('sections.travel.subtitle')}
-        description={t('sections.travel.description')}
-        variant="alternate"
-      />
+      {/* Viaje & Hoteles Section - Custom Component */}
+      <TravelSection />
 
       {/* RSVP Section */}
       <Section

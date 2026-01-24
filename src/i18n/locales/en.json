@@ -23,9 +23,20 @@
       "description": "We're getting married in Venice, where every canal tells a love story. We want to share this special day with you."
     },
     "travel": {
-      "title": "Travel & Hotels",
+      "title": "Travel & Accommodation",
       "subtitle": "Everything you need to know for your stay in Venice",
-      "description": "We have prepared a selection of hotels and travel tips to make your experience unforgettable."
+      "howToArrive": "How to Get There",
+      "whereToStay": "Where to Stay",
+      "viewRoute": "View Route in Maps",
+      "busSchedules": "Bus Schedules",
+      "bookNow": "Book Now",
+      "discountCode": "Discount Code",
+      "fromAirport": "from the airport",
+      "categories": {
+        "luxury": "Luxury & Relax",
+        "smart": "Smart Choice",
+        "budget": "Squad / Budget"
+      }
     },
     "rsvp": {
       "title": "Confirm Your Attendance",
