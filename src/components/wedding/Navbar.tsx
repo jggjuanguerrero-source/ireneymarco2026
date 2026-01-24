@@ -125,8 +125,15 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 flex flex-col"
+            className="md:hidden flex flex-col overflow-hidden"
             style={{ 
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: '100dvh',
+              width: '100vw',
               zIndex: 9999, 
               backgroundColor: '#FAFAF9',
             }}
