@@ -138,8 +138,8 @@ const Navbar = () => {
               backgroundColor: '#FAFAF9',
             }}
           >
-            {/* Header: Logo left, Close button right */}
-            <div className="absolute top-6 left-6">
+            {/* Header: Logo left, Close button right - flex aligned */}
+            <header className="flex justify-between items-center p-6">
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
@@ -151,14 +151,11 @@ const Navbar = () => {
               >
                 I & M
               </button>
-            </div>
-            
-            {/* Close Button - positioned top right */}
-            <div className="absolute top-6 right-6">
+              
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 transition-colors"
-                style={{ color: '#1c1917' }}
+                className="transition-colors hover:opacity-70"
+                style={{ color: '#1C1917' }}
                 aria-label="Close menu"
               >
                 <svg 
@@ -175,7 +172,7 @@ const Navbar = () => {
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
-            </div>
+            </header>
 
             {/* Centered Navigation Links */}
             <div className="flex-1 flex flex-col items-center justify-center gap-10 pb-20">
