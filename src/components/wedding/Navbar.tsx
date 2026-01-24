@@ -138,6 +138,21 @@ const Navbar = () => {
               backgroundColor: '#FAFAF9',
             }}
           >
+            {/* Header: Logo left, Close button right */}
+            <div className="absolute top-6 left-6">
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="font-script text-3xl tracking-wide transition-colors hover:opacity-70"
+                style={{ color: '#1C1917' }}
+                aria-label="Go to top"
+              >
+                I & M
+              </button>
+            </div>
+            
             {/* Close Button - positioned top right */}
             <div className="absolute top-6 right-6">
               <button
