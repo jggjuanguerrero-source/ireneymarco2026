@@ -27,6 +27,7 @@ export type Database = {
           plus_one: boolean | null
           plus_one_name: string | null
           rsvp_status: boolean | null
+          song_processed: boolean
           song_request: string | null
           table_id: number | null
           updated_at: string
@@ -43,6 +44,7 @@ export type Database = {
           plus_one?: boolean | null
           plus_one_name?: string | null
           rsvp_status?: boolean | null
+          song_processed?: boolean
           song_request?: string | null
           table_id?: number | null
           updated_at?: string
@@ -59,6 +61,7 @@ export type Database = {
           plus_one?: boolean | null
           plus_one_name?: string | null
           rsvp_status?: boolean | null
+          song_processed?: boolean
           song_request?: string | null
           table_id?: number | null
           updated_at?: string
