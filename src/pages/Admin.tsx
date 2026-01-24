@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +18,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
@@ -34,6 +38,9 @@ import {
   Save,
   X,
   Check,
+  ChevronDown,
+  Undo2,
+  CheckSquare,
 } from 'lucide-react';
 
 // ============================================
@@ -52,6 +59,7 @@ interface Guest {
   song_request: string | null;
   plus_one: boolean | null;
   plus_one_name: string | null;
+  song_processed: boolean;
 }
 
 interface Metrics {
@@ -61,17 +69,30 @@ interface Metrics {
   dietary: number;
 }
 
+// Helper to detect anonymous song suggestions
+const isAnonymousSuggestion = (guest: Guest): boolean => {
+  return (
+    guest.email.endsWith('@suggestion.local') ||
+    guest.first_name === 'Anónimo' ||
+    guest.first_name === 'Anónimo Sugerencia'
+  );
+};
+
 const Admin = () => {
   const { toast } = useToast();
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessCode, setAccessCode] = useState('');
   const [codeError, setCodeError] = useState(false);
-  
+
   const [guests, setGuests] = useState<Guest[]>([]);
   const [metrics, setMetrics] = useState<Metrics>({ total: 0, confirmed: 0, pending: 0, dietary: 0 });
   const [loading, setLoading] = useState(true);
   const [editingTableId, setEditingTableId] = useState<{ id: string; value: string } | null>(null);
-  
+
+  // Collapsible states for song sections
+  const [pendingSongsOpen, setPendingSongsOpen] = useState(true);
+  const [addedSongsOpen, setAddedSongsOpen] = useState(false);
+
   // Add guest dialog state
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newGuest, setNewGuest] = useState({
@@ -110,15 +131,16 @@ const Admin = () => {
       return;
     }
 
-    const guestsData = data || [];
+    const guestsData = (data || []) as Guest[];
     setGuests(guestsData);
 
-    // Calculate metrics
+    // Calculate metrics (excluding anonymous suggestions)
+    const realGuests = guestsData.filter((g) => !isAnonymousSuggestion(g));
     setMetrics({
-      total: guestsData.length,
-      confirmed: guestsData.filter((g) => g.rsvp_status === true).length,
-      pending: guestsData.filter((g) => g.rsvp_status === null || g.rsvp_status === false).length,
-      dietary: guestsData.filter((g) => g.dietary_reqs && g.dietary_reqs.trim() !== '').length,
+      total: realGuests.length,
+      confirmed: realGuests.filter((g) => g.rsvp_status === true).length,
+      pending: realGuests.filter((g) => g.rsvp_status === null || g.rsvp_status === false).length,
+      dietary: realGuests.filter((g) => g.dietary_reqs && g.dietary_reqs.trim() !== '').length,
     });
 
     setLoading(false);
@@ -133,7 +155,7 @@ const Admin = () => {
   // Update table_id for a guest
   const handleUpdateTableId = async (guestId: string, tableId: string) => {
     const tableNumber = tableId ? parseInt(tableId, 10) : null;
-    
+
     const { error } = await supabase
       .from('guests')
       .update({ table_id: tableNumber })
@@ -154,6 +176,30 @@ const Admin = () => {
     });
 
     setEditingTableId(null);
+    fetchGuests();
+  };
+
+  // Toggle song processed status
+  const handleToggleSongProcessed = async (guestId: string, processed: boolean) => {
+    const { error } = await supabase
+      .from('guests')
+      .update({ song_processed: processed })
+      .eq('id', guestId);
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: 'No se pudo actualizar el estado',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    toast({
+      title: processed ? '✓ Añadida a Spotify' : '↩ Movida a pendientes',
+      description: processed ? 'Canción marcada como añadida' : 'Canción devuelta a pendientes',
+    });
+
     fetchGuests();
   };
 
@@ -272,10 +318,15 @@ const Admin = () => {
     );
   }
 
-  // Song requests (filtered)
-  const songRequests = guests.filter(
+  // Filter out anonymous suggestions for the guest table
+  const realGuests = guests.filter((g) => !isAnonymousSuggestion(g));
+
+  // Song requests - all guests with songs (including anonymous)
+  const allSongRequests = guests.filter(
     (g) => g.song_request && g.song_request.trim() !== ''
   );
+  const pendingSongs = allSongRequests.filter((g) => !g.song_processed);
+  const addedSongs = allSongRequests.filter((g) => g.song_processed);
 
   // Dashboard
   return (
@@ -451,7 +502,7 @@ const Admin = () => {
           <CardContent>
             {loading ? (
               <div className="text-center py-8 text-slate-500">Cargando...</div>
-            ) : guests.length === 0 ? (
+            ) : realGuests.length === 0 ? (
               <div className="text-center py-8 text-slate-500">
                 No hay invitados registrados
               </div>
@@ -469,7 +520,7 @@ const Admin = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {guests.map((guest) => (
+                    {realGuests.map((guest) => (
                       <TableRow key={guest.id}>
                         <TableCell>
                           <div>
@@ -588,37 +639,127 @@ const Admin = () => {
           </CardContent>
         </Card>
 
-        {/* Song Requests */}
+        {/* Song Requests - Dual Section */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Music className="w-5 h-5" />
               Peticiones de Canciones
               <span className="text-sm font-normal text-slate-500">
-                ({songRequests.length})
+                ({allSongRequests.length} total)
               </span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            {songRequests.length === 0 ? (
-              <p className="text-slate-500 text-center py-4">
-                No hay peticiones de canciones todavía
-              </p>
-            ) : (
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {songRequests.map((guest) => (
-                  <div
-                    key={guest.id}
-                    className="bg-slate-50 rounded-lg p-3 border border-slate-100"
-                  >
-                    <p className="font-medium text-slate-700">{guest.song_request}</p>
-                    <p className="text-xs text-slate-400 mt-1">
-                      — {guest.first_name} {guest.last_name}
-                    </p>
+          <CardContent className="space-y-4">
+            {/* Pending Songs */}
+            <Collapsible open={pendingSongsOpen} onOpenChange={setPendingSongsOpen}>
+              <CollapsibleTrigger asChild>
+                <button className="flex items-center justify-between w-full p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
+                  <span className="flex items-center gap-2 font-medium text-amber-800">
+                    🎵 Pendientes
+                    <span className="bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full text-xs">
+                      {pendingSongs.length}
+                    </span>
+                  </span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-amber-600 transition-transform ${
+                      pendingSongsOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-3">
+                {pendingSongs.length === 0 ? (
+                  <p className="text-slate-500 text-center py-4 text-sm">
+                    ¡Todas las canciones han sido añadidas! 🎉
+                  </p>
+                ) : (
+                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {pendingSongs.map((guest) => (
+                      <div
+                        key={guest.id}
+                        className="bg-white rounded-lg p-3 border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-slate-700 truncate">
+                              {guest.song_request}
+                            </p>
+                            <p className="text-xs text-slate-400 mt-1">
+                              — {isAnonymousSuggestion(guest) ? 'Anónimo' : `${guest.first_name} ${guest.last_name}`}
+                            </p>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="shrink-0 gap-1 text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700"
+                            onClick={() => handleToggleSongProcessed(guest.id, true)}
+                          >
+                            <CheckSquare className="w-3 h-3" />
+                            Añadir
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                )}
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Added Songs */}
+            <Collapsible open={addedSongsOpen} onOpenChange={setAddedSongsOpen}>
+              <CollapsibleTrigger asChild>
+                <button className="flex items-center justify-between w-full p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                  <span className="flex items-center gap-2 font-medium text-green-800">
+                    ✅ Añadidas a Spotify
+                    <span className="bg-green-200 text-green-900 px-2 py-0.5 rounded-full text-xs">
+                      {addedSongs.length}
+                    </span>
+                  </span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-green-600 transition-transform ${
+                      addedSongsOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-3">
+                {addedSongs.length === 0 ? (
+                  <p className="text-slate-500 text-center py-4 text-sm">
+                    No hay canciones añadidas todavía
+                  </p>
+                ) : (
+                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {addedSongs.map((guest) => (
+                      <div
+                        key={guest.id}
+                        className="bg-green-50/50 rounded-lg p-3 border border-green-100"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-slate-600 truncate line-through decoration-green-400">
+                              {guest.song_request}
+                            </p>
+                            <p className="text-xs text-slate-400 mt-1">
+                              — {isAnonymousSuggestion(guest) ? 'Anónimo' : `${guest.first_name} ${guest.last_name}`}
+                            </p>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="shrink-0 gap-1 text-slate-400 hover:text-amber-600 hover:bg-amber-50"
+                            onClick={() => handleToggleSongProcessed(guest.id, false)}
+                          >
+                            <Undo2 className="w-3 h-3" />
+                            Deshacer
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CollapsibleContent>
+            </Collapsible>
           </CardContent>
         </Card>
       </main>
