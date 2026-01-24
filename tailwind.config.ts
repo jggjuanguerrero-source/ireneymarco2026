@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        script: ['"Pinyon Script"', 'cursive'],
-        serif: ['Cinzel', 'serif'],
-        body: ['Lato', 'sans-serif'],
+        script: ['"Great Vibes"', 'cursive'],
+        serif: ['"Playfair Display"', 'serif'],
+        body: ['"Cormorant Garamond"', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",

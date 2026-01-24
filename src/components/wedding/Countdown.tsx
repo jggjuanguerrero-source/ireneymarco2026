@@ -48,28 +48,27 @@ const Countdown = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1.2, duration: 0.8 }}
-      className="flex items-center justify-center gap-4 md:gap-8 lg:gap-12"
+      className="flex items-center justify-center gap-6 md:gap-10 lg:gap-14"
     >
       {timeUnits.map((unit, index) => (
         <div key={unit.label} className="flex items-center">
           <div className="text-center">
             <motion.div
               key={unit.value}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="font-script text-5xl md:text-6xl lg:text-7xl text-primary leading-none"
+              initial={{ opacity: 0.8 }}
+              animate={{ opacity: 1 }}
+              className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground leading-none font-light"
             >
               {unit.value.toString().padStart(2, '0')}
             </motion.div>
-            <p className="font-serif text-xs md:text-sm tracking-[0.2em] uppercase text-muted-foreground mt-2">
+            <p className="font-body italic text-xs md:text-sm tracking-widest text-muted-foreground mt-2 lowercase">
               {unit.label}
             </p>
           </div>
 
-          {/* Separator ornament (not after last item) */}
+          {/* Separator (not after last item) */}
           {index < timeUnits.length - 1 && (
-            <div className="ml-4 md:ml-8 lg:ml-12 text-primary/40 font-serif text-2xl">
+            <div className="ml-6 md:ml-10 lg:ml-14 text-primary/30 text-xl">
               ·
             </div>
           )}

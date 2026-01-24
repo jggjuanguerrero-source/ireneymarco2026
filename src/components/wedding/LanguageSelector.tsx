@@ -29,8 +29,8 @@ const LanguageSelector = () => {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        <span className="text-lg">{currentLang.flag}</span>
-        <span className="font-serif text-sm tracking-wider">{currentLang.label}</span>
+        <span className="text-base">{currentLang.flag}</span>
+        <span className="font-body text-sm tracking-wider">{currentLang.label}</span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
@@ -61,11 +61,11 @@ const LanguageSelector = () => {
                   key={lang.code}
                   onClick={() => changeLanguage(lang.code)}
                   className={`w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-muted/50 transition-colors ${
-                    lang.code === i18n.language ? 'text-primary' : 'text-foreground/80'
+                    lang.code === i18n.language ? 'text-primary' : 'text-foreground/70'
                   }`}
                 >
-                  <span className="text-lg">{lang.flag}</span>
-                  <span className="font-serif text-sm tracking-wider">{lang.label}</span>
+                  <span className="text-base">{lang.flag}</span>
+                  <span className="font-body text-sm tracking-wider">{lang.label}</span>
                 </button>
               ))}
             </motion.div>

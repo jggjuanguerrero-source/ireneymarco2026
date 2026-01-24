@@ -52,9 +52,9 @@ const Navbar = () => {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="font-script text-4xl text-primary hover:opacity-80 transition-opacity cursor-pointer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="font-script text-3xl md:text-4xl text-foreground hover:text-primary transition-colors cursor-pointer"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             I & M
           </motion.a>
@@ -65,7 +65,7 @@ const Navbar = () => {
               <button
                 key={link.href}
                 onClick={() => scrollToSection(link.href)}
-                className="font-serif text-sm tracking-widest uppercase text-foreground/80 hover:text-primary link-elegant transition-colors"
+                className="font-body text-sm tracking-[0.15em] uppercase text-foreground/70 hover:text-primary link-elegant transition-colors"
               >
                 {link.label}
               </button>
@@ -134,7 +134,7 @@ const Navbar = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   onClick={() => scrollToSection(link.href)}
-                  className="font-serif text-base tracking-widest uppercase text-foreground/80 hover:text-primary text-left transition-colors"
+                  className="font-body text-base tracking-[0.15em] uppercase text-foreground/70 hover:text-primary text-left transition-colors"
                 >
                   {link.label}
                 </motion.button>

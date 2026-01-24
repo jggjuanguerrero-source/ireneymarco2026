@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import VenetianOrnament from './VenetianOrnament';
 
 interface SectionProps {
   id: string;
@@ -19,16 +18,19 @@ const Section = ({ id, title, subtitle, description, children, variant = 'defaul
     <section
       id={id}
       ref={ref}
-      className={`section-padding ${variant === 'alternate' ? 'bg-secondary/30' : 'bg-background'}`}
+      className={`section-padding ${variant === 'alternate' ? 'bg-secondary/50' : 'bg-background'}`}
     >
-      <div className="max-w-4xl mx-auto text-center">
-        {/* Ornament */}
+      <div className="max-w-3xl mx-auto text-center">
+        {/* Decorative line top */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          initial={{ scaleX: 0 }}
+          animate={isInView ? { scaleX: 1 } : {}}
           transition={{ duration: 0.8 }}
+          className="flex items-center justify-center gap-4 mb-10"
         >
-          <VenetianOrnament size="sm" className="mx-auto mb-12" />
+          <div className="w-12 h-px bg-primary/40" />
+          <span className="text-primary/50 text-xs">✦</span>
+          <div className="w-12 h-px bg-primary/40" />
         </motion.div>
 
         {/* Title */}
@@ -46,7 +48,7 @@ const Section = ({ id, title, subtitle, description, children, variant = 'defaul
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="font-body text-lg md:text-xl text-muted-foreground mb-8"
+          className="font-body italic text-lg md:text-xl text-muted-foreground mb-8"
         >
           {subtitle}
         </motion.p>
@@ -56,7 +58,7 @@ const Section = ({ id, title, subtitle, description, children, variant = 'defaul
           initial={{ scaleX: 0 }}
           animate={isInView ? { scaleX: 1 } : {}}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="w-24 h-px bg-primary/40 mx-auto mb-8"
+          className="w-16 h-px bg-primary/30 mx-auto mb-8"
         />
 
         {/* Description */}
@@ -64,7 +66,7 @@ const Section = ({ id, title, subtitle, description, children, variant = 'defaul
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="font-body text-base md:text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed"
+          className="font-body text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed"
         >
           {description}
         </motion.p>
