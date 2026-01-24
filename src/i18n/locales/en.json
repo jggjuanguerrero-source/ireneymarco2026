@@ -41,12 +41,40 @@
     "rsvp": {
       "title": "Confirm Your Attendance",
       "subtitle": "We hope to count on you for this special day",
-      "description": "Please confirm your attendance before July 1st, 2026."
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "willAttend": "Will you attend?",
+      "attending": "Yes, I'll be there!",
+      "notAttending": "Unfortunately not",
+      "plusOne": "Bringing a guest?",
+      "plusOneName": "Guest's name",
+      "guests": "Number of guests",
+      "dietary": "Allergies or dietary restrictions",
+      "dietaryPlaceholder": "E.g.: vegetarian, gluten-free, nut allergy...",
+      "submit": "Confirm Attendance",
+      "submitting": "Sending...",
+      "successTitle": "Thank you for confirming!",
+      "successMessage": "We've received your confirmation. See you in Venice!",
+      "successNotAttending": "We're sorry you can't join us. You'll be in our hearts!",
+      "errorTitle": "Error sending",
+      "errorMessage": "An error occurred. Please try again.",
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email"
     },
     "music": {
-      "title": "Suggest a Song",
-      "subtitle": "Help us create the perfect playlist",
-      "description": "What song cannot be missing from our party? Tell us."
+      "title": "DJ & Party",
+      "subtitle": "Help us create the perfect playlist for the night",
+      "spotifyTitle": "Do you have Spotify?",
+      "spotifyDescription": "Add songs directly to our collaborative playlist",
+      "spotifyButton": "Add to Playlist",
+      "manualTitle": "Suggest a song manually",
+      "manualDescription": "Don't use Spotify? Tell us what song we can't miss",
+      "songPlaceholder": "Artist - Song name",
+      "sendSuggestion": "Send Suggestion",
+      "sending": "Sending...",
+      "thankYou": "Thank you for your suggestion!",
+      "songAdded": "We've added your song to our list."
     }
   },
   "footer": {
