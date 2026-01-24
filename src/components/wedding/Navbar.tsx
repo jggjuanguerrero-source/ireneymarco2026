@@ -117,29 +117,63 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Full Screen Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-background/98 backdrop-elegant border-t border-border"
+            className="md:hidden fixed inset-0 z-50 bg-[#FAFAF9] flex flex-col"
           >
-            <div className="px-6 py-8 flex flex-col gap-6">
+            {/* Close Button */}
+            <div className="flex justify-end p-6">
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 text-foreground hover:text-primary transition-colors"
+                aria-label="Close menu"
+              >
+                <svg 
+                  width="28" 
+                  height="28" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="1.5" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Centered Navigation Links */}
+            <div className="flex-1 flex flex-col items-center justify-center gap-8 pb-20">
               {navLinks.map((link, index) => (
                 <motion.button
                   key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.08, duration: 0.4 }}
                   onClick={() => scrollToSection(link.href)}
-                  className="font-body text-base tracking-[0.15em] uppercase text-foreground/70 hover:text-primary text-left transition-colors"
+                  className="font-serif text-2xl tracking-wide text-foreground hover:text-primary transition-colors"
                 >
                   {link.label}
                 </motion.button>
               ))}
+              
+              {/* Language Selector in Mobile Menu */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.08, duration: 0.4 }}
+                className="mt-4"
+              >
+                <LanguageSelector />
+              </motion.div>
             </div>
           </motion.div>
         )}
