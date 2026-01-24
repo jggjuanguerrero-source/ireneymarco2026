@@ -1,15 +1,24 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import VenetianOrnament from './VenetianOrnament';
 
 const Footer = () => {
   const { t } = useTranslation();
 
   return (
-    <footer className="py-16 md:py-24 bg-secondary/30">
+    <footer className="py-16 md:py-24 bg-secondary/50">
       <div className="max-w-4xl mx-auto px-6 text-center">
-        {/* Ornament */}
-        <VenetianOrnament size="sm" className="mx-auto mb-8" />
+        {/* Decorative line */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="flex items-center justify-center gap-4 mb-10"
+        >
+          <div className="w-12 h-px bg-primary/40" />
+          <span className="text-primary/50 text-xs">✦</span>
+          <div className="w-12 h-px bg-primary/40" />
+        </motion.div>
 
         {/* Monogram */}
         <motion.p
@@ -17,7 +26,7 @@ const Footer = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="font-script text-5xl md:text-6xl text-primary mb-6"
+          className="font-script text-5xl md:text-6xl text-foreground mb-6"
         >
           I & M
         </motion.p>
@@ -28,7 +37,7 @@ const Footer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="font-body text-sm tracking-widest text-muted-foreground"
+          className="font-body italic text-base tracking-widest text-muted-foreground"
         >
           {t('footer.madeWith')}
         </motion.p>
@@ -39,7 +48,7 @@ const Footer = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="font-serif text-xs tracking-[0.3em] text-muted-foreground/60 mt-4"
+          className="font-body text-xs tracking-[0.3em] text-muted-foreground/60 mt-4"
         >
           2026
         </motion.p>

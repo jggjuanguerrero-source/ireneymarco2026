@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Lato:wght@300;400;700&family=Pinyon+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,102 +6,106 @@
 
 /* 
   IRENE & MARCO - VENECIA 2026
-  Design System: "Lujo Silencioso Veneciano"
+  Design System: "Invitación Acuarela Veneciana"
+  
+  Inspired by warm watercolor wedding invitation
   
   Palette:
-  - Cream (Background): #FAFAF9 → HSL(60, 9%, 98%)
-  - Gold (Primary): #C5A059 → HSL(42, 48%, 56%)
-  - Venice Blue (Accent): #4A6C6F → HSL(184, 21%, 36%)
-  - Dark Gray (Text): #3D3D3D → HSL(0, 0%, 24%)
-  - Soft Gray (Muted): #8A8A8A → HSL(0, 0%, 54%)
+  - Warm Cream (Background): #F8F5F0 → HSL(40, 33%, 96%)
+  - Paper Cream (Secondary): #F3EDE4 → HSL(38, 38%, 93%)
+  - Charcoal Navy (Text): #2C3E50 → HSL(210, 29%, 24%)
+  - Olive Gold (Primary): #8B7355 → HSL(30, 24%, 44%)
+  - Soft Gold (Accent): #B8A07A → HSL(38, 30%, 60%)
+  - Muted Text: #6B7B8C → HSL(210, 14%, 48%)
 */
 
 @layer base {
   :root {
-    /* Venetian Wedding Theme - Light Mode */
-    --background: 60 9% 98%;
-    --foreground: 0 0% 24%;
+    /* Warm cream paper background */
+    --background: 40 33% 96%;
+    --foreground: 210 29% 24%;
 
-    --card: 60 9% 98%;
-    --card-foreground: 0 0% 24%;
+    --card: 38 38% 93%;
+    --card-foreground: 210 29% 24%;
 
-    --popover: 60 9% 98%;
-    --popover-foreground: 0 0% 24%;
+    --popover: 40 33% 96%;
+    --popover-foreground: 210 29% 24%;
 
-    /* Gold - Primary */
-    --primary: 42 48% 56%;
-    --primary-foreground: 60 9% 98%;
+    /* Olive Gold - Primary */
+    --primary: 30 24% 44%;
+    --primary-foreground: 40 33% 96%;
 
-    /* Soft cream - Secondary */
-    --secondary: 40 20% 94%;
-    --secondary-foreground: 0 0% 24%;
+    /* Paper cream - Secondary */
+    --secondary: 38 38% 93%;
+    --secondary-foreground: 210 29% 24%;
 
-    /* Venice Blue - Accent */
-    --accent: 184 21% 36%;
-    --accent-foreground: 60 9% 98%;
+    /* Soft Gold - Accent */
+    --accent: 38 30% 60%;
+    --accent-foreground: 210 29% 24%;
 
-    /* Muted grays */
-    --muted: 40 10% 92%;
-    --muted-foreground: 0 0% 54%;
+    /* Muted grays with warmth */
+    --muted: 35 20% 90%;
+    --muted-foreground: 210 14% 48%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9% 98%;
+    --destructive-foreground: 40 33% 96%;
 
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 42 48% 56%;
+    --border: 35 25% 85%;
+    --input: 35 25% 85%;
+    --ring: 30 24% 44%;
 
     --radius: 0.5rem;
 
     /* Sidebar - matching theme */
-    --sidebar-background: 60 9% 98%;
-    --sidebar-foreground: 0 0% 24%;
-    --sidebar-primary: 42 48% 56%;
-    --sidebar-primary-foreground: 60 9% 98%;
-    --sidebar-accent: 184 21% 36%;
-    --sidebar-accent-foreground: 60 9% 98%;
-    --sidebar-border: 40 15% 88%;
-    --sidebar-ring: 42 48% 56%;
+    --sidebar-background: 40 33% 96%;
+    --sidebar-foreground: 210 29% 24%;
+    --sidebar-primary: 30 24% 44%;
+    --sidebar-primary-foreground: 40 33% 96%;
+    --sidebar-accent: 38 30% 60%;
+    --sidebar-accent-foreground: 210 29% 24%;
+    --sidebar-border: 35 25% 85%;
+    --sidebar-ring: 30 24% 44%;
 
     /* Custom Wedding Variables */
-    --gold: 42 48% 56%;
-    --gold-light: 42 48% 72%;
-    --gold-dark: 42 48% 42%;
-    --venice-blue: 184 21% 36%;
-    --venice-blue-light: 184 21% 52%;
-    --cream: 60 9% 98%;
-    --cream-dark: 40 20% 94%;
+    --gold: 30 24% 44%;
+    --gold-light: 38 30% 60%;
+    --gold-dark: 30 24% 35%;
+    --venice-blue: 200 25% 45%;
+    --venice-blue-light: 200 25% 60%;
+    --cream: 40 33% 96%;
+    --cream-dark: 38 38% 93%;
+    --paper: 38 40% 94%;
   }
 
   .dark {
     /* Keep same theme for wedding - no dark mode needed */
-    --background: 60 9% 98%;
-    --foreground: 0 0% 24%;
-    --card: 60 9% 98%;
-    --card-foreground: 0 0% 24%;
-    --popover: 60 9% 98%;
-    --popover-foreground: 0 0% 24%;
-    --primary: 42 48% 56%;
-    --primary-foreground: 60 9% 98%;
-    --secondary: 40 20% 94%;
-    --secondary-foreground: 0 0% 24%;
-    --accent: 184 21% 36%;
-    --accent-foreground: 60 9% 98%;
-    --muted: 40 10% 92%;
-    --muted-foreground: 0 0% 54%;
+    --background: 40 33% 96%;
+    --foreground: 210 29% 24%;
+    --card: 38 38% 93%;
+    --card-foreground: 210 29% 24%;
+    --popover: 40 33% 96%;
+    --popover-foreground: 210 29% 24%;
+    --primary: 30 24% 44%;
+    --primary-foreground: 40 33% 96%;
+    --secondary: 38 38% 93%;
+    --secondary-foreground: 210 29% 24%;
+    --accent: 38 30% 60%;
+    --accent-foreground: 210 29% 24%;
+    --muted: 35 20% 90%;
+    --muted-foreground: 210 14% 48%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9% 98%;
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 42 48% 56%;
-    --sidebar-background: 60 9% 98%;
-    --sidebar-foreground: 0 0% 24%;
-    --sidebar-primary: 42 48% 56%;
-    --sidebar-primary-foreground: 60 9% 98%;
-    --sidebar-accent: 184 21% 36%;
-    --sidebar-accent-foreground: 60 9% 98%;
-    --sidebar-border: 40 15% 88%;
-    --sidebar-ring: 42 48% 56%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 35 25% 85%;
+    --input: 35 25% 85%;
+    --ring: 30 24% 44%;
+    --sidebar-background: 40 33% 96%;
+    --sidebar-foreground: 210 29% 24%;
+    --sidebar-primary: 30 24% 44%;
+    --sidebar-primary-foreground: 40 33% 96%;
+    --sidebar-accent: 38 30% 60%;
+    --sidebar-accent-foreground: 210 29% 24%;
+    --sidebar-border: 35 25% 85%;
+    --sidebar-ring: 30 24% 44%;
   }
 }
 
@@ -112,27 +116,27 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Cormorant Garamond', serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cinzel', serif;
+    font-family: 'Playfair Display', serif;
     font-weight: 500;
   }
 
-  /* Script font for romantic elements */
+  /* Script font for romantic elements - names */
   .font-script {
-    font-family: 'Pinyon Script', cursive;
+    font-family: 'Great Vibes', cursive;
   }
 
   /* Serif font for elegant headings */
   .font-serif {
-    font-family: 'Cinzel', serif;
+    font-family: 'Playfair Display', serif;
   }
 
-  /* Body font */
+  /* Body font - elegant serif */
   .font-body {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Cormorant Garamond', serif;
   }
 }
 
