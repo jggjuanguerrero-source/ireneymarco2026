@@ -3,7 +3,8 @@
     "wedding": "Il Matrimonio",
     "travel": "Viaggio & Hotel",
     "rsvp": "RSVP",
-    "music": "Musica"
+    "music": "Musica",
+    "seat": "Il Tuo Posto"
   },
   "hero": {
     "date": "10 Ottobre, 2026",
@@ -75,6 +76,22 @@
       "sending": "Invio in corso...",
       "thankYou": "Grazie per il tuo suggerimento!",
       "songAdded": "Abbiamo aggiunto la tua canzone alla nostra lista."
+    },
+    "seat": {
+      "title": "Il Tuo Posto",
+      "subtitle": "Trova il tuo tavolo per la cena",
+      "searchPlaceholder": "Scrivi il tuo nome...",
+      "searchButton": "Trova il mio tavolo",
+      "searching": "Ricerca in corso...",
+      "greeting": "Ciao",
+      "tableMessage": "Ti abbiamo riservato un posto al",
+      "table": "Tavolo",
+      "multipleResults": "Abbiamo trovato diversi ospiti con quel nome",
+      "selectYourself": "Per favore, seleziona il tuo nome:",
+      "notFound": "Non ti abbiamo trovato",
+      "notFoundMessage": "Per favore, chiedi alla nostra Wedding Planner",
+      "searchAgain": "Cerca di nuovo",
+      "noTableAssigned": "Il tuo tavolo sarà assegnato a breve"
     }
   },
   "footer": {
