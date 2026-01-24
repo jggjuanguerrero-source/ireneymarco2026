@@ -3,7 +3,8 @@
     "wedding": "The Wedding",
     "travel": "Travel & Hotels",
     "rsvp": "RSVP",
-    "music": "Music"
+    "music": "Music",
+    "seat": "Your Seat"
   },
   "hero": {
     "date": "October 10th, 2026",
@@ -75,6 +76,22 @@
       "sending": "Sending...",
       "thankYou": "Thank you for your suggestion!",
       "songAdded": "We've added your song to our list."
+    },
+    "seat": {
+      "title": "Your Seat",
+      "subtitle": "Find your table for dinner",
+      "searchPlaceholder": "Type your name...",
+      "searchButton": "Find my table",
+      "searching": "Searching...",
+      "greeting": "Hello",
+      "tableMessage": "We've reserved a seat for you at",
+      "table": "Table",
+      "multipleResults": "We found several guests with that name",
+      "selectYourself": "Please select your name:",
+      "notFound": "We couldn't find you",
+      "notFoundMessage": "Please check with our Wedding Planner",
+      "searchAgain": "Search again",
+      "noTableAssigned": "Your table will be assigned soon"
     }
   },
   "footer": {

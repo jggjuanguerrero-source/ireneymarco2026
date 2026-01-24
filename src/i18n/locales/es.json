@@ -3,7 +3,8 @@
     "wedding": "La Boda",
     "travel": "Viaje & Hoteles",
     "rsvp": "RSVP",
-    "music": "Música"
+    "music": "Música",
+    "seat": "Tu Sitio"
   },
   "hero": {
     "date": "10 de Octubre, 2026",
@@ -75,6 +76,22 @@
       "sending": "Enviando...",
       "thankYou": "¡Gracias por tu sugerencia!",
       "songAdded": "Hemos añadido tu canción a nuestra lista."
+    },
+    "seat": {
+      "title": "Tu Sitio",
+      "subtitle": "Encuentra tu mesa para la cena",
+      "searchPlaceholder": "Escribe tu nombre...",
+      "searchButton": "Buscar mi mesa",
+      "searching": "Buscando...",
+      "greeting": "¡Hola",
+      "tableMessage": "Te hemos reservado un sitio en la",
+      "table": "Mesa",
+      "multipleResults": "Hemos encontrado varios invitados con ese nombre",
+      "selectYourself": "Por favor, selecciona tu nombre:",
+      "notFound": "No te encontramos",
+      "notFoundMessage": "Por favor, consulta con nuestra Wedding Planner",
+      "searchAgain": "Buscar de nuevo",
+      "noTableAssigned": "Tu mesa será asignada pronto"
     }
   },
   "footer": {
