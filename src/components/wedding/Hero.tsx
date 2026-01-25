@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 
 import Countdown from './Countdown';
-import veniceWatercolor from '@/assets/venice-watercolor.png';
+import veniceWatercolor from '@/assets/venice-horizontal.jpg';
 
 const Hero = () => {
   const { t } = useTranslation();
