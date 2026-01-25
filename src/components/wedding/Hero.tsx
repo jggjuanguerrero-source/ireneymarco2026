@@ -1,20 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+
 import Countdown from './Countdown';
 import veniceWatercolor from '@/assets/venice-watercolor.png';
 const Hero = () => {
   const {
     t
   } = useTranslation();
-  const scrollToContent = () => {
-    const element = document.querySelector('#wedding');
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
-  };
   return <section className="relative h-screen overflow-hidden bg-background">
       {/* TEXT ZONE (TOP) — clean solid background */}
       <div className="relative z-10 h-full flex flex-col items-center text-center px-6 pt-24 md:pt-28 pb-[42vh]">
@@ -123,28 +115,6 @@ const Hero = () => {
         <img src={veniceWatercolor} alt="Venice watercolor illustration - Rialto bridge and gondola" loading="eager" decoding="async" className="absolute inset-0 w-full h-full object-cover object-bottom" />
       </motion.div>
 
-      {/* Scroll indicator - positioned above the image */}
-      <motion.button onClick={scrollToContent} initial={{
-      opacity: 0
-    }} animate={{
-      opacity: 1
-    }} transition={{
-      delay: 2,
-      duration: 0.8
-    }} className="absolute bottom-[42vh] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 text-foreground/60 hover:text-primary transition-colors cursor-pointer">
-        <span className="font-body italic text-xs tracking-widest">
-          {t('hero.scrollDown')}
-        </span>
-        <motion.div animate={{
-        y: [0, 5, 0]
-      }} transition={{
-        duration: 1.5,
-        repeat: Infinity,
-        ease: 'easeInOut'
-      }}>
-          <ChevronDown className="w-4 h-4" />
-        </motion.div>
-      </motion.button>
     </section>;
 };
 export default Hero;
