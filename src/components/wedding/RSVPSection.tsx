@@ -1,12 +1,10 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Check, X, Loader2, Heart } from 'lucide-react';
+import { Check, X, Loader2, Heart, Users } from 'lucide-react';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 
@@ -18,6 +16,9 @@ const rsvpSchema = z.object({
   rsvpStatus: z.boolean(),
   plusOne: z.boolean(),
   plusOneName: z.string().trim().max(200).optional(),
+  hasChildren: z.boolean(),
+  childrenCount: z.number().min(0).max(10).optional(),
+  childrenNeeds: z.string().trim().max(500).optional(),
   dietaryReqs: z.string().trim().max(500).optional(),
 });
 
@@ -39,11 +40,14 @@ const RSVPSection = () => {
     rsvpStatus: true,
     plusOne: false,
     plusOneName: '',
+    hasChildren: false,
+    childrenCount: 0,
+    childrenNeeds: '',
     dietaryReqs: '',
   });
   const [errors, setErrors] = useState<Partial<Record<keyof RSVPFormData, string>>>({});
 
-  const handleInputChange = (field: keyof RSVPFormData, value: string | boolean) => {
+  const handleInputChange = (field: keyof RSVPFormData, value: string | boolean | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
@@ -82,6 +86,8 @@ const RSVPSection = () => {
         rsvp_status: result.data.rsvpStatus,
         plus_one: result.data.plusOne,
         plus_one_name: result.data.plusOneName || null,
+        children_count: result.data.hasChildren ? result.data.childrenCount : 0,
+        children_needs: result.data.hasChildren ? result.data.childrenNeeds || null : null,
         dietary_reqs: result.data.dietaryReqs || null,
         language: i18n.language,
       });
@@ -114,7 +120,7 @@ const RSVPSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="w-12 h-px bg-primary/40" />
@@ -164,19 +170,20 @@ const RSVPSection = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2, duration: 0.8 }}
               onSubmit={handleSubmit}
-              className="space-y-8"
+              className="space-y-10"
             >
               {/* Name Fields */}
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName" className="font-body text-foreground/80">
+                  <Label htmlFor="firstName" className="font-body text-foreground/80 text-base">
                     {t('sections.rsvp.firstName')} *
                   </Label>
-                  <Input
+                  <input
                     id="firstName"
+                    type="text"
                     value={formData.firstName}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className="bg-background/50 border-border focus:border-primary transition-colors font-body"
+                    className="input-underline w-full text-lg"
                     placeholder=""
                   />
                   {errors.firstName && (
@@ -184,14 +191,15 @@ const RSVPSection = () => {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lastName" className="font-body text-foreground/80">
+                  <Label htmlFor="lastName" className="font-body text-foreground/80 text-base">
                     {t('sections.rsvp.lastName')} *
                   </Label>
-                  <Input
+                  <input
                     id="lastName"
+                    type="text"
                     value={formData.lastName}
                     onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    className="bg-background/50 border-border focus:border-primary transition-colors font-body"
+                    className="input-underline w-full text-lg"
                   />
                   {errors.lastName && (
                     <p className="text-sm text-destructive font-body">{errors.lastName}</p>
@@ -201,15 +209,15 @@ const RSVPSection = () => {
 
               {/* Email */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="font-body text-foreground/80">
+                <Label htmlFor="email" className="font-body text-foreground/80 text-base">
                   {t('sections.rsvp.email')} *
                 </Label>
-                <Input
+                <input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="bg-background/50 border-border focus:border-primary transition-colors font-body"
+                  className="input-underline w-full text-lg"
                 />
                 {errors.email && (
                   <p className="text-sm text-destructive font-body">{errors.email}</p>
@@ -218,7 +226,7 @@ const RSVPSection = () => {
 
               {/* Attendance Toggle */}
               <div className="space-y-4">
-                <Label className="font-body text-foreground/80">
+                <Label className="font-body text-foreground/80 text-base">
                   {t('sections.rsvp.willAttend')} *
                 </Label>
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -263,11 +271,11 @@ const RSVPSection = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="space-y-6 overflow-hidden"
+                    className="space-y-10 overflow-hidden"
                   >
                     {/* Plus One Toggle */}
                     <div className="space-y-4">
-                      <Label className="font-body text-foreground/80">
+                      <Label className="font-body text-foreground/80 text-base">
                         {t('sections.rsvp.plusOne')}
                       </Label>
                       <div className="flex gap-4">
@@ -280,7 +288,7 @@ const RSVPSection = () => {
                               : 'border-border bg-background hover:border-primary/50'
                           }`}
                         >
-                          Sí
+                          {t('sections.rsvp.yes')}
                         </button>
                         <button
                           type="button"
@@ -308,30 +316,108 @@ const RSVPSection = () => {
                           exit={{ opacity: 0, height: 0 }}
                           className="space-y-2"
                         >
-                          <Label htmlFor="plusOneName" className="font-body text-foreground/80">
+                          <Label htmlFor="plusOneName" className="font-body text-foreground/80 text-base">
                             {t('sections.rsvp.plusOneName')}
                           </Label>
-                          <Input
+                          <input
                             id="plusOneName"
+                            type="text"
                             value={formData.plusOneName}
                             onChange={(e) => handleInputChange('plusOneName', e.target.value)}
-                            className="bg-background/50 border-border focus:border-primary transition-colors font-body"
+                            className="input-underline w-full text-lg"
                           />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Children Toggle */}
+                    <div className="space-y-4">
+                      <Label className="font-body text-foreground/80 text-base flex items-center gap-2">
+                        <Users className="w-4 h-4 text-primary/70" />
+                        {t('sections.rsvp.childrenQuestion')}
+                      </Label>
+                      <div className="flex gap-4">
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('hasChildren', true)}
+                          className={`px-6 py-3 rounded-lg border-2 transition-all duration-300 font-body ${
+                            formData.hasChildren
+                              ? 'border-primary bg-primary/10 text-primary'
+                              : 'border-border bg-background hover:border-primary/50'
+                          }`}
+                        >
+                          {t('sections.rsvp.yes')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleInputChange('hasChildren', false);
+                            handleInputChange('childrenCount', 0);
+                            handleInputChange('childrenNeeds', '');
+                          }}
+                          className={`px-6 py-3 rounded-lg border-2 transition-all duration-300 font-body ${
+                            !formData.hasChildren
+                              ? 'border-primary bg-primary/10 text-primary'
+                              : 'border-border bg-background hover:border-primary/50'
+                          }`}
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Children Details */}
+                    <AnimatePresence>
+                      {formData.hasChildren && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="space-y-6 pl-4 border-l-2 border-primary/20"
+                        >
+                          <div className="space-y-2">
+                            <Label htmlFor="childrenCount" className="font-body text-foreground/80 text-base">
+                              {t('sections.rsvp.childrenCount')}
+                            </Label>
+                            <input
+                              id="childrenCount"
+                              type="number"
+                              min="1"
+                              max="10"
+                              value={formData.childrenCount || ''}
+                              onChange={(e) => handleInputChange('childrenCount', parseInt(e.target.value) || 0)}
+                              className="input-underline w-full max-w-[120px] text-lg"
+                              placeholder="1"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="childrenNeeds" className="font-body text-foreground/80 text-base">
+                              {t('sections.rsvp.childrenNeeds')}
+                            </Label>
+                            <input
+                              id="childrenNeeds"
+                              type="text"
+                              value={formData.childrenNeeds}
+                              onChange={(e) => handleInputChange('childrenNeeds', e.target.value)}
+                              placeholder={t('sections.rsvp.childrenNeedsPlaceholder')}
+                              className="input-underline w-full text-lg"
+                            />
+                          </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
 
                     {/* Dietary Requirements */}
                     <div className="space-y-2">
-                      <Label htmlFor="dietary" className="font-body text-foreground/80">
+                      <Label htmlFor="dietary" className="font-body text-foreground/80 text-base">
                         {t('sections.rsvp.dietary')}
                       </Label>
-                      <Textarea
+                      <textarea
                         id="dietary"
                         value={formData.dietaryReqs}
                         onChange={(e) => handleInputChange('dietaryReqs', e.target.value)}
                         placeholder={t('sections.rsvp.dietaryPlaceholder')}
-                        className="bg-background/50 border-border focus:border-primary transition-colors font-body min-h-[100px] resize-none"
+                        className="input-underline w-full text-lg min-h-[80px] resize-none"
                       />
                     </div>
                   </motion.div>
@@ -342,7 +428,7 @@ const RSVPSection = () => {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: attendingChoice !== null ? 1 : 0.5 }}
-                className="pt-4"
+                className="pt-6"
               >
                 <Button
                   type="submit"

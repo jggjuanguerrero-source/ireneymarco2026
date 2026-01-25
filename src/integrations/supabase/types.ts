@@ -16,6 +16,8 @@ export type Database = {
     Tables: {
       guests: {
         Row: {
+          children_count: number | null
+          children_needs: string | null
           created_at: string
           dietary_reqs: string | null
           email: string
@@ -33,6 +35,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          children_count?: number | null
+          children_needs?: string | null
           created_at?: string
           dietary_reqs?: string | null
           email: string
@@ -50,6 +54,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          children_count?: number | null
+          children_needs?: string | null
           created_at?: string
           dietary_reqs?: string | null
           email?: string
