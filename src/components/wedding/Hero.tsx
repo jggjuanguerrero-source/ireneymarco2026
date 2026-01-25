@@ -1,14 +1,24 @@
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 import Countdown from './Countdown';
 import veniceWatercolor from '@/assets/venice-horizontal.jpg';
 
 const Hero = () => {
   const { t } = useTranslation();
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  // Parallax effect: image moves slower than scroll
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"]
+  });
+  
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
   return (
-    <section className="relative h-screen overflow-hidden bg-[#FAFAF9]">
+    <section ref={sectionRef} className="relative h-screen overflow-hidden bg-[#FAFAF9]">
       {/* ═══════════════════════════════════════════════════════════════
           ZONA SUPERIOR (65%) — Texto exclusivo, padding agresivo arriba
           ═══════════════════════════════════════════════════════════════ */}
@@ -99,8 +109,9 @@ const Hero = () => {
           }}
         />
         
-        {/* Image strictly contained */}
-        <img
+        {/* Image with parallax effect */}
+        <motion.img
+          style={{ y: imageY }}
           src={veniceWatercolor}
           alt="Venice watercolor illustration - Rialto bridge and gondola"
           loading="eager"
