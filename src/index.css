@@ -75,6 +75,9 @@
     --cream: 40 33% 96%;
     --cream-dark: 38 38% 93%;
     --paper: 38 40% 94%;
+    
+    /* High contrast text for countdown/headings */
+    --text-strong: 30 10% 25%;
   }
 
   .dark {
