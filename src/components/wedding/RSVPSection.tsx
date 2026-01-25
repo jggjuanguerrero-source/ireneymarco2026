@@ -271,10 +271,10 @@ const RSVPSection = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="space-y-10 overflow-hidden"
+                    className="space-y-8 overflow-hidden"
                   >
                     {/* Plus One Toggle */}
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <Label className="font-body text-foreground/80 text-base">
                         {t('sections.rsvp.plusOne')}
                       </Label>
@@ -314,7 +314,7 @@ const RSVPSection = () => {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="space-y-2"
+                          className="space-y-2 pl-4 border-l-2 border-primary/20"
                         >
                           <Label htmlFor="plusOneName" className="font-body text-foreground/80 text-base">
                             {t('sections.rsvp.plusOneName')}
@@ -331,7 +331,7 @@ const RSVPSection = () => {
                     </AnimatePresence>
 
                     {/* Children Toggle */}
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <Label className="font-body text-foreground/80 text-base flex items-center gap-2">
                         <Users className="w-4 h-4 text-primary/70" />
                         {t('sections.rsvp.childrenQuestion')}
@@ -366,14 +366,14 @@ const RSVPSection = () => {
                       </div>
                     </div>
 
-                    {/* Children Details */}
+                    {/* Children Details - Compact grouped */}
                     <AnimatePresence>
                       {formData.hasChildren && (
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="space-y-6 pl-4 border-l-2 border-primary/20"
+                          className="space-y-4 pl-4 border-l-2 border-primary/20"
                         >
                           <div className="space-y-2">
                             <Label htmlFor="childrenCount" className="font-body text-foreground/80 text-base">
@@ -386,7 +386,7 @@ const RSVPSection = () => {
                               max="10"
                               value={formData.childrenCount || ''}
                               onChange={(e) => handleInputChange('childrenCount', parseInt(e.target.value) || 0)}
-                              className="input-underline w-full max-w-[120px] text-lg"
+                              className="input-underline w-full text-lg [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="1"
                             />
                           </div>
