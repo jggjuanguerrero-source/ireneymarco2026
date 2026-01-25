@@ -236,14 +236,14 @@ const RSVPSection = () => {
                       setAttendingChoice(true);
                       handleInputChange('rsvpStatus', true);
                     }}
-                    className={`flex-1 p-4 rounded-xl border-2 transition-all duration-300 flex items-center justify-center gap-3 ${
+                    className={`flex-1 py-3 px-6 border transition-all duration-300 flex items-center justify-center gap-3 font-serif tracking-wide ${
                       attendingChoice === true
-                        ? 'border-primary bg-primary/10 text-primary'
-                        : 'border-border bg-background hover:border-primary/50'
+                        ? 'border-primary bg-primary/15 text-primary'
+                        : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
                     }`}
                   >
-                    <Check className="w-5 h-5" />
-                    <span className="font-body">{t('sections.rsvp.attending')}</span>
+                    <Check className="w-4 h-4" />
+                    <span>{t('sections.rsvp.attending')}</span>
                   </button>
                   <button
                     type="button"
@@ -251,14 +251,14 @@ const RSVPSection = () => {
                       setAttendingChoice(false);
                       handleInputChange('rsvpStatus', false);
                     }}
-                    className={`flex-1 p-4 rounded-xl border-2 transition-all duration-300 flex items-center justify-center gap-3 ${
+                    className={`flex-1 py-3 px-6 border transition-all duration-300 flex items-center justify-center gap-3 font-serif tracking-wide ${
                       attendingChoice === false
-                        ? 'border-muted-foreground bg-muted text-foreground'
-                        : 'border-border bg-background hover:border-muted-foreground/50'
+                        ? 'border-muted-foreground bg-muted/30 text-foreground'
+                        : 'border-primary/30 bg-transparent text-foreground/70 hover:border-muted-foreground/60'
                     }`}
                   >
-                    <X className="w-5 h-5" />
-                    <span className="font-body">{t('sections.rsvp.notAttending')}</span>
+                    <X className="w-4 h-4" />
+                    <span>{t('sections.rsvp.notAttending')}</span>
                   </button>
                 </div>
               </div>
@@ -271,21 +271,21 @@ const RSVPSection = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="space-y-8 overflow-hidden"
+                    className="space-y-6 overflow-hidden"
                   >
                     {/* Plus One Toggle */}
                     <div className="space-y-3">
                       <Label className="font-body text-foreground/80 text-base">
                         {t('sections.rsvp.plusOne')}
                       </Label>
-                      <div className="flex gap-4">
+                      <div className="flex gap-3">
                         <button
                           type="button"
                           onClick={() => handleInputChange('plusOne', true)}
-                          className={`px-6 py-3 rounded-lg border-2 transition-all duration-300 font-body ${
+                          className={`px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
                             formData.plusOne
-                              ? 'border-primary bg-primary/10 text-primary'
-                              : 'border-border bg-background hover:border-primary/50'
+                              ? 'border-primary bg-primary/15 text-primary'
+                              : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
                           }`}
                         >
                           {t('sections.rsvp.yes')}
@@ -296,10 +296,10 @@ const RSVPSection = () => {
                             handleInputChange('plusOne', false);
                             handleInputChange('plusOneName', '');
                           }}
-                          className={`px-6 py-3 rounded-lg border-2 transition-all duration-300 font-body ${
+                          className={`px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
                             !formData.plusOne
-                              ? 'border-primary bg-primary/10 text-primary'
-                              : 'border-border bg-background hover:border-primary/50'
+                              ? 'border-primary bg-primary/15 text-primary'
+                              : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
                           }`}
                         >
                           No
@@ -329,21 +329,33 @@ const RSVPSection = () => {
                         </motion.div>
                       )}
                     </AnimatePresence>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-                    {/* Children Toggle */}
+              {/* Children Toggle - Independent, always show if attending */}
+              <AnimatePresence>
+                {attendingChoice === true && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-6 overflow-hidden"
+                  >
                     <div className="space-y-3">
                       <Label className="font-body text-foreground/80 text-base flex items-center gap-2">
                         <Users className="w-4 h-4 text-primary/70" />
                         {t('sections.rsvp.childrenQuestion')}
                       </Label>
-                      <div className="flex gap-4">
+                      <div className="flex gap-3">
                         <button
                           type="button"
                           onClick={() => handleInputChange('hasChildren', true)}
-                          className={`px-6 py-3 rounded-lg border-2 transition-all duration-300 font-body ${
+                          className={`px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
                             formData.hasChildren
-                              ? 'border-primary bg-primary/10 text-primary'
-                              : 'border-border bg-background hover:border-primary/50'
+                              ? 'border-primary bg-primary/15 text-primary'
+                              : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
                           }`}
                         >
                           {t('sections.rsvp.yes')}
@@ -355,10 +367,10 @@ const RSVPSection = () => {
                             handleInputChange('childrenCount', 0);
                             handleInputChange('childrenNeeds', '');
                           }}
-                          className={`px-6 py-3 rounded-lg border-2 transition-all duration-300 font-body ${
+                          className={`px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
                             !formData.hasChildren
-                              ? 'border-primary bg-primary/10 text-primary'
-                              : 'border-border bg-background hover:border-primary/50'
+                              ? 'border-primary bg-primary/15 text-primary'
+                              : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
                           }`}
                         >
                           No
@@ -406,23 +418,34 @@ const RSVPSection = () => {
                         </motion.div>
                       )}
                     </AnimatePresence>
-
-                    {/* Dietary Requirements */}
-                    <div className="space-y-2">
-                      <Label htmlFor="dietary" className="font-body text-foreground/80 text-base">
-                        {t('sections.rsvp.dietary')}
-                      </Label>
-                      <textarea
-                        id="dietary"
-                        value={formData.dietaryReqs}
-                        onChange={(e) => handleInputChange('dietaryReqs', e.target.value)}
-                        placeholder={t('sections.rsvp.dietaryPlaceholder')}
-                        className="input-underline w-full text-lg min-h-[80px] resize-none"
-                      />
-                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/* Dietary Requirements - Show if attending */}
+              <AnimatePresence>
+                {attendingChoice === true && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="space-y-2 overflow-hidden"
+                  >
+                    <Label htmlFor="dietary" className="font-body text-foreground/80 text-base">
+                      {t('sections.rsvp.dietary')}
+                    </Label>
+                    <textarea
+                      id="dietary"
+                      value={formData.dietaryReqs}
+                      onChange={(e) => handleInputChange('dietaryReqs', e.target.value)}
+                      placeholder={t('sections.rsvp.dietaryPlaceholder')}
+                      className="input-underline w-full text-lg min-h-[80px] resize-none"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
 
               {/* Submit Button */}
               <motion.div
