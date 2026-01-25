@@ -89,7 +89,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35, duration: 1.1 }}
-        className="absolute bottom-0 left-0 w-full h-[35vh] z-10 pointer-events-none"
+        className="absolute bottom-0 left-0 w-full h-[50vh] md:h-[35vh] z-10 pointer-events-none"
       >
         {/* Gradient fade at top edge for smooth blend */}
         <div 

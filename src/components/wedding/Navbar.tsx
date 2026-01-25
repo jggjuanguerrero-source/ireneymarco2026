@@ -53,7 +53,7 @@ const Navbar = () => {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="font-script text-3xl md:text-4xl text-foreground hover:text-primary transition-colors cursor-pointer"
+            className="font-script text-3xl md:text-4xl text-foreground hover:text-primary transition-colors cursor-pointer whitespace-nowrap"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
