@@ -1,6 +1,7 @@
 {
   "nav": {
     "wedding": "The Wedding",
+    "prewedding": "Pre-Wedding",
     "travel": "Travel & Hotels",
     "rsvp": "RSVP",
     "music": "Music",
@@ -22,6 +23,17 @@
       "title": "The Wedding",
       "subtitle": "Celebrate with us in the most romantic city in the world",
       "description": "We're getting married in Venice, where every canal tells a love story. We want to share this special day with you."
+    },
+    "prewedding": {
+      "title": "Pre-Wedding",
+      "subtitle": "Join us the evening before our wedding",
+      "description": "The night before the wedding, we'd love to have an informal get-together with all of you. It'll be the perfect way to kick off the weekend!",
+      "time": "7:00 PM",
+      "timeLabel": "Time",
+      "locationLabel": "Location",
+      "location": "Jesolo",
+      "tbc": "To be confirmed",
+      "updateSoon": "We'll update the exact location soon"
     },
     "travel": {
       "title": "Travel & Accommodation",
