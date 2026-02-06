@@ -1,94 +1,68 @@
 
-# Actualizar la seccion "Donde Dormir" con hoteles definitivos
+# Anadir seccion "Preboda" con datos provisionales (TBC)
 
 ## Resumen
 
-Reemplazar los hoteles placeholder actuales (Hotel Danieli, Gritti Palace, etc.) con los 3 hoteles reales proporcionados. Cada tarjeta mostrara el precio fijo (sin "desde"), un campo de codigo de descuento con boton de copiar, y un boton de reserva con enlace directo.
+Crear una nueva seccion "Preboda" / "Pre-Wedding" / "Pre-Matrimonio" que se colocara justo despues de la seccion "La Boda" y antes de "Viaje y Hoteles". Mostrara la informacion confirmada (hora: 19:00, zona: Jesolo) y marcara el lugar exacto como "por confirmar" (TBC).
 
 ---
 
-## Cambios detallados
+## Que se vera en la seccion
 
-### 1. Datos de hoteles (`TravelSection.tsx`)
+La seccion seguira el mismo estilo elegante del resto de la web. Incluira:
 
-Eliminar los 6 hoteles actuales y sustituirlos por los 3 definitivos:
-
-| Hotel | Precio | URL |
-|---|---|---|
-| Hotel Europa | Doble: 90 EUR/noche | hoteleuropajesolo.it |
-| Hotel Atlantico | Doble: 80 EUR/noche | hotel-atlantico.it |
-| Hotel Casablanca | Doble: 70 EUR / Triple: 105 EUR/noche | casablancajesolo.it |
-
-- Se eliminara el sistema de categorias (luxury/smart/budget) ya que solo hay 3 hoteles y no tiene sentido agruparlos.
-- Se anadira un campo `prices` a la interfaz `Hotel` para mostrar precios fijos (ej: `{ double: "90€/noche", triple?: "105€/noche" }`).
-- El codigo de descuento sera el mismo para todos: `BODA-IRENE-MARCO`.
-
-### 2. Rediseno de tarjetas de hotel
-
-Cada tarjeta incluira:
-
-- Imagen de stock elegante (se mantendran imagenes de Unsplash representativas de hoteles italianos).
-- Nombre del hotel.
-- Precios exactos mostrados de forma clara y destacada (sin la palabra "desde"), por ejemplo: "Doble: 90 EUR/noche" y si aplica "Triple: 105 EUR/noche".
-- Bloque de "Codigo de Descuento" con:
-  - El codigo `BODA-IRENE-MARCO` en tipografia monospace.
-  - Un boton pequeno de "Copiar" al lado que use `navigator.clipboard.writeText()` y muestre feedback visual (icono check o toast).
-- Boton "Reservar" que abra la URL del hotel en nueva pestana.
-
-### 3. Traducciones (es.json, en.json, it.json)
-
-Anadir nuevas claves de traduccion:
-
-- `sections.travel.priceDouble` - "Habitacion doble" / "Double room" / "Camera doppia"
-- `sections.travel.priceTriple` - "Habitacion triple" / "Triple room" / "Camera tripla"
-- `sections.travel.perNight` - "/noche" / "/night" / "/notte"
-- `sections.travel.copyCode` - "Copiar" / "Copy" / "Copia"
-- `sections.travel.codeCopied` - "Copiado!" / "Copied!" / "Copiato!"
-
-### 4. Layout del grid
-
-Con 3 hoteles, se usara un grid de 3 columnas en desktop (`grid-cols-1 md:grid-cols-3`) para que las tarjetas se distribuyan uniformemente en una sola fila.
+- Titulo: "Preboda" (ES) / "Pre-Wedding" (EN) / "Pre-Matrimonio" (IT)
+- Subtitulo con la fecha o un mensaje invitando al evento previo
+- Una tarjeta informativa con dos bloques:
+  - **Hora:** 19:00h (confirmado)
+  - **Lugar:** Jesolo (por confirmar) -- con una etiqueta visual "TBC" / "Por confirmar" sutil
+- Un mensaje amigable indicando que se actualizara la ubicacion exacta pronto
 
 ---
 
-## Seccion tecnica
+## Detalles tecnicos
 
-### Interfaz Hotel actualizada
+### 1. Nuevo componente: `src/components/wedding/PreWeddingSection.tsx`
 
-```typescript
-interface Hotel {
-  id: string;
-  name: string;
-  image: string;
-  description: { es: string; en: string; it: string; };
-  prices: {
-    double: number;
-    triple?: number;
-  };
-  discountCode: string;
-  bookingUrl: string;
-}
+Se creara un componente dedicado que:
+- Usa `framer-motion` para animaciones de entrada (coherente con el resto de secciones)
+- Muestra iconos de `lucide-react` (Clock para hora, MapPin para ubicacion)
+- Incluye una etiqueta/badge "TBC" / "Por confirmar" al lado de la ubicacion
+- Sigue el espaciado "luxury" existente (py-32 a py-48)
+
+### 2. Actualizacion de `src/pages/Index.tsx`
+
+- Importar el nuevo componente `PreWeddingSection`
+- Colocarlo entre la seccion "La Boda" (`<Section id="wedding" .../>`) y `<TravelSection />`
+
+### 3. Actualizacion del Navbar (`src/components/wedding/Navbar.tsx`)
+
+- Anadir un nuevo enlace de navegacion "Preboda" con ancla `#prewedding`
+- Colocarlo como segundo item, justo despues de "La Boda" y antes de "Viaje y Hoteles"
+
+### 4. Traducciones (es.json, en.json, it.json)
+
+Nuevas claves:
+
+```
+nav.prewedding: "Preboda" / "Pre-Wedding" / "Pre-Matrimonio"
+
+sections.prewedding.title: "Preboda" / "Pre-Wedding" / "Pre-Matrimonio"
+sections.prewedding.subtitle: "Acompananos la vispera..." / "Join us the evening before..." / "Unisciti a noi la sera prima..."
+sections.prewedding.description: breve texto invitando al evento
+sections.prewedding.time: "19:00h"
+sections.prewedding.timeLabel: "Hora" / "Time" / "Ora"
+sections.prewedding.locationLabel: "Lugar" / "Location" / "Luogo"
+sections.prewedding.location: "Jesolo"
+sections.prewedding.tbc: "Por confirmar" / "To be confirmed" / "Da confermare"
+sections.prewedding.updateSoon: "Actualizaremos la ubicacion exacta pronto" / "We'll update the exact location soon" / "Aggiorneremo presto la posizione esatta"
 ```
 
-### Funcionalidad de copiar codigo
+### Archivos a crear/modificar
 
-Se usara un estado local `copiedId` para mostrar feedback visual temporal (2 segundos) cuando se copia el codigo:
-
-```typescript
-const [copiedId, setCopiedId] = useState<string | null>(null);
-
-const handleCopy = (code: string, hotelId: string) => {
-  navigator.clipboard.writeText(code);
-  setCopiedId(hotelId);
-  setTimeout(() => setCopiedId(null), 2000);
-};
-```
-
-Se usaran los iconos `Copy` y `Check` de `lucide-react` para el boton.
-
-### Archivos modificados
-
-1. **`src/components/wedding/TravelSection.tsx`** - Reemplazo de datos de hoteles, eliminacion de categorias, nuevo diseno de tarjetas con precios y boton copiar.
-2. **`src/i18n/locales/es.json`** - Nuevas claves de traduccion para precios y boton copiar.
-3. **`src/i18n/locales/en.json`** - Idem en ingles.
-4. **`src/i18n/locales/it.json`** - Idem en italiano.
+1. **Crear** `src/components/wedding/PreWeddingSection.tsx` -- componente nuevo
+2. **Modificar** `src/pages/Index.tsx` -- importar y posicionar la nueva seccion
+3. **Modificar** `src/components/wedding/Navbar.tsx` -- anadir enlace de navegacion
+4. **Modificar** `src/i18n/locales/es.json` -- nuevas traducciones en espanol
+5. **Modificar** `src/i18n/locales/en.json` -- nuevas traducciones en ingles
+6. **Modificar** `src/i18n/locales/it.json` -- nuevas traducciones en italiano
