@@ -3,6 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { motion, useInView } from 'framer-motion';
 import { Plane, Bus, MapPin, ExternalLink, Tag, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import hotelEuropaImg from '@/assets/hotel-europa.jpg';
+import hotelAtlanticoImg from '@/assets/hotel-atlantico.jpg';
+import hotelCasablancaImg from '@/assets/hotel-casablanca.jpg';
 
 // ============================================
 // EDITABLE DATA - Hotels & Airports
@@ -74,7 +77,7 @@ const hotels: Hotel[] = [
   {
     id: 'europa',
     name: 'Hotel Europa',
-    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
+    image: hotelEuropaImg,
     description: {
       es: 'Hotel acogedor en el corazón de Jesolo, ideal para disfrutar de la playa y la cercanía a Venecia.',
       en: 'Cozy hotel in the heart of Jesolo, ideal for enjoying the beach and proximity to Venice.',
@@ -87,7 +90,7 @@ const hotels: Hotel[] = [
   {
     id: 'atlantico',
     name: 'Hotel Atlántico',
-    image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80',
+    image: hotelAtlanticoImg,
     description: {
       es: 'Ubicación privilegiada con todas las comodidades para una estancia perfecta en Jesolo.',
       en: 'Privileged location with all amenities for a perfect stay in Jesolo.',
@@ -100,7 +103,7 @@ const hotels: Hotel[] = [
   {
     id: 'casablanca',
     name: 'Hotel Casablanca',
-    image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
+    image: hotelCasablancaImg,
     description: {
       es: 'Excelente relación calidad-precio con opción de habitaciones triples, perfecto para grupos.',
       en: 'Excellent value for money with triple room option, perfect for groups.',
