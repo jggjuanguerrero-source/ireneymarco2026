@@ -1,7 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView } from 'framer-motion';
-import { Plane, Bus, MapPin, ExternalLink, Star, Tag, Sparkles, Heart, Users } from 'lucide-react';
+import { Plane, Bus, MapPin, ExternalLink, Tag, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // ============================================
@@ -25,15 +25,17 @@ interface Airport {
 interface Hotel {
   id: string;
   name: string;
-  stars: number;
-  category: 'luxury' | 'smart' | 'budget';
   image: string;
   description: {
     es: string;
     en: string;
     it: string;
   };
-  discountCode?: string;
+  prices: {
+    double: number;
+    triple?: number;
+  };
+  discountCode: string;
   bookingUrl: string;
 }
 
@@ -69,89 +71,44 @@ const airports: Airport[] = [
 
 // HOTELS DATA - Edit this array to update hotel recommendations
 const hotels: Hotel[] = [
-  // LUXURY CATEGORY
   {
-    id: 'danieli',
-    name: 'Hotel Danieli',
-    stars: 5,
-    category: 'luxury',
+    id: 'europa',
+    name: 'Hotel Europa',
     image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
     description: {
-      es: 'Palacio gótico del siglo XIV frente a San Marcos. Lujo veneciano auténtico para una experiencia inolvidable.',
-      en: '14th-century Gothic palace facing St. Mark\'s. Authentic Venetian luxury for an unforgettable experience.',
-      it: 'Palazzo gotico del XIV secolo di fronte a San Marco. Lusso veneziano autentico per un\'esperienza indimenticabile.',
+      es: 'Hotel acogedor en el corazón de Jesolo, ideal para disfrutar de la playa y la cercanía a Venecia.',
+      en: 'Cozy hotel in the heart of Jesolo, ideal for enjoying the beach and proximity to Venice.',
+      it: 'Hotel accogliente nel cuore di Jesolo, ideale per godersi la spiaggia e la vicinanza a Venezia.',
     },
-    discountCode: 'IRENEMARCO2026',
-    bookingUrl: 'https://www.marriott.com/hotels/travel/vcedk-hotel-danieli-a-luxury-collection-hotel-venice/',
+    prices: { double: 90 },
+    discountCode: 'BODA-IRENE-MARCO',
+    bookingUrl: 'https://www.hoteleuropajesolo.it/',
   },
   {
-    id: 'gritti',
-    name: 'The Gritti Palace',
-    stars: 5,
-    category: 'luxury',
-    image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80',
-    description: {
-      es: 'Elegancia atemporal en el Gran Canal. Terraza con vistas espectaculares y servicio impecable.',
-      en: 'Timeless elegance on the Grand Canal. Terrace with spectacular views and impeccable service.',
-      it: 'Eleganza senza tempo sul Canal Grande. Terrazza con viste spettacolari e servizio impeccabile.',
-    },
-    bookingUrl: 'https://www.marriott.com/hotels/travel/vcegr-the-gritti-palace-a-luxury-collection-hotel/',
-  },
-  // SMART CHOICE CATEGORY
-  {
-    id: 'saturnia',
-    name: 'Hotel Saturnia & International',
-    stars: 4,
-    category: 'smart',
+    id: 'atlantico',
+    name: 'Hotel Atlántico',
     image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80',
     description: {
-      es: 'A 2 minutos de San Marcos. Relación calidad-precio excepcional con encanto veneciano.',
-      en: '2 minutes from St. Mark\'s. Exceptional value for money with Venetian charm.',
-      it: 'A 2 minuti da San Marco. Rapporto qualità-prezzo eccezionale con fascino veneziano.',
+      es: 'Ubicación privilegiada con todas las comodidades para una estancia perfecta en Jesolo.',
+      en: 'Privileged location with all amenities for a perfect stay in Jesolo.',
+      it: 'Posizione privilegiata con tutti i comfort per un soggiorno perfetto a Jesolo.',
     },
-    discountCode: 'WEDDING10',
-    bookingUrl: 'https://www.hotelsaturnia.it/',
+    prices: { double: 80 },
+    discountCode: 'BODA-IRENE-MARCO',
+    bookingUrl: 'https://www.hotel-atlantico.it/',
   },
   {
-    id: 'bonvecchiati',
-    name: 'Hotel Bonvecchiati',
-    stars: 4,
-    category: 'smart',
-    image: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=80',
-    description: {
-      es: 'Ubicación central perfecta. Habitaciones elegantes con todas las comodidades modernas.',
-      en: 'Perfect central location. Elegant rooms with all modern amenities.',
-      it: 'Posizione centrale perfetta. Camere eleganti con tutti i comfort moderni.',
-    },
-    bookingUrl: 'https://www.hotelbonvecchiati.it/',
-  },
-  // BUDGET / SQUAD CATEGORY
-  {
-    id: 'generator',
-    name: 'Generator Venice',
-    stars: 3,
-    category: 'budget',
+    id: 'casablanca',
+    name: 'Hotel Casablanca',
     image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
     description: {
-      es: 'En la isla de Giudecca con vistas al skyline. Ambiente joven, bar en la azotea y buen rollo.',
-      en: 'On Giudecca island with skyline views. Young vibe, rooftop bar and good vibes.',
-      it: 'Sull\'isola della Giudecca con vista sullo skyline. Atmosfera giovane, bar sul tetto e buone vibes.',
+      es: 'Excelente relación calidad-precio con opción de habitaciones triples, perfecto para grupos.',
+      en: 'Excellent value for money with triple room option, perfect for groups.',
+      it: 'Ottimo rapporto qualità-prezzo con opzione camere triple, perfetto per gruppi.',
     },
-    discountCode: 'SQUAD15',
-    bookingUrl: 'https://staygenerator.com/hostels/venice',
-  },
-  {
-    id: 'we-crociferi',
-    name: 'We Crociferi',
-    stars: 3,
-    category: 'budget',
-    image: 'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&q=80',
-    description: {
-      es: 'Antiguo monasterio convertido en hostel de diseño. Arquitectura única y ambiente social.',
-      en: 'Former monastery turned design hostel. Unique architecture and social atmosphere.',
-      it: 'Ex monastero trasformato in ostello di design. Architettura unica e atmosfera sociale.',
-    },
-    bookingUrl: 'https://wecrociferi.com/',
+    prices: { double: 70, triple: 105 },
+    discountCode: 'BODA-IRENE-MARCO',
+    bookingUrl: 'https://casablancajesolo.it/',
   },
 ];
 
@@ -159,26 +116,18 @@ const hotels: Hotel[] = [
 // COMPONENT
 // ============================================
 
-const categoryConfig = {
-  luxury: {
-    icon: Sparkles,
-    color: 'bg-amber-100 text-amber-700 border-amber-200',
-  },
-  smart: {
-    icon: Heart,
-    color: 'bg-rose-100 text-rose-700 border-rose-200',
-  },
-  budget: {
-    icon: Users,
-    color: 'bg-sky-100 text-sky-700 border-sky-200',
-  },
-};
-
 const TravelSection = () => {
   const { t, i18n } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const lang = i18n.language as 'es' | 'en' | 'it';
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (code: string, hotelId: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedId(hotelId);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   return (
     <section id="travel" ref={ref} className="section-padding bg-secondary/50">
@@ -280,92 +229,81 @@ const TravelSection = () => {
             </h3>
           </div>
 
-          {/* Category Groups */}
-          {(['luxury', 'smart', 'budget'] as const).map((category, catIndex) => {
-            const categoryHotels = hotels.filter(h => h.category === category);
-            const config = categoryConfig[category];
-            const Icon = config.icon;
-
-            return (
+          {/* Hotel Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {hotels.map((hotel, index) => (
               <motion.div
-                key={category}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.5 + catIndex * 0.15, duration: 0.6 }}
-                className="mb-10 last:mb-0"
+                key={hotel.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
+                className="bg-background rounded-xl overflow-hidden border border-border shadow-sm hover:shadow-lg transition-all group"
               >
-                {/* Category Label */}
-                <div className="flex items-center gap-2 mb-4">
-                  <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-body border ${config.color}`}>
-                    <Icon className="w-4 h-4" />
-                    {t(`sections.travel.categories.${category}`)}
-                  </span>
+                {/* Hotel Image */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={hotel.image}
+                    alt={hotel.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
 
-                {/* Hotel Cards Grid */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  {categoryHotels.map((hotel, index) => (
-                    <motion.div
-                      key={hotel.id}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                      transition={{ delay: 0.6 + catIndex * 0.1 + index * 0.05, duration: 0.5 }}
-                      className="bg-background rounded-xl overflow-hidden border border-border shadow-sm hover:shadow-lg transition-all group"
+                {/* Hotel Info */}
+                <div className="p-5">
+                  <h4 className="font-serif text-lg text-foreground mb-3">
+                    {hotel.name}
+                  </h4>
+
+                  <p className="font-body text-sm text-foreground/70 mb-4 leading-relaxed">
+                    {hotel.description[lang]}
+                  </p>
+
+                  {/* Prices */}
+                  <div className="mb-4 space-y-1">
+                    <div className="flex items-center justify-between font-body text-sm">
+                      <span className="text-foreground/80">{t('sections.travel.priceDouble')}</span>
+                      <span className="font-semibold text-foreground">{hotel.prices.double}€{t('sections.travel.perNight')}</span>
+                    </div>
+                    {hotel.prices.triple && (
+                      <div className="flex items-center justify-between font-body text-sm">
+                        <span className="text-foreground/80">{t('sections.travel.priceTriple')}</span>
+                        <span className="font-semibold text-foreground">{hotel.prices.triple}€{t('sections.travel.perNight')}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Discount Code */}
+                  <div className="flex items-center gap-2 mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                    <Tag className="w-4 h-4 text-primary flex-shrink-0" />
+                    <code className="font-mono text-sm font-semibold text-primary truncate">
+                      {hotel.discountCode}
+                    </code>
+                    <button
+                      onClick={() => handleCopy(hotel.discountCode, hotel.id)}
+                      className="ml-auto flex-shrink-0 p-1.5 rounded-md hover:bg-primary/10 transition-colors"
+                      title={t('sections.travel.copyCode')}
                     >
-                      {/* Hotel Image */}
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={hotel.image}
-                          alt={hotel.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        {/* Stars overlay */}
-                        <div className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
-                          {Array.from({ length: hotel.stars }).map((_, i) => (
-                            <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
-                          ))}
-                        </div>
-                      </div>
+                      {copiedId === hotel.id ? (
+                        <Check className="w-4 h-4 text-primary" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-primary" />
+                      )}
+                    </button>
+                  </div>
 
-                      {/* Hotel Info */}
-                      <div className="p-5">
-                        <h4 className="font-serif text-lg text-foreground mb-2">
-                          {hotel.name}
-                        </h4>
-
-                        <p className="font-body text-sm text-foreground/70 mb-4 leading-relaxed">
-                          {hotel.description[lang]}
-                        </p>
-
-                        {/* Discount Code */}
-                        {hotel.discountCode && (
-                          <div className="flex items-center gap-2 mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
-                            <Tag className="w-4 h-4 text-primary" />
-                            <span className="font-body text-sm text-foreground/80">
-                              {t('sections.travel.discountCode')}:
-                            </span>
-                            <code className="font-mono text-sm font-semibold text-primary">
-                              {hotel.discountCode}
-                            </code>
-                          </div>
-                        )}
-
-                        {/* Book Button */}
-                        <Button
-                          variant="outline"
-                          className="w-full gap-2 hover:bg-primary hover:text-primary-foreground transition-colors"
-                          onClick={() => window.open(hotel.bookingUrl, '_blank')}
-                        >
-                          {t('sections.travel.bookNow')}
-                          <ExternalLink className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </motion.div>
-                  ))}
+                  {/* Book Button */}
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2 hover:bg-primary hover:text-primary-foreground transition-colors"
+                    onClick={() => window.open(hotel.bookingUrl, '_blank')}
+                  >
+                    {t('sections.travel.bookNow')}
+                    <ExternalLink className="w-4 h-4" />
+                  </Button>
                 </div>
               </motion.div>
-            );
-          })}
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
