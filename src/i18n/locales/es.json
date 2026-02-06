@@ -33,11 +33,11 @@
       "bookNow": "Reservar",
       "discountCode": "Código Descuento",
       "fromAirport": "desde el aeropuerto",
-      "categories": {
-        "luxury": "Lujo & Relax",
-        "smart": "Smart Choice",
-        "budget": "Squad / Joven"
-      }
+      "priceDouble": "Habitación doble",
+      "priceTriple": "Habitación triple",
+      "perNight": "/noche",
+      "copyCode": "Copiar",
+      "codeCopied": "¡Copiado!"
     },
     "rsvp": {
       "title": "Confirma tu Asistencia",

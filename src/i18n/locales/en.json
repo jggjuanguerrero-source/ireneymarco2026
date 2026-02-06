@@ -33,11 +33,11 @@
       "bookNow": "Book Now",
       "discountCode": "Discount Code",
       "fromAirport": "from the airport",
-      "categories": {
-        "luxury": "Luxury & Relax",
-        "smart": "Smart Choice",
-        "budget": "Squad / Budget"
-      }
+      "priceDouble": "Double room",
+      "priceTriple": "Triple room",
+      "perNight": "/night",
+      "copyCode": "Copy",
+      "codeCopied": "Copied!"
     },
     "rsvp": {
       "title": "Confirm Your Attendance",
