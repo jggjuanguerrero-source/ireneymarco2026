@@ -1,6 +1,7 @@
 {
   "nav": {
     "wedding": "La Boda",
+    "prewedding": "Preboda",
     "travel": "Viaje & Hoteles",
     "rsvp": "RSVP",
     "music": "Música",
@@ -22,6 +23,17 @@
       "title": "La Boda",
       "subtitle": "Celebra con nosotros en la ciudad de Venecia",
       "description": "Nos casamos en Venecia, donde cada canal cuenta una historia de amor. Queremos compartir este día tan especial contigo."
+    },
+    "prewedding": {
+      "title": "Preboda",
+      "subtitle": "Acompáñanos la víspera de nuestra boda",
+      "description": "La noche antes de la boda, nos encantaría celebrar un encuentro informal con todos vosotros. ¡Será la mejor forma de empezar el fin de semana!",
+      "time": "19:00h",
+      "timeLabel": "Hora",
+      "locationLabel": "Lugar",
+      "location": "Jesolo",
+      "tbc": "Por confirmar",
+      "updateSoon": "Actualizaremos la ubicación exacta pronto"
     },
     "travel": {
       "title": "Viaje & Alojamiento",

@@ -19,6 +19,7 @@ const Navbar = () => {
 
   const navLinks = [
     { href: '#wedding', label: t('nav.wedding') },
+    { href: '#prewedding', label: t('nav.prewedding') },
     { href: '#travel', label: t('nav.travel') },
     { href: '#rsvp', label: t('nav.rsvp') },
     { href: '#seat', label: t('nav.seat') },

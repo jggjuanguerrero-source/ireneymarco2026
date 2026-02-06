@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import Navbar from '@/components/wedding/Navbar';
 import Hero from '@/components/wedding/Hero';
 import Section from '@/components/wedding/Section';
+import PreWeddingSection from '@/components/wedding/PreWeddingSection';
 import TravelSection from '@/components/wedding/TravelSection';
 import RSVPSection from '@/components/wedding/RSVPSection';
 import MusicSection from '@/components/wedding/MusicSection';
@@ -25,6 +26,9 @@ const Index = () => {
         subtitle={t('sections.wedding.subtitle')}
         description={t('sections.wedding.description')}
       />
+
+      {/* Preboda Section */}
+      <PreWeddingSection />
 
       {/* Viaje & Hoteles Section */}
       <TravelSection />

@@ -1,6 +1,7 @@
 {
   "nav": {
     "wedding": "Il Matrimonio",
+    "prewedding": "Pre-Matrimonio",
     "travel": "Viaggio & Hotel",
     "rsvp": "RSVP",
     "music": "Musica",
@@ -22,6 +23,17 @@
       "title": "Il Matrimonio",
       "subtitle": "Festeggia con noi nella città più romantica del mondo",
       "description": "Ci sposiamo a Venezia, dove ogni canale racconta una storia d'amore. Vogliamo condividere questo giorno speciale con te."
+    },
+    "prewedding": {
+      "title": "Pre-Matrimonio",
+      "subtitle": "Unisciti a noi la sera prima del nostro matrimonio",
+      "description": "La sera prima del matrimonio, ci piacerebbe fare un incontro informale con tutti voi. Sarà il modo perfetto per iniziare il weekend!",
+      "time": "19:00",
+      "timeLabel": "Ora",
+      "locationLabel": "Luogo",
+      "location": "Jesolo",
+      "tbc": "Da confermare",
+      "updateSoon": "Aggiorneremo presto la posizione esatta"
     },
     "travel": {
       "title": "Viaggio & Alloggio",
