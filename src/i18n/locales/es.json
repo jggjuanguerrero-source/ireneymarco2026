@@ -2,7 +2,7 @@
   "nav": {
     "wedding": "La Boda",
     "prewedding": "Preboda",
-    "travel": "Viaje & Hoteles",
+    "travel": "Hoteles",
     "rsvp": "RSVP",
     "music": "Música",
     "seat": "Tu Sitio"
@@ -22,7 +22,19 @@
     "wedding": {
       "title": "La Boda",
       "subtitle": "Celebra con nosotros en la ciudad de Venecia",
-      "description": "Nos casamos en Venecia, donde cada canal cuenta una historia de amor. Queremos compartir este día tan especial contigo."
+      "description": "Nos casamos en Venecia y queremos compartir este día tan especial contigo.",
+      "scheduleTitle": "Programa del Día",
+      "hotelDeparture": "Salida desde los hoteles",
+      "hotelDepartureTime": "14:00h",
+      "churchCeremony": "Ceremonia en la iglesia",
+      "churchTime": "15:00h",
+      "transportToVenue": "Transporte a la celebración",
+      "transportTime": "16:30h",
+      "celebrationStart": "Comienzo de la celebración",
+      "celebrationTime": "17:00h",
+      "dresscodeTitle": "Dresscode",
+      "dresscode": "Elegante / Formal",
+      "dresscodeDescription": "Traje y vestido largo"
     },
     "prewedding": {
       "title": "Preboda",
@@ -36,15 +48,11 @@
       "updateSoon": "Actualizaremos la ubicación exacta pronto"
     },
     "travel": {
-      "title": "Viaje & Alojamiento",
-      "subtitle": "Todo lo que necesitas saber para tu estancia en Venecia",
-      "howToArrive": "Cómo Llegar",
+      "title": "Alojamiento",
+      "subtitle": "Hoteles recomendados en Jesolo",
       "whereToStay": "Dónde Dormir",
-      "viewRoute": "Ver Ruta en Maps",
-      "busSchedules": "Horarios Autobuses",
       "bookNow": "Reservar",
       "discountCode": "Código Descuento",
-      "fromAirport": "desde el aeropuerto",
       "priceDouble": "Habitación doble",
       "priceTriple": "Habitación triple",
       "perNight": "/noche",
