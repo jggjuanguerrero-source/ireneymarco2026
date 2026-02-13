@@ -2,7 +2,7 @@
   "nav": {
     "wedding": "Il Matrimonio",
     "prewedding": "Pre-Matrimonio",
-    "travel": "Viaggio & Hotel",
+    "travel": "Hotel",
     "rsvp": "RSVP",
     "music": "Musica",
     "seat": "Il Tuo Posto"
@@ -22,7 +22,19 @@
     "wedding": {
       "title": "Il Matrimonio",
       "subtitle": "Festeggia con noi nella città più romantica del mondo",
-      "description": "Ci sposiamo a Venezia, dove ogni canale racconta una storia d'amore. Vogliamo condividere questo giorno speciale con te."
+      "description": "Ci sposiamo a Venezia e vogliamo condividere questo giorno speciale con te.",
+      "scheduleTitle": "Programma della Giornata",
+      "hotelDeparture": "Partenza dagli hotel",
+      "hotelDepartureTime": "14:00",
+      "churchCeremony": "Cerimonia in chiesa",
+      "churchTime": "15:00",
+      "transportToVenue": "Trasporto al ricevimento",
+      "transportTime": "16:30",
+      "celebrationStart": "Inizio della festa",
+      "celebrationTime": "17:00",
+      "dresscodeTitle": "Dress Code",
+      "dresscode": "Elegante / Formale",
+      "dresscodeDescription": "Abito e vestito lungo"
     },
     "prewedding": {
       "title": "Pre-Matrimonio",
@@ -36,15 +48,11 @@
       "updateSoon": "Aggiorneremo presto la posizione esatta"
     },
     "travel": {
-      "title": "Viaggio & Alloggio",
-      "subtitle": "Tutto quello che devi sapere per il tuo soggiorno a Venezia",
-      "howToArrive": "Come Arrivare",
+      "title": "Alloggio",
+      "subtitle": "Hotel consigliati a Jesolo",
       "whereToStay": "Dove Dormire",
-      "viewRoute": "Vedi Percorso su Maps",
-      "busSchedules": "Orari Autobus",
       "bookNow": "Prenota",
       "discountCode": "Codice Sconto",
-      "fromAirport": "dall'aeroporto",
       "priceDouble": "Camera doppia",
       "priceTriple": "Camera tripla",
       "perNight": "/notte",

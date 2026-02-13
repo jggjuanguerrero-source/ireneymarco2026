@@ -2,7 +2,7 @@
   "nav": {
     "wedding": "The Wedding",
     "prewedding": "Pre-Wedding",
-    "travel": "Travel & Hotels",
+    "travel": "Hotels",
     "rsvp": "RSVP",
     "music": "Music",
     "seat": "Your Seat"
@@ -22,7 +22,19 @@
     "wedding": {
       "title": "The Wedding",
       "subtitle": "Celebrate with us in the most romantic city in the world",
-      "description": "We're getting married in Venice, where every canal tells a love story. We want to share this special day with you."
+      "description": "We're getting married in Venice and we want to share this special day with you.",
+      "scheduleTitle": "Schedule",
+      "hotelDeparture": "Departure from hotels",
+      "hotelDepartureTime": "2:00 PM",
+      "churchCeremony": "Church ceremony",
+      "churchTime": "3:00 PM",
+      "transportToVenue": "Transport to venue",
+      "transportTime": "4:30 PM",
+      "celebrationStart": "Celebration begins",
+      "celebrationTime": "5:00 PM",
+      "dresscodeTitle": "Dress Code",
+      "dresscode": "Elegant / Formal",
+      "dresscodeDescription": "Suit and long dress"
     },
     "prewedding": {
       "title": "Pre-Wedding",
@@ -36,15 +48,11 @@
       "updateSoon": "We'll update the exact location soon"
     },
     "travel": {
-      "title": "Travel & Accommodation",
-      "subtitle": "Everything you need to know for your stay in Venice",
-      "howToArrive": "How to Get There",
+      "title": "Accommodation",
+      "subtitle": "Recommended hotels in Jesolo",
       "whereToStay": "Where to Stay",
-      "viewRoute": "View Route in Maps",
-      "busSchedules": "Bus Schedules",
       "bookNow": "Book Now",
       "discountCode": "Discount Code",
-      "fromAirport": "from the airport",
       "priceDouble": "Double room",
       "priceTriple": "Triple room",
       "perNight": "/night",
