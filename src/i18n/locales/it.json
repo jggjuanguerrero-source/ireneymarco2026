@@ -58,6 +58,7 @@
       "bookByEmail": "Prenota via Email",
       "fallbackNote": "Se il pulsante non funziona, copia e incolla questo testo nella tua email:",
       "copyTemplate": "Copia modello",
+      "emailToLabel": "A",
       "emailSubjectLabel": "Oggetto",
       "emailBodyLabel": "Corpo del messaggio"
     },

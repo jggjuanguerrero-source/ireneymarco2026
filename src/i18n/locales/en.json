@@ -58,6 +58,7 @@
       "bookByEmail": "Book by Email",
       "fallbackNote": "If the button doesn't work, copy and paste this text into your email:",
       "copyTemplate": "Copy template",
+      "emailToLabel": "To",
       "emailSubjectLabel": "Subject",
       "emailBodyLabel": "Message body"
     },
