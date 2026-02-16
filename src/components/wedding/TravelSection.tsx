@@ -1,28 +1,35 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView } from 'framer-motion';
-import { Mail, Phone, ExternalLink, Copy, Check, Globe } from 'lucide-react';
+import { Mail, Phone, ExternalLink, Copy, Check, Globe, Paperclip } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import hotelImg from '@/assets/hotel-orizzonte.jpg';
 
 const HOTEL_EMAIL = 'booking@horizzonte.com';
-const HOTEL_PHONE = '0421 380 004';
+const HOTEL_PHONE = '+39 0421 380 004';
 const HOTEL_WEB = 'https://www.hotelorizzonte.it/';
 
-const MAILTO_SUBJECT = 'Conferma prenotazione [Nome e Cognome] per matrimonio Marco & Irene';
-const MAILTO_BODY = `Buongiorno,
-Vorrei confermare una prenotazione per il matrimonio di Marco & Irene.
-- Nome e Cognome: [Tu Nombre y Apellidos]
-- Data di arrivo (Check-in): [Giorno] Ottobre 2026
-- Data di partenza (Check-out): [Giorno] Ottobre 2026
-- Numero di persone: [Numero di adulti/bambini]
-Grazie.`;
+const placeholders: Record<string, { name: string; day: string; people: string }> = {
+  es: { name: 'Nombre y Apellidos', day: 'Día', people: 'Número de adultos/niños' },
+  en: { name: 'Name and Surname', day: 'Day', people: 'Number of adults/children' },
+  it: { name: 'Nome e Cognome', day: 'Giorno', people: 'Numero di persone' },
+};
+
+const getEmailContent = (lang: string) => {
+  const p = placeholders[lang] || placeholders.es;
+  const subject = `Conferma prenotazione [${p.name}] per matrimonio Marco & Irene`;
+  const body = `Buongiorno,\nVorrei confermare una prenotazione per il matrimonio di Marco & Irene.\n- Nome e Cognome: [${p.name}]\n- Data di arrivo (Check-in): [${p.day}] Ottobre 2026\n- Data di partenza (Check-out): [${p.day}] Ottobre 2026\n- Numero di persone: [${p.people}]\nGrazie.`;
+  return { subject, body };
+};
 
 const TravelSection = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const lang = i18n.language?.substring(0, 2) || 'es';
+  const { subject, body } = getEmailContent(lang);
 
   const handleCopy = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
@@ -30,9 +37,8 @@ const TravelSection = () => {
     setTimeout(() => setCopiedField(null), 2000);
   };
 
-  const mailtoLink = `mailto:${HOTEL_EMAIL}?subject=${encodeURIComponent(MAILTO_SUBJECT)}&body=${encodeURIComponent(MAILTO_BODY)}`;
-
-  const fullTemplate = `${t('sections.travel.emailSubjectLabel')}: ${MAILTO_SUBJECT}\n\n${MAILTO_BODY}`;
+  const mailtoLink = `mailto:${HOTEL_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const fullTemplate = `${t('sections.travel.emailSubjectLabel')}: ${subject}\n\n${body}`;
 
   return (
     <section id="travel" ref={ref} className="section-padding bg-secondary/50">
@@ -118,37 +124,65 @@ const TravelSection = () => {
                 <Button
                   variant="outline"
                   className="flex-1 gap-2"
-                  onClick={() => window.open(`tel:+39${HOTEL_PHONE.replace(/\s/g, '')}`, '_self')}
+                  asChild
                 >
-                  <Phone className="w-4 h-4" />
-                  {HOTEL_PHONE}
+                  <a href={`tel:${HOTEL_PHONE.replace(/\s/g, '')}`}>
+                    <Phone className="w-4 h-4" />
+                    {HOTEL_PHONE}
+                  </a>
                 </Button>
               </div>
             </div>
 
-            {/* Fallback template */}
-            <div className="mt-6 p-5 bg-card rounded-lg border border-border">
-              <div className="flex items-start justify-between mb-3">
-                <p className="font-body text-sm italic text-muted-foreground">
-                  {t('sections.travel.fallbackNote')}
-                </p>
-                <button
-                  onClick={() => handleCopy(fullTemplate, 'template')}
-                  className="ml-3 flex-shrink-0 p-2 rounded-md hover:bg-primary/10 transition-colors"
-                  title={t('sections.travel.copyTemplate')}
-                >
-                  {copiedField === 'template' ? (
-                    <Check className="w-4 h-4 text-primary" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-primary" />
-                  )}
-                </button>
-              </div>
-              <div className="font-body text-sm text-foreground/80 whitespace-pre-line leading-relaxed bg-background/50 p-4 rounded border border-border/50">
-                <p className="font-semibold mb-1">{t('sections.travel.emailSubjectLabel')}:</p>
-                <p className="mb-3">{MAILTO_SUBJECT}</p>
-                <p className="font-semibold mb-1">{t('sections.travel.emailBodyLabel')}:</p>
-                <p>{MAILTO_BODY}</p>
+            {/* Email window fallback */}
+            <div className="mt-6 space-y-2">
+              <p className="font-body text-sm italic text-muted-foreground">
+                {t('sections.travel.fallbackNote')}
+              </p>
+
+              <div className="rounded-lg border border-border overflow-hidden shadow-sm">
+                {/* Window title bar */}
+                <div className="flex items-center justify-between bg-muted px-4 py-2.5 border-b border-border">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Mail className="w-4 h-4" />
+                    <span className="font-body text-xs font-medium tracking-wide uppercase">
+                      {t('sections.travel.bookByEmail')}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Paperclip className="w-3.5 h-3.5 text-muted-foreground/50" />
+                    <button
+                      onClick={() => handleCopy(fullTemplate, 'template')}
+                      className="p-1 rounded hover:bg-primary/10 transition-colors"
+                      title={t('sections.travel.copyTemplate')}
+                    >
+                      {copiedField === 'template' ? (
+                        <Check className="w-3.5 h-3.5 text-primary" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5 text-muted-foreground" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Header fields */}
+                <div className="bg-background px-4 py-2.5 space-y-1.5 border-b border-border/50">
+                  <div className="flex items-center gap-2 font-body text-sm">
+                    <span className="text-muted-foreground font-medium w-12 shrink-0">{t('sections.travel.emailToLabel')}:</span>
+                    <span className="text-foreground">{HOTEL_EMAIL}</span>
+                  </div>
+                  <div className="flex items-start gap-2 font-body text-sm">
+                    <span className="text-muted-foreground font-medium w-12 shrink-0">{t('sections.travel.emailSubjectLabel')}:</span>
+                    <span className="text-foreground">{subject}</span>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="bg-card/60 px-4 py-4">
+                  <p className="font-body text-sm text-foreground/80 whitespace-pre-line leading-relaxed">
+                    {body}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

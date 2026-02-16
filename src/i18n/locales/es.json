@@ -58,6 +58,7 @@
       "bookByEmail": "Reservar por Email",
       "fallbackNote": "Si el botón no funciona, copia y pega este texto en tu email:",
       "copyTemplate": "Copiar plantilla",
+      "emailToLabel": "Para",
       "emailSubjectLabel": "Asunto",
       "emailBodyLabel": "Cuerpo del mensaje"
     },
