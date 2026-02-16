@@ -2,10 +2,9 @@
   "nav": {
     "wedding": "The Wedding",
     "prewedding": "Pre-Wedding",
-    "travel": "Hotels",
+    "travel": "Hotel",
     "rsvp": "RSVP",
-    "music": "Music",
-    "seat": "Your Seat"
+    "music": "Music"
   },
   "hero": {
     "date": "October 10th, 2026",
@@ -49,15 +48,18 @@
     },
     "travel": {
       "title": "Accommodation",
-      "subtitle": "Recommended hotels in Jesolo",
-      "whereToStay": "Where to Stay",
-      "bookNow": "Book Now",
-      "discountCode": "Discount Code",
-      "priceDouble": "Double room",
-      "priceTriple": "Triple room",
-      "perNight": "/night",
-      "copyCode": "Copy",
-      "codeCopied": "Copied!"
+      "subtitle": "Our recommendation for your stay",
+      "hotelDescription": "We've reserved rooms at Hotel Orizzonte in Jesolo, just minutes from Venice. Special price for wedding guests with breakfast included.",
+      "perNight": "/night (breakfast included)",
+      "priceNote": "That's 37.5€ per person",
+      "visitWeb": "Visit hotel website",
+      "howToBook": "How to book?",
+      "bookingInstructions": "Booking is exclusively by email or phone. Click the button to send a pre-filled email to the hotel (in Italian).",
+      "bookByEmail": "Book by Email",
+      "fallbackNote": "If the button doesn't work, copy and paste this text into your email:",
+      "copyTemplate": "Copy template",
+      "emailSubjectLabel": "Subject",
+      "emailBodyLabel": "Message body"
     },
     "rsvp": {
       "title": "Confirm Your Attendance",
@@ -101,22 +103,6 @@
       "sending": "Sending...",
       "thankYou": "Thank you for your suggestion!",
       "songAdded": "We've added your song to our list."
-    },
-    "seat": {
-      "title": "Your Seat",
-      "subtitle": "Find your table for dinner",
-      "searchPlaceholder": "Type your name...",
-      "searchButton": "Find my table",
-      "searching": "Searching...",
-      "greeting": "Hello",
-      "tableMessage": "We've reserved a seat for you at",
-      "table": "Table",
-      "multipleResults": "We found several guests with that name",
-      "selectYourself": "Please select your name:",
-      "notFound": "We couldn't find you",
-      "notFoundMessage": "Please check with our Wedding Planner",
-      "searchAgain": "Search again",
-      "noTableAssigned": "Your table will be assigned soon"
     }
   },
   "footer": {

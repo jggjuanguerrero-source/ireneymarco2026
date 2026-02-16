@@ -4,8 +4,7 @@
     "prewedding": "Pre-Matrimonio",
     "travel": "Hotel",
     "rsvp": "RSVP",
-    "music": "Musica",
-    "seat": "Il Tuo Posto"
+    "music": "Musica"
   },
   "hero": {
     "date": "10 Ottobre, 2026",
@@ -49,15 +48,18 @@
     },
     "travel": {
       "title": "Alloggio",
-      "subtitle": "Hotel consigliati a Jesolo",
-      "whereToStay": "Dove Dormire",
-      "bookNow": "Prenota",
-      "discountCode": "Codice Sconto",
-      "priceDouble": "Camera doppia",
-      "priceTriple": "Camera tripla",
-      "perNight": "/notte",
-      "copyCode": "Copia",
-      "codeCopied": "Copiato!"
+      "subtitle": "Il nostro consiglio per il tuo soggiorno",
+      "hotelDescription": "Abbiamo riservato delle camere all'Hotel Orizzonte a Jesolo, a pochi minuti da Venezia. Prezzo speciale per gli invitati al matrimonio con colazione inclusa.",
+      "perNight": "/notte (colazione inclusa)",
+      "priceNote": "Equivale a 37,5€ a persona",
+      "visitWeb": "Visita il sito dell'hotel",
+      "howToBook": "Come prenotare?",
+      "bookingInstructions": "La prenotazione è esclusivamente via email o telefono. Clicca il pulsante per inviare un'email pre-compilata all'hotel.",
+      "bookByEmail": "Prenota via Email",
+      "fallbackNote": "Se il pulsante non funziona, copia e incolla questo testo nella tua email:",
+      "copyTemplate": "Copia modello",
+      "emailSubjectLabel": "Oggetto",
+      "emailBodyLabel": "Corpo del messaggio"
     },
     "rsvp": {
       "title": "Conferma la tua Presenza",
@@ -101,22 +103,6 @@
       "sending": "Invio in corso...",
       "thankYou": "Grazie per il tuo suggerimento!",
       "songAdded": "Abbiamo aggiunto la tua canzone alla nostra lista."
-    },
-    "seat": {
-      "title": "Il Tuo Posto",
-      "subtitle": "Trova il tuo tavolo per la cena",
-      "searchPlaceholder": "Scrivi il tuo nome...",
-      "searchButton": "Trova il mio tavolo",
-      "searching": "Ricerca in corso...",
-      "greeting": "Ciao",
-      "tableMessage": "Ti abbiamo riservato un posto al",
-      "table": "Tavolo",
-      "multipleResults": "Abbiamo trovato diversi ospiti con quel nome",
-      "selectYourself": "Per favore, seleziona il tuo nome:",
-      "notFound": "Non ti abbiamo trovato",
-      "notFoundMessage": "Per favore, chiedi alla nostra Wedding Planner",
-      "searchAgain": "Cerca di nuovo",
-      "noTableAssigned": "Il tuo tavolo sarà assegnato a breve"
     }
   },
   "footer": {
