@@ -2,10 +2,9 @@
   "nav": {
     "wedding": "La Boda",
     "prewedding": "Preboda",
-    "travel": "Hoteles",
+    "travel": "Hotel",
     "rsvp": "RSVP",
-    "music": "Música",
-    "seat": "Tu Sitio"
+    "music": "Música"
   },
   "hero": {
     "date": "10 de Octubre, 2026",
@@ -49,15 +48,18 @@
     },
     "travel": {
       "title": "Alojamiento",
-      "subtitle": "Hoteles recomendados en Jesolo",
-      "whereToStay": "Dónde Dormir",
-      "bookNow": "Reservar",
-      "discountCode": "Código Descuento",
-      "priceDouble": "Habitación doble",
-      "priceTriple": "Habitación triple",
-      "perNight": "/noche",
-      "copyCode": "Copiar",
-      "codeCopied": "¡Copiado!"
+      "subtitle": "Nuestra recomendación para tu estancia",
+      "hotelDescription": "Hemos reservado habitaciones en el Hotel Orizzonte, en Jesolo, a pocos minutos de Venecia. Precio especial para los invitados de la boda con desayuno incluido.",
+      "perNight": "/noche (desayuno incluido)",
+      "priceNote": "Equivale a 37,5€ por persona",
+      "visitWeb": "Ver web del hotel",
+      "howToBook": "¿Cómo reservar?",
+      "bookingInstructions": "La reserva se realiza exclusivamente por email o por teléfono. Haz clic en el botón para enviar un email pre-rellenado al hotel (en italiano).",
+      "bookByEmail": "Reservar por Email",
+      "fallbackNote": "Si el botón no funciona, copia y pega este texto en tu email:",
+      "copyTemplate": "Copiar plantilla",
+      "emailSubjectLabel": "Asunto",
+      "emailBodyLabel": "Cuerpo del mensaje"
     },
     "rsvp": {
       "title": "Confirma tu Asistencia",
@@ -101,22 +103,6 @@
       "sending": "Enviando...",
       "thankYou": "¡Gracias por tu sugerencia!",
       "songAdded": "Hemos añadido tu canción a nuestra lista."
-    },
-    "seat": {
-      "title": "Tu Sitio",
-      "subtitle": "Encuentra tu mesa para la cena",
-      "searchPlaceholder": "Escribe tu nombre...",
-      "searchButton": "Buscar mi mesa",
-      "searching": "Buscando...",
-      "greeting": "¡Hola",
-      "tableMessage": "Te hemos reservado un sitio en la",
-      "table": "Mesa",
-      "multipleResults": "Hemos encontrado varios invitados con ese nombre",
-      "selectYourself": "Por favor, selecciona tu nombre:",
-      "notFound": "No te encontramos",
-      "notFoundMessage": "Por favor, consulta con nuestra Wedding Planner",
-      "searchAgain": "Buscar de nuevo",
-      "noTableAssigned": "Tu mesa será asignada pronto"
     }
   },
   "footer": {

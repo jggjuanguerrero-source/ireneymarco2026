@@ -1,88 +1,42 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView } from 'framer-motion';
-import { MapPin, ExternalLink, Tag, Copy, Check } from 'lucide-react';
+import { Mail, Phone, ExternalLink, Copy, Check, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import hotelEuropaImg from '@/assets/hotel-europa.jpg';
-import hotelAtlanticoImg from '@/assets/hotel-atlantico.jpg';
-import hotelCasablancaImg from '@/assets/hotel-casablanca.jpg';
+import hotelImg from '@/assets/hotel-orizzonte.jpg';
 
-// ============================================
-// EDITABLE DATA - Hotels
-// ============================================
+const HOTEL_EMAIL = 'booking@horizzonte.com';
+const HOTEL_PHONE = '0421 380 004';
+const HOTEL_WEB = 'https://www.hotelorizzonte.it/';
 
-interface Hotel {
-  id: string;
-  name: string;
-  image: string;
-  description: { es: string; en: string; it: string };
-  prices: { double: number; triple?: number };
-  discountCode: string;
-  bookingUrl: string;
-}
-
-const hotels: Hotel[] = [
-  {
-    id: 'europa',
-    name: 'Hotel Europa',
-    image: hotelEuropaImg,
-    description: {
-      es: 'Hotel acogedor en el corazón de Jesolo, ideal para disfrutar de la playa y la cercanía a Venecia.',
-      en: 'Cozy hotel in the heart of Jesolo, ideal for enjoying the beach and proximity to Venice.',
-      it: 'Hotel accogliente nel cuore di Jesolo, ideale per godersi la spiaggia e la vicinanza a Venezia.',
-    },
-    prices: { double: 90 },
-    discountCode: 'BODA-IRENE-MARCO',
-    bookingUrl: 'https://www.hoteleuropajesolo.it/',
-  },
-  {
-    id: 'atlantico',
-    name: 'Hotel Atlántico',
-    image: hotelAtlanticoImg,
-    description: {
-      es: 'Ubicación privilegiada con todas las comodidades para una estancia perfecta en Jesolo.',
-      en: 'Privileged location with all amenities for a perfect stay in Jesolo.',
-      it: 'Posizione privilegiata con tutti i comfort per un soggiorno perfetto a Jesolo.',
-    },
-    prices: { double: 80 },
-    discountCode: 'BODA-IRENE-MARCO',
-    bookingUrl: 'https://www.hotel-atlantico.it/',
-  },
-  {
-    id: 'casablanca',
-    name: 'Hotel Casablanca',
-    image: hotelCasablancaImg,
-    description: {
-      es: 'Excelente relación calidad-precio con opción de habitaciones triples, perfecto para grupos.',
-      en: 'Excellent value for money with triple room option, perfect for groups.',
-      it: 'Ottimo rapporto qualità-prezzo con opzione camere triple, perfetto per gruppi.',
-    },
-    prices: { double: 70, triple: 105 },
-    discountCode: 'BODA-IRENE-MARCO',
-    bookingUrl: 'https://casablancajesolo.it/',
-  },
-];
-
-// ============================================
-// COMPONENT
-// ============================================
+const MAILTO_SUBJECT = 'Conferma prenotazione [Nome e Cognome] per matrimonio Marco & Irene';
+const MAILTO_BODY = `Buongiorno,
+Vorrei confermare una prenotazione per il matrimonio di Marco & Irene.
+- Nome e Cognome: [Tu Nombre y Apellidos]
+- Data di arrivo (Check-in): [Giorno] Ottobre 2026
+- Data di partenza (Check-out): [Giorno] Ottobre 2026
+- Numero di persone: [Numero di adulti/bambini]
+Grazie.`;
 
 const TravelSection = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const lang = i18n.language as 'es' | 'en' | 'it';
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const handleCopy = (code: string, hotelId: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedId(hotelId);
-    setTimeout(() => setCopiedId(null), 2000);
+  const handleCopy = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
   };
+
+  const mailtoLink = `mailto:${HOTEL_EMAIL}?subject=${encodeURIComponent(MAILTO_SUBJECT)}&body=${encodeURIComponent(MAILTO_BODY)}`;
+
+  const fullTemplate = `${t('sections.travel.emailSubjectLabel')}: ${MAILTO_SUBJECT}\n\n${MAILTO_BODY}`;
 
   return (
     <section id="travel" ref={ref} className="section-padding bg-secondary/50">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -103,73 +57,102 @@ const TravelSection = () => {
           </p>
         </motion.div>
 
-        {/* Hotel Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {hotels.map((hotel, index) => (
-            <motion.div
-              key={hotel.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
-              className="bg-background rounded-xl overflow-hidden border border-border shadow-sm hover:shadow-lg transition-all group"
-            >
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={hotel.image}
-                  alt={hotel.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+        {/* Hotel Card */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="bg-background rounded-xl overflow-hidden border border-border shadow-sm"
+        >
+          {/* Hotel Image */}
+          <div className="relative h-56 md:h-72 overflow-hidden">
+            <img
+              src={hotelImg}
+              alt="Hotel Orizzonte"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent" />
+            <div className="absolute bottom-4 left-6">
+              <h3 className="font-serif text-2xl md:text-3xl text-background drop-shadow-lg">
+                Hotel Orizzonte
+              </h3>
+            </div>
+          </div>
+
+          <div className="p-6 md:p-8 space-y-6">
+            {/* Description */}
+            <p className="font-body text-base md:text-lg text-foreground/80 leading-relaxed">
+              {t('sections.travel.hotelDescription')}
+            </p>
+
+            {/* Price */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 p-4 bg-primary/5 rounded-lg border border-primary/20">
+              <div className="flex-1">
+                <p className="font-serif text-lg text-foreground">75€ <span className="font-body text-sm text-muted-foreground">{t('sections.travel.perNight')}</span></p>
+                <p className="font-body text-sm text-muted-foreground">{t('sections.travel.priceNote')}</p>
               </div>
+              <a
+                href={HOTEL_WEB}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 font-body text-sm text-primary hover:underline"
+              >
+                <Globe className="w-4 h-4" />
+                {t('sections.travel.visitWeb')}
+              </a>
+            </div>
 
-              <div className="p-5">
-                <h4 className="font-serif text-lg text-foreground mb-3">{hotel.name}</h4>
-                <p className="font-body text-sm text-foreground/70 mb-4 leading-relaxed">
-                  {hotel.description[lang]}
-                </p>
+            {/* Booking instructions */}
+            <div className="space-y-3">
+              <h4 className="font-serif text-lg text-foreground">{t('sections.travel.howToBook')}</h4>
+              <p className="font-body text-sm text-foreground/70">{t('sections.travel.bookingInstructions')}</p>
 
-                <div className="mb-4 space-y-1">
-                  <div className="flex items-center justify-between font-body text-sm">
-                    <span className="text-foreground/80">{t('sections.travel.priceDouble')}</span>
-                    <span className="font-semibold text-foreground">{hotel.prices.double}€{t('sections.travel.perNight')}</span>
-                  </div>
-                  {hotel.prices.triple && (
-                    <div className="flex items-center justify-between font-body text-sm">
-                      <span className="text-foreground/80">{t('sections.travel.priceTriple')}</span>
-                      <span className="font-semibold text-foreground">{hotel.prices.triple}€{t('sections.travel.perNight')}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2 mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
-                  <Tag className="w-4 h-4 text-primary flex-shrink-0" />
-                  <code className="font-mono text-sm font-semibold text-primary truncate">
-                    {hotel.discountCode}
-                  </code>
-                  <button
-                    onClick={() => handleCopy(hotel.discountCode, hotel.id)}
-                    className="ml-auto flex-shrink-0 p-1.5 rounded-md hover:bg-primary/10 transition-colors"
-                    title={t('sections.travel.copyCode')}
-                  >
-                    {copiedId === hotel.id ? (
-                      <Check className="w-4 h-4 text-primary" />
-                    ) : (
-                      <Copy className="w-4 h-4 text-primary" />
-                    )}
-                  </button>
-                </div>
-
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  className="flex-1 gap-2"
+                  onClick={() => window.open(mailtoLink, '_blank')}
+                >
+                  <Mail className="w-4 h-4" />
+                  {t('sections.travel.bookByEmail')}
+                </Button>
                 <Button
                   variant="outline"
-                  className="w-full gap-2 hover:bg-primary hover:text-primary-foreground transition-colors"
-                  onClick={() => window.open(hotel.bookingUrl, '_blank')}
+                  className="flex-1 gap-2"
+                  onClick={() => window.open(`tel:+39${HOTEL_PHONE.replace(/\s/g, '')}`, '_self')}
                 >
-                  {t('sections.travel.bookNow')}
-                  <ExternalLink className="w-4 h-4" />
+                  <Phone className="w-4 h-4" />
+                  {HOTEL_PHONE}
                 </Button>
               </div>
-            </motion.div>
-          ))}
-        </div>
+            </div>
+
+            {/* Fallback template */}
+            <div className="mt-6 p-5 bg-card rounded-lg border border-border">
+              <div className="flex items-start justify-between mb-3">
+                <p className="font-body text-sm italic text-muted-foreground">
+                  {t('sections.travel.fallbackNote')}
+                </p>
+                <button
+                  onClick={() => handleCopy(fullTemplate, 'template')}
+                  className="ml-3 flex-shrink-0 p-2 rounded-md hover:bg-primary/10 transition-colors"
+                  title={t('sections.travel.copyTemplate')}
+                >
+                  {copiedField === 'template' ? (
+                    <Check className="w-4 h-4 text-primary" />
+                  ) : (
+                    <Copy className="w-4 h-4 text-primary" />
+                  )}
+                </button>
+              </div>
+              <div className="font-body text-sm text-foreground/80 whitespace-pre-line leading-relaxed bg-background/50 p-4 rounded border border-border/50">
+                <p className="font-semibold mb-1">{t('sections.travel.emailSubjectLabel')}:</p>
+                <p className="mb-3">{MAILTO_SUBJECT}</p>
+                <p className="font-semibold mb-1">{t('sections.travel.emailBodyLabel')}:</p>
+                <p>{MAILTO_BODY}</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
