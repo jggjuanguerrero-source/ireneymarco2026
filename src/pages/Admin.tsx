@@ -35,12 +35,12 @@ import {
   Trash2,
   UserPlus,
   Lock,
-  Save,
   X,
   Check,
   ChevronDown,
   Undo2,
   CheckSquare,
+  Download,
 } from 'lucide-react';
 
 // ============================================
@@ -60,6 +60,14 @@ interface Guest {
   plus_one: boolean | null;
   plus_one_name: string | null;
   song_processed: boolean;
+  language: string;
+  created_at: string;
+  children_count: number | null;
+  notes: string | null;
+  bus_ida: boolean;
+  bus_vuelta: boolean;
+  barco_ida: boolean;
+  barco_vuelta: boolean;
 }
 
 interface Metrics {
@@ -78,6 +86,77 @@ const isAnonymousSuggestion = (guest: Guest): boolean => {
   );
 };
 
+const formatDate = (iso: string) => {
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' });
+};
+
+const langLabel = (code: string) => {
+  const map: Record<string, string> = { es: '🇪🇸 ES', en: '🇬🇧 EN', it: '🇮🇹 IT' };
+  return map[code] ?? code.toUpperCase();
+};
+
+const boolCell = (val: boolean) =>
+  val ? (
+    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100 text-green-600">
+      <Check className="w-3 h-3" />
+    </span>
+  ) : (
+    <span className="text-slate-300">—</span>
+  );
+
+// CSV Export
+const downloadCSV = (guests: Guest[]) => {
+  const headers = [
+    'Nombre',
+    'Apellidos',
+    'Email',
+    'Asistencia',
+    'Pareja',
+    'Nombre Pareja',
+    'Niños',
+    'Notas Niños',
+    'Alergias/Dieta',
+    'Canción',
+    'Idioma',
+    'Fecha Registro',
+    'Bus Ida',
+    'Bus Vuelta',
+    'Barco Ida',
+    'Barco Vuelta',
+  ];
+
+  const rows = guests.map((g) => [
+    g.first_name,
+    g.last_name,
+    g.email,
+    g.rsvp_status === true ? 'Sí' : g.rsvp_status === false ? 'No' : 'Pendiente',
+    g.plus_one ? 'Sí' : 'No',
+    g.plus_one_name ?? '',
+    g.children_count ?? 0,
+    g.notes ?? '',
+    g.dietary_reqs ?? '',
+    g.song_request ?? '',
+    g.language ?? '',
+    formatDate(g.created_at),
+    g.bus_ida ? 'Sí' : 'No',
+    g.bus_vuelta ? 'Sí' : 'No',
+    g.barco_ida ? 'Sí' : 'No',
+    g.barco_vuelta ? 'Sí' : 'No',
+  ]);
+
+  const escape = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
+  const csv = [headers, ...rows].map((r) => r.map(escape).join(',')).join('\n');
+
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `invitados_irene_marco_${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
 const Admin = () => {
   const { toast } = useToast();
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -87,7 +166,6 @@ const Admin = () => {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [metrics, setMetrics] = useState<Metrics>({ total: 0, confirmed: 0, pending: 0, dietary: 0 });
   const [loading, setLoading] = useState(true);
-  const [editingTableId, setEditingTableId] = useState<{ id: string; value: string } | null>(null);
 
   // Collapsible states for song sections
   const [pendingSongsOpen, setPendingSongsOpen] = useState(true);
@@ -100,11 +178,9 @@ const Admin = () => {
     last_name: '',
     email: '',
     rsvp_status: false,
-    table_id: '',
     dietary_reqs: '',
   });
 
-  // Check access code
   const handleUnlock = () => {
     if (accessCode === ACCESS_CODE) {
       setIsUnlocked(true);
@@ -114,7 +190,6 @@ const Admin = () => {
     }
   };
 
-  // Fetch guests data
   const fetchGuests = async () => {
     setLoading(true);
     const { data, error } = await supabase
@@ -123,18 +198,13 @@ const Admin = () => {
       .order('last_name', { ascending: true });
 
     if (error) {
-      toast({
-        title: 'Error',
-        description: 'No se pudieron cargar los invitados',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: 'No se pudieron cargar los invitados', variant: 'destructive' });
       return;
     }
 
     const guestsData = (data || []) as Guest[];
     setGuests(guestsData);
 
-    // Calculate metrics (excluding anonymous suggestions)
     const realGuests = guestsData.filter((g) => !isAnonymousSuggestion(g));
     setMetrics({
       total: realGuests.length,
@@ -147,39 +217,9 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    if (isUnlocked) {
-      fetchGuests();
-    }
+    if (isUnlocked) fetchGuests();
   }, [isUnlocked]);
 
-  // Update table_id for a guest
-  const handleUpdateTableId = async (guestId: string, tableId: string) => {
-    const tableNumber = tableId ? parseInt(tableId, 10) : null;
-
-    const { error } = await supabase
-      .from('guests')
-      .update({ table_id: tableNumber })
-      .eq('id', guestId);
-
-    if (error) {
-      toast({
-        title: 'Error',
-        description: 'No se pudo actualizar la mesa',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    toast({
-      title: '✓ Mesa actualizada',
-      description: `Mesa asignada: ${tableNumber || 'Sin asignar'}`,
-    });
-
-    setEditingTableId(null);
-    fetchGuests();
-  };
-
-  // Toggle song processed status
   const handleToggleSongProcessed = async (guestId: string, processed: boolean) => {
     const { error } = await supabase
       .from('guests')
@@ -187,11 +227,7 @@ const Admin = () => {
       .eq('id', guestId);
 
     if (error) {
-      toast({
-        title: 'Error',
-        description: 'No se pudo actualizar el estado',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: 'No se pudo actualizar el estado', variant: 'destructive' });
       return;
     }
 
@@ -203,14 +239,9 @@ const Admin = () => {
     fetchGuests();
   };
 
-  // Add new guest
   const handleAddGuest = async () => {
     if (!newGuest.first_name || !newGuest.last_name || !newGuest.email) {
-      toast({
-        title: 'Error',
-        description: 'Nombre, apellidos y email son obligatorios',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: 'Nombre, apellidos y email son obligatorios', variant: 'destructive' });
       return;
     }
 
@@ -219,56 +250,33 @@ const Admin = () => {
       last_name: newGuest.last_name,
       email: newGuest.email,
       rsvp_status: newGuest.rsvp_status,
-      table_id: newGuest.table_id ? parseInt(newGuest.table_id, 10) : null,
       dietary_reqs: newGuest.dietary_reqs || null,
+      language: 'es',
     });
 
     if (error) {
-      toast({
-        title: 'Error',
-        description: 'No se pudo añadir el invitado',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: 'No se pudo añadir el invitado', variant: 'destructive' });
       return;
     }
 
-    toast({
-      title: '✓ Invitado añadido',
-      description: `${newGuest.first_name} ${newGuest.last_name} ha sido registrado`,
-    });
+    toast({ title: '✓ Invitado añadido', description: `${newGuest.first_name} ${newGuest.last_name} ha sido registrado` });
 
-    setNewGuest({
-      first_name: '',
-      last_name: '',
-      email: '',
-      rsvp_status: false,
-      table_id: '',
-      dietary_reqs: '',
-    });
+    setNewGuest({ first_name: '', last_name: '', email: '', rsvp_status: false, dietary_reqs: '' });
     setIsAddDialogOpen(false);
     fetchGuests();
   };
 
-  // Delete guest
   const handleDeleteGuest = async (guestId: string, guestName: string) => {
     if (!confirm(`¿Seguro que quieres eliminar a ${guestName}?`)) return;
 
     const { error } = await supabase.from('guests').delete().eq('id', guestId);
 
     if (error) {
-      toast({
-        title: 'Error',
-        description: 'No se pudo eliminar el invitado',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: 'No se pudo eliminar el invitado', variant: 'destructive' });
       return;
     }
 
-    toast({
-      title: '✓ Invitado eliminado',
-      description: `${guestName} ha sido eliminado`,
-    });
-
+    toast({ title: '✓ Invitado eliminado', description: `${guestName} ha sido eliminado` });
     fetchGuests();
   };
 
@@ -294,14 +302,9 @@ const Admin = () => {
                 type="password"
                 placeholder="Código de acceso..."
                 value={accessCode}
-                onChange={(e) => {
-                  setAccessCode(e.target.value);
-                  setCodeError(false);
-                }}
+                onChange={(e) => { setAccessCode(e.target.value); setCodeError(false); }}
                 onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
-                className={`text-center text-lg tracking-widest ${
-                  codeError ? 'border-red-500 focus-visible:ring-red-500' : ''
-                }`}
+                className={`text-center text-lg tracking-widest ${codeError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
               />
               {codeError && (
                 <p className="text-red-500 text-sm text-center mt-2">
@@ -318,33 +321,21 @@ const Admin = () => {
     );
   }
 
-  // Filter out anonymous suggestions for the guest table
   const realGuests = guests.filter((g) => !isAnonymousSuggestion(g));
-
-  // Song requests - all guests with songs (including anonymous)
-  const allSongRequests = guests.filter(
-    (g) => g.song_request && g.song_request.trim() !== ''
-  );
+  const allSongRequests = guests.filter((g) => g.song_request && g.song_request.trim() !== '');
   const pendingSongs = allSongRequests.filter((g) => !g.song_processed);
   const addedSongs = allSongRequests.filter((g) => g.song_processed);
 
-  // Dashboard
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-slate-800">
-              Panel de Coordinación
-            </h1>
+            <h1 className="text-xl font-semibold text-slate-800">Panel de Coordinación</h1>
             <p className="text-sm text-slate-500">Irene & Marco · Venecia 2026</p>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsUnlocked(false)}
-          >
+          <Button variant="outline" size="sm" onClick={() => setIsUnlocked(false)}>
             Cerrar Sesión
           </Button>
         </div>
@@ -366,7 +357,6 @@ const Admin = () => {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
@@ -380,7 +370,6 @@ const Admin = () => {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
@@ -394,7 +383,6 @@ const Admin = () => {
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
@@ -412,66 +400,59 @@ const Admin = () => {
 
         {/* Guest Table */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
+          <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
             <CardTitle className="text-lg">Gestión de Invitados</CardTitle>
-            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-              <DialogTrigger asChild>
-                <Button size="sm" className="gap-2">
-                  <UserPlus className="w-4 h-4" />
-                  Añadir Invitado
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Añadir Nuevo Invitado</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 pt-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label>Nombre *</Label>
-                      <Input
-                        value={newGuest.first_name}
-                        onChange={(e) =>
-                          setNewGuest({ ...newGuest, first_name: e.target.value })
-                        }
-                        placeholder="Nombre"
-                      />
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 text-slate-600"
+                onClick={() => downloadCSV(realGuests)}
+                disabled={realGuests.length === 0}
+              >
+                <Download className="w-4 h-4" />
+                Descargar CSV
+              </Button>
+              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="sm" className="gap-2">
+                    <UserPlus className="w-4 h-4" />
+                    Añadir Invitado
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Añadir Nuevo Invitado</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 pt-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Nombre *</Label>
+                        <Input
+                          value={newGuest.first_name}
+                          onChange={(e) => setNewGuest({ ...newGuest, first_name: e.target.value })}
+                          placeholder="Nombre"
+                        />
+                      </div>
+                      <div>
+                        <Label>Apellidos *</Label>
+                        <Input
+                          value={newGuest.last_name}
+                          onChange={(e) => setNewGuest({ ...newGuest, last_name: e.target.value })}
+                          placeholder="Apellidos"
+                        />
+                      </div>
                     </div>
                     <div>
-                      <Label>Apellidos *</Label>
+                      <Label>Email *</Label>
                       <Input
-                        value={newGuest.last_name}
-                        onChange={(e) =>
-                          setNewGuest({ ...newGuest, last_name: e.target.value })
-                        }
-                        placeholder="Apellidos"
+                        type="email"
+                        value={newGuest.email}
+                        onChange={(e) => setNewGuest({ ...newGuest, email: e.target.value })}
+                        placeholder="email@ejemplo.com"
                       />
                     </div>
-                  </div>
-                  <div>
-                    <Label>Email *</Label>
-                    <Input
-                      type="email"
-                      value={newGuest.email}
-                      onChange={(e) =>
-                        setNewGuest({ ...newGuest, email: e.target.value })
-                      }
-                      placeholder="email@ejemplo.com"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label>Mesa</Label>
-                      <Input
-                        type="number"
-                        value={newGuest.table_id}
-                        onChange={(e) =>
-                          setNewGuest({ ...newGuest, table_id: e.target.value })
-                        }
-                        placeholder="Número de mesa"
-                      />
-                    </div>
-                    <div className="flex items-center gap-2 pt-6">
+                    <div className="flex items-center gap-2">
                       <Checkbox
                         id="rsvp"
                         checked={newGuest.rsvp_status}
@@ -481,31 +462,27 @@ const Admin = () => {
                       />
                       <Label htmlFor="rsvp">Confirmado</Label>
                     </div>
+                    <div>
+                      <Label>Restricciones Alimentarias</Label>
+                      <Input
+                        value={newGuest.dietary_reqs}
+                        onChange={(e) => setNewGuest({ ...newGuest, dietary_reqs: e.target.value })}
+                        placeholder="Alergias, vegetariano, etc."
+                      />
+                    </div>
+                    <Button onClick={handleAddGuest} className="w-full">
+                      Guardar Invitado
+                    </Button>
                   </div>
-                  <div>
-                    <Label>Restricciones Alimentarias</Label>
-                    <Input
-                      value={newGuest.dietary_reqs}
-                      onChange={(e) =>
-                        setNewGuest({ ...newGuest, dietary_reqs: e.target.value })
-                      }
-                      placeholder="Alergias, vegetariano, etc."
-                    />
-                  </div>
-                  <Button onClick={handleAddGuest} className="w-full">
-                    Guardar Invitado
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+                </DialogContent>
+              </Dialog>
+            </div>
           </CardHeader>
           <CardContent>
             {loading ? (
               <div className="text-center py-8 text-slate-500">Cargando...</div>
             ) : realGuests.length === 0 ? (
-              <div className="text-center py-8 text-slate-500">
-                No hay invitados registrados
-              </div>
+              <div className="text-center py-8 text-slate-500">No hay invitados registrados</div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
@@ -514,8 +491,12 @@ const Admin = () => {
                       <TableHead>Nombre</TableHead>
                       <TableHead className="text-center">Asistencia</TableHead>
                       <TableHead>Alergias/Dieta</TableHead>
-                      <TableHead className="text-center">Mesa</TableHead>
-                      <TableHead>Canción</TableHead>
+                      <TableHead className="text-center">Idioma</TableHead>
+                      <TableHead className="text-center">🚌 Ida</TableHead>
+                      <TableHead className="text-center">🚌 Vuelta</TableHead>
+                      <TableHead className="text-center">⛵ Ida</TableHead>
+                      <TableHead className="text-center">⛵ Vuelta</TableHead>
+                      <TableHead className="text-center">Registro</TableHead>
                       <TableHead className="w-12"></TableHead>
                     </TableRow>
                   </TableHeader>
@@ -529,9 +510,7 @@ const Admin = () => {
                             </p>
                             <p className="text-xs text-slate-500">{guest.email}</p>
                             {guest.plus_one && guest.plus_one_name && (
-                              <p className="text-xs text-slate-400 mt-1">
-                                +1: {guest.plus_one_name}
-                              </p>
+                              <p className="text-xs text-slate-400 mt-1">+1: {guest.plus_one_name}</p>
                             )}
                           </div>
                         </TableCell>
@@ -558,62 +537,14 @@ const Admin = () => {
                           )}
                         </TableCell>
                         <TableCell className="text-center">
-                          {editingTableId?.id === guest.id ? (
-                            <div className="flex items-center gap-1">
-                              <Input
-                                type="number"
-                                className="w-16 h-8 text-center text-sm"
-                                value={editingTableId.value}
-                                onChange={(e) =>
-                                  setEditingTableId({
-                                    ...editingTableId,
-                                    value: e.target.value,
-                                  })
-                                }
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') {
-                                    handleUpdateTableId(guest.id, editingTableId.value);
-                                  }
-                                  if (e.key === 'Escape') {
-                                    setEditingTableId(null);
-                                  }
-                                }}
-                                autoFocus
-                              />
-                              <Button
-                                size="icon"
-                                variant="ghost"
-                                className="h-8 w-8"
-                                onClick={() =>
-                                  handleUpdateTableId(guest.id, editingTableId.value)
-                                }
-                              >
-                                <Save className="w-3 h-3" />
-                              </Button>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() =>
-                                setEditingTableId({
-                                  id: guest.id,
-                                  value: guest.table_id?.toString() || '',
-                                })
-                              }
-                              className="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded text-sm font-medium text-slate-700 transition-colors min-w-[48px]"
-                            >
-                              {guest.table_id || '—'}
-                            </button>
-                          )}
+                          <span className="text-sm">{langLabel(guest.language)}</span>
                         </TableCell>
-                        <TableCell>
-                          {guest.song_request ? (
-                            <span className="text-sm text-slate-600 flex items-center gap-1">
-                              <Music className="w-3 h-3" />
-                              {guest.song_request}
-                            </span>
-                          ) : (
-                            <span className="text-slate-300">—</span>
-                          )}
+                        <TableCell className="text-center">{boolCell(guest.bus_ida)}</TableCell>
+                        <TableCell className="text-center">{boolCell(guest.bus_vuelta)}</TableCell>
+                        <TableCell className="text-center">{boolCell(guest.barco_ida)}</TableCell>
+                        <TableCell className="text-center">{boolCell(guest.barco_vuelta)}</TableCell>
+                        <TableCell className="text-center text-xs text-slate-500 whitespace-nowrap">
+                          {formatDate(guest.created_at)}
                         </TableCell>
                         <TableCell>
                           <Button
@@ -621,10 +552,7 @@ const Admin = () => {
                             variant="ghost"
                             className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
                             onClick={() =>
-                              handleDeleteGuest(
-                                guest.id,
-                                `${guest.first_name} ${guest.last_name}`
-                              )
+                              handleDeleteGuest(guest.id, `${guest.first_name} ${guest.last_name}`)
                             }
                           >
                             <Trash2 className="w-4 h-4" />
@@ -639,15 +567,13 @@ const Admin = () => {
           </CardContent>
         </Card>
 
-        {/* Song Requests - Dual Section */}
+        {/* Song Requests */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <Music className="w-5 h-5" />
               Peticiones de Canciones
-              <span className="text-sm font-normal text-slate-500">
-                ({allSongRequests.length} total)
-              </span>
+              <span className="text-sm font-normal text-slate-500">({allSongRequests.length} total)</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -662,29 +588,20 @@ const Admin = () => {
                     </span>
                   </span>
                   <ChevronDown
-                    className={`w-5 h-5 text-amber-600 transition-transform ${
-                      pendingSongsOpen ? 'rotate-180' : ''
-                    }`}
+                    className={`w-5 h-5 text-amber-600 transition-transform ${pendingSongsOpen ? 'rotate-180' : ''}`}
                   />
                 </button>
               </CollapsibleTrigger>
               <CollapsibleContent className="pt-3">
                 {pendingSongs.length === 0 ? (
-                  <p className="text-slate-500 text-center py-4 text-sm">
-                    ¡Todas las canciones han sido añadidas! 🎉
-                  </p>
+                  <p className="text-slate-500 text-center py-4 text-sm">¡Todas las canciones han sido añadidas! 🎉</p>
                 ) : (
                   <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {pendingSongs.map((guest) => (
-                      <div
-                        key={guest.id}
-                        className="bg-white rounded-lg p-3 border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
-                      >
+                      <div key={guest.id} className="bg-white rounded-lg p-3 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-slate-700 truncate">
-                              {guest.song_request}
-                            </p>
+                            <p className="font-medium text-slate-700 truncate">{guest.song_request}</p>
                             <p className="text-xs text-slate-400 mt-1">
                               — {isAnonymousSuggestion(guest) ? 'Anónimo' : `${guest.first_name} ${guest.last_name}`}
                             </p>
@@ -717,24 +634,17 @@ const Admin = () => {
                     </span>
                   </span>
                   <ChevronDown
-                    className={`w-5 h-5 text-green-600 transition-transform ${
-                      addedSongsOpen ? 'rotate-180' : ''
-                    }`}
+                    className={`w-5 h-5 text-green-600 transition-transform ${addedSongsOpen ? 'rotate-180' : ''}`}
                   />
                 </button>
               </CollapsibleTrigger>
               <CollapsibleContent className="pt-3">
                 {addedSongs.length === 0 ? (
-                  <p className="text-slate-500 text-center py-4 text-sm">
-                    No hay canciones añadidas todavía
-                  </p>
+                  <p className="text-slate-500 text-center py-4 text-sm">No hay canciones añadidas todavía</p>
                 ) : (
                   <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
                     {addedSongs.map((guest) => (
-                      <div
-                        key={guest.id}
-                        className="bg-green-50/50 rounded-lg p-3 border border-green-100"
-                      >
+                      <div key={guest.id} className="bg-green-50/50 rounded-lg p-3 border border-green-100">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-slate-600 truncate line-through decoration-green-400">

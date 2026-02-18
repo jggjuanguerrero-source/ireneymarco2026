@@ -16,6 +16,10 @@ export type Database = {
     Tables: {
       guests: {
         Row: {
+          barco_ida: boolean
+          barco_vuelta: boolean
+          bus_ida: boolean
+          bus_vuelta: boolean
           children_count: number | null
           children_needs: string | null
           created_at: string
@@ -35,6 +39,10 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          barco_ida?: boolean
+          barco_vuelta?: boolean
+          bus_ida?: boolean
+          bus_vuelta?: boolean
           children_count?: number | null
           children_needs?: string | null
           created_at?: string
@@ -54,6 +62,10 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          barco_ida?: boolean
+          barco_vuelta?: boolean
+          bus_ida?: boolean
+          bus_vuelta?: boolean
           children_count?: number | null
           children_needs?: string | null
           created_at?: string
