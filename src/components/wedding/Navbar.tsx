@@ -22,6 +22,7 @@ const Navbar = () => {
     { href: '#prewedding', label: t('nav.prewedding') },
     { href: '#travel', label: t('nav.travel') },
     { href: '#rsvp', label: t('nav.rsvp') },
+    { href: '#gift', label: t('nav.gift') },
     { href: '#music', label: t('nav.music') },
   ];
 
