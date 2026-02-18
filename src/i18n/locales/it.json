@@ -94,11 +94,8 @@
       "dietary": "Allergie o restrizioni alimentari",
       "dietaryPlaceholder": "Indica qui le allergie o restrizioni alimentari di TUTTI i partecipanti (tu, il tuo partner e i bambini se presenti)...",
       "transport": "Trasporto",
-      "transportDescription": "Indica se hai bisogno di trasporto organizzato dal matrimonio (seleziona tutto ciò che si applica):",
-      "busIda": "Bus · Andata",
-      "busVuelta": "Bus · Ritorno",
-      "barcoIda": "Barca · Andata",
-      "barcoVuelta": "Barca · Ritorno",
+      "transportDescription": "Hai bisogno di un autobus fino al punto di partenza del battello?",
+      "busIda": "Sì, ho bisogno del bus",
       "submit": "Conferma Presenza",
       "submitting": "Invio in corso...",
       "successTitle": "Grazie per la conferma!",
@@ -108,6 +105,14 @@
       "errorMessage": "Si è verificato un errore. Per favore riprova.",
       "required": "Questo campo è obbligatorio",
       "invalidEmail": "Per favore inserisci un'email valida"
+    },
+    "gift": {
+      "title": "Regalo",
+      "subtitle": "La vostra presenza è il nostro regalo più grande",
+      "message": "La vostra presenza è il regalo più bello, ma se desiderate contribuire alla nostra luna di miele e alla nostra nuova casa, vi lasciamo il nostro numero di conto:",
+      "ibanLabel": "IBAN",
+      "copyLabel": "Copia IBAN",
+      "copiedLabel": "Copiato!"
     },
     "music": {
       "title": "DJ & Festa",

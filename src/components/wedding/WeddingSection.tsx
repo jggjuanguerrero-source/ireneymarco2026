@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView } from 'framer-motion';
-import { Bus, Ship, Church, AlertTriangle, UtensilsCrossed, PartyPopper, MapPin, Shirt, Star } from 'lucide-react';
+import { Bus, Ship, Church, AlertTriangle, UtensilsCrossed, PartyPopper, MapPin, Shirt } from 'lucide-react';
 
 const MAPS = {
   hotel: 'https://maps.google.com/?q=Hotel+Orizzonte+Viale+Venezia+5+Jesolo',
@@ -12,7 +12,6 @@ const MAPS = {
 
 const MichelinBadge = () => (
   <span className="inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded-full bg-[hsl(var(--primary)/0.08)] border border-[hsl(var(--primary)/0.2)] text-[10px] font-semibold tracking-wider text-primary uppercase align-middle">
-    <Star className="w-2.5 h-2.5 fill-primary text-primary" />
     Michelin Guide
   </span>
 );

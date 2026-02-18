@@ -5,8 +5,8 @@ import WeddingSection from '@/components/wedding/WeddingSection';
 import PreWeddingSection from '@/components/wedding/PreWeddingSection';
 import TravelSection from '@/components/wedding/TravelSection';
 import RSVPSection from '@/components/wedding/RSVPSection';
+import GiftSection from '@/components/wedding/GiftSection';
 import MusicSection from '@/components/wedding/MusicSection';
-
 import Footer from '@/components/wedding/Footer';
 
 const Index = () => {
@@ -20,7 +20,7 @@ const Index = () => {
       <PreWeddingSection />
       <TravelSection />
       <RSVPSection />
-      
+      <GiftSection />
       <MusicSection />
       <Footer />
     </div>

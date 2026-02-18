@@ -120,10 +120,7 @@ const downloadCSV = (guests: Guest[]) => {
     'Canción',
     'Idioma',
     'Fecha Registro',
-    'Bus Ida',
-    'Bus Vuelta',
-    'Barco Ida',
-    'Barco Vuelta',
+    'Bus',
   ];
 
   const rows = guests.map((g) => [
@@ -140,9 +137,6 @@ const downloadCSV = (guests: Guest[]) => {
     g.language ?? '',
     formatDate(g.created_at),
     g.bus_ida ? 'Sí' : 'No',
-    g.bus_vuelta ? 'Sí' : 'No',
-    g.barco_ida ? 'Sí' : 'No',
-    g.barco_vuelta ? 'Sí' : 'No',
   ]);
 
   const escape = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
@@ -492,10 +486,7 @@ const Admin = () => {
                       <TableHead className="text-center">Asistencia</TableHead>
                       <TableHead>Alergias/Dieta</TableHead>
                       <TableHead className="text-center">Idioma</TableHead>
-                      <TableHead className="text-center">🚌 Ida</TableHead>
-                      <TableHead className="text-center">🚌 Vuelta</TableHead>
-                      <TableHead className="text-center">⛵ Ida</TableHead>
-                      <TableHead className="text-center">⛵ Vuelta</TableHead>
+                      <TableHead className="text-center">🚌 Bus</TableHead>
                       <TableHead className="text-center">Registro</TableHead>
                       <TableHead className="w-12"></TableHead>
                     </TableRow>
@@ -540,9 +531,6 @@ const Admin = () => {
                           <span className="text-sm">{langLabel(guest.language)}</span>
                         </TableCell>
                         <TableCell className="text-center">{boolCell(guest.bus_ida)}</TableCell>
-                        <TableCell className="text-center">{boolCell(guest.bus_vuelta)}</TableCell>
-                        <TableCell className="text-center">{boolCell(guest.barco_ida)}</TableCell>
-                        <TableCell className="text-center">{boolCell(guest.barco_vuelta)}</TableCell>
                         <TableCell className="text-center text-xs text-slate-500 whitespace-nowrap">
                           {formatDate(guest.created_at)}
                         </TableCell>
