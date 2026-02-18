@@ -94,11 +94,8 @@
       "dietary": "Allergies or dietary restrictions",
       "dietaryPlaceholder": "Please list allergies or dietary restrictions for ALL attendees (you, your partner, and children if applicable)...",
       "transport": "Transport",
-      "transportDescription": "Let us know if you need transport organised by the wedding (select all that apply):",
-      "busIda": "Bus · Outbound",
-      "busVuelta": "Bus · Return",
-      "barcoIda": "Boat · Outbound",
-      "barcoVuelta": "Boat · Return",
+      "transportDescription": "Do you need a bus to the boat departure point?",
+      "busIda": "Yes, I need the bus",
       "submit": "Confirm Attendance",
       "submitting": "Sending...",
       "successTitle": "Thank you for confirming!",
@@ -108,6 +105,14 @@
       "errorMessage": "An error occurred. Please try again.",
       "required": "This field is required",
       "invalidEmail": "Please enter a valid email"
+    },
+    "gift": {
+      "title": "Gift",
+      "subtitle": "Your presence is our greatest gift",
+      "message": "Your presence is the best gift, but if you wish to contribute to our honeymoon and our new home, here is our bank account number:",
+      "ibanLabel": "IBAN",
+      "copyLabel": "Copy IBAN",
+      "copiedLabel": "Copied!"
     },
     "music": {
       "title": "DJ & Party",

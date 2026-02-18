@@ -94,11 +94,8 @@
       "dietary": "Alergias o restricciones alimentarias",
       "dietaryPlaceholder": "Indica aquí las alergias o restricciones alimentarias de TODOS los asistentes (tú, tu pareja y niños si los hay)...",
       "transport": "Transporte",
-      "transportDescription": "Indica si necesitas transporte organizado por la boda (selecciona todo lo que aplique):",
-      "busIda": "Bus · Ida",
-      "busVuelta": "Bus · Vuelta",
-      "barcoIda": "Barco · Ida",
-      "barcoVuelta": "Barco · Vuelta",
+      "transportDescription": "¿Necesitas autobús hasta el punto de salida del barco?",
+      "busIda": "Sí, necesito bus de ida",
       "submit": "Confirmar Asistencia",
       "submitting": "Enviando...",
       "successTitle": "¡Gracias por confirmar!",
@@ -108,6 +105,14 @@
       "errorMessage": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
       "required": "Este campo es obligatorio",
       "invalidEmail": "Por favor, introduce un email válido"
+    },
+    "gift": {
+      "title": "Regalo",
+      "subtitle": "Vuestra presencia es nuestro mayor regalo",
+      "message": "Vuestra presencia es el mejor regalo, pero si deseáis colaborar con nuestra luna de miel y nuestro nuevo hogar, os facilitamos nuestro número de cuenta:",
+      "ibanLabel": "IBAN",
+      "copyLabel": "Copiar IBAN",
+      "copiedLabel": "¡Copiado!"
     },
     "music": {
       "title": "DJ & Fiesta",
