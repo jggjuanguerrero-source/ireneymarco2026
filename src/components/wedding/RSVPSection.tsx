@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Check, X, Loader2, Heart, Users } from 'lucide-react';
+import { Check, X, Loader2, Heart, Users, Bus, Ship } from 'lucide-react';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,10 @@ const rsvpSchema = z.object({
   childrenCount: z.number().min(0).max(10).optional(),
   childrenNeeds: z.string().trim().max(500).optional(),
   dietaryReqs: z.string().trim().max(500).optional(),
+  busIda: z.boolean(),
+  busVuelta: z.boolean(),
+  barcoIda: z.boolean(),
+  barcoVuelta: z.boolean(),
 });
 
 type RSVPFormData = z.infer<typeof rsvpSchema>;
@@ -44,12 +48,15 @@ const RSVPSection = () => {
     childrenCount: 0,
     childrenNeeds: '',
     dietaryReqs: '',
+    busIda: false,
+    busVuelta: false,
+    barcoIda: false,
+    barcoVuelta: false,
   });
   const [errors, setErrors] = useState<Partial<Record<keyof RSVPFormData, string>>>({});
 
   const handleInputChange = (field: keyof RSVPFormData, value: string | boolean | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
@@ -58,7 +65,6 @@ const RSVPSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate form
     const dataToValidate = {
       ...formData,
       rsvpStatus: attendingChoice ?? false,
@@ -90,6 +96,10 @@ const RSVPSection = () => {
         children_needs: result.data.hasChildren ? result.data.childrenNeeds || null : null,
         dietary_reqs: result.data.dietaryReqs || null,
         language: i18n.language,
+        bus_ida: result.data.busIda,
+        bus_vuelta: result.data.busVuelta,
+        barco_ida: result.data.barcoIda,
+        barco_vuelta: result.data.barcoVuelta,
       });
 
       if (error) throw error;
@@ -111,6 +121,45 @@ const RSVPSection = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Reusable toggle button style
+  const toggleBtn = (active: boolean) =>
+    `px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
+      active
+        ? 'border-primary bg-primary/15 text-primary'
+        : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
+    }`;
+
+  // Transport checkbox component
+  const TransportCheckbox = ({
+    field,
+    label,
+    icon: Icon,
+  }: {
+    field: 'busIda' | 'busVuelta' | 'barcoIda' | 'barcoVuelta';
+    label: string;
+    icon: React.ElementType;
+  }) => (
+    <button
+      type="button"
+      onClick={() => handleInputChange(field, !formData[field])}
+      className={`flex items-center gap-2.5 px-4 py-3 border transition-all duration-300 font-body text-sm ${
+        formData[field]
+          ? 'border-primary bg-primary/10 text-primary'
+          : 'border-primary/20 bg-transparent text-foreground/60 hover:border-primary/50'
+      }`}
+    >
+      <div
+        className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${
+          formData[field] ? 'border-primary bg-primary' : 'border-primary/40'
+        }`}
+      >
+        {formData[field] && <Check className="w-3 h-3 text-primary-foreground" />}
+      </div>
+      <Icon className="w-3.5 h-3.5" />
+      {label}
+    </button>
+  );
 
   return (
     <section id="rsvp" ref={ref} className="section-padding bg-background">
@@ -263,7 +312,7 @@ const RSVPSection = () => {
                 </div>
               </div>
 
-              {/* Plus One - Only show if attending */}
+              {/* Fields only shown when attending */}
               <AnimatePresence>
                 {attendingChoice === true && (
                   <motion.div
@@ -271,7 +320,7 @@ const RSVPSection = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="space-y-6 overflow-hidden"
+                    className="space-y-10 overflow-hidden"
                   >
                     {/* Plus One Toggle */}
                     <div className="space-y-3">
@@ -282,11 +331,7 @@ const RSVPSection = () => {
                         <button
                           type="button"
                           onClick={() => handleInputChange('plusOne', true)}
-                          className={`px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
-                            formData.plusOne
-                              ? 'border-primary bg-primary/15 text-primary'
-                              : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
-                          }`}
+                          className={toggleBtn(formData.plusOne)}
                         >
                           {t('sections.rsvp.yes')}
                         </button>
@@ -296,11 +341,7 @@ const RSVPSection = () => {
                             handleInputChange('plusOne', false);
                             handleInputChange('plusOneName', '');
                           }}
-                          className={`px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
-                            !formData.plusOne
-                              ? 'border-primary bg-primary/15 text-primary'
-                              : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
-                          }`}
+                          className={toggleBtn(!formData.plusOne)}
                         >
                           No
                         </button>
@@ -329,20 +370,8 @@ const RSVPSection = () => {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </motion.div>
-                )}
-              </AnimatePresence>
 
-              {/* Children Toggle - Independent, always show if attending */}
-              <AnimatePresence>
-                {attendingChoice === true && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-6 overflow-hidden"
-                  >
+                    {/* Children Toggle */}
                     <div className="space-y-3">
                       <Label className="font-body text-foreground/80 text-base flex items-center gap-2">
                         <Users className="w-4 h-4 text-primary/70" />
@@ -352,11 +381,7 @@ const RSVPSection = () => {
                         <button
                           type="button"
                           onClick={() => handleInputChange('hasChildren', true)}
-                          className={`px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
-                            formData.hasChildren
-                              ? 'border-primary bg-primary/15 text-primary'
-                              : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
-                          }`}
+                          className={toggleBtn(formData.hasChildren)}
                         >
                           {t('sections.rsvp.yes')}
                         </button>
@@ -367,18 +392,14 @@ const RSVPSection = () => {
                             handleInputChange('childrenCount', 0);
                             handleInputChange('childrenNeeds', '');
                           }}
-                          className={`px-5 py-2 border transition-all duration-300 font-serif tracking-wide ${
-                            !formData.hasChildren
-                              ? 'border-primary bg-primary/15 text-primary'
-                              : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
-                          }`}
+                          className={toggleBtn(!formData.hasChildren)}
                         >
                           No
                         </button>
                       </div>
                     </div>
 
-                    {/* Children Details - Compact grouped */}
+                    {/* Children Details */}
                     <AnimatePresence>
                       {formData.hasChildren && (
                         <motion.div
@@ -397,7 +418,9 @@ const RSVPSection = () => {
                               min="1"
                               max="10"
                               value={formData.childrenCount || ''}
-                              onChange={(e) => handleInputChange('childrenCount', parseInt(e.target.value) || 0)}
+                              onChange={(e) =>
+                                handleInputChange('childrenCount', parseInt(e.target.value) || 0)
+                              }
                               className="input-underline w-full text-lg [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="1"
                             />
@@ -418,34 +441,55 @@ const RSVPSection = () => {
                         </motion.div>
                       )}
                     </AnimatePresence>
+
+                    {/* Dietary Requirements */}
+                    <div className="space-y-2">
+                      <Label htmlFor="dietary" className="font-body text-foreground/80 text-base">
+                        {t('sections.rsvp.dietary')}
+                      </Label>
+                      <textarea
+                        id="dietary"
+                        value={formData.dietaryReqs}
+                        onChange={(e) => handleInputChange('dietaryReqs', e.target.value)}
+                        placeholder={t('sections.rsvp.dietaryPlaceholder')}
+                        className="input-underline w-full text-lg min-h-[80px] resize-none"
+                      />
+                    </div>
+
+                    {/* Transport */}
+                    <div className="space-y-4">
+                      <Label className="font-body text-foreground/80 text-base">
+                        {t('sections.rsvp.transport')}
+                      </Label>
+                      <p className="font-body text-sm text-muted-foreground -mt-2">
+                        {t('sections.rsvp.transportDescription')}
+                      </p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <TransportCheckbox
+                          field="busIda"
+                          label={t('sections.rsvp.busIda')}
+                          icon={Bus}
+                        />
+                        <TransportCheckbox
+                          field="busVuelta"
+                          label={t('sections.rsvp.busVuelta')}
+                          icon={Bus}
+                        />
+                        <TransportCheckbox
+                          field="barcoIda"
+                          label={t('sections.rsvp.barcoIda')}
+                          icon={Ship}
+                        />
+                        <TransportCheckbox
+                          field="barcoVuelta"
+                          label={t('sections.rsvp.barcoVuelta')}
+                          icon={Ship}
+                        />
+                      </div>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {/* Dietary Requirements - Show if attending */}
-              <AnimatePresence>
-                {attendingChoice === true && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-2 overflow-hidden"
-                  >
-                    <Label htmlFor="dietary" className="font-body text-foreground/80 text-base">
-                      {t('sections.rsvp.dietary')}
-                    </Label>
-                    <textarea
-                      id="dietary"
-                      value={formData.dietaryReqs}
-                      onChange={(e) => handleInputChange('dietaryReqs', e.target.value)}
-                      placeholder={t('sections.rsvp.dietaryPlaceholder')}
-                      className="input-underline w-full text-lg min-h-[80px] resize-none"
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
 
               {/* Submit Button */}
               <motion.div
