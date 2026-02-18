@@ -11,10 +11,41 @@ const GiftSection = () => {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(IBAN.replace(/\s/g, ''));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2200);
+  const handleCopy = async () => {
+    const text = IBAN.replace(/\s/g, '');
+    let success = false;
+
+    // Primary: modern Clipboard API
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      try {
+        await navigator.clipboard.writeText(text);
+        success = true;
+      } catch {
+        // fall through to legacy method
+      }
+    }
+
+    // Fallback: execCommand (works everywhere including GitHub Pages)
+    if (!success) {
+      try {
+        const el = document.createElement('textarea');
+        el.value = text;
+        el.setAttribute('readonly', '');
+        el.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+        document.body.appendChild(el);
+        el.focus();
+        el.select();
+        success = document.execCommand('copy');
+        document.body.removeChild(el);
+      } catch {
+        // nothing more we can do
+      }
+    }
+
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    }
   };
 
   return (
