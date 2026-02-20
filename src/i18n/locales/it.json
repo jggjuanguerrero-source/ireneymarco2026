@@ -113,6 +113,8 @@
       "successNotAttending": "Ci dispiace che non possa unirti a noi. Sarai nei nostri cuori!",
       "errorTitle": "Errore nell'invio",
       "errorMessage": "Si è verificato un errore. Per favore riprova.",
+      "alreadySubmittedTitle": "Abbiamo già ricevuto la tua conferma",
+      "alreadySubmittedMessage": "Se hai bisogno di modifiche, contattaci.",
       "required": "Questo campo è obbligatorio",
       "invalidEmail": "Per favore inserisci un'email valida"
     },
