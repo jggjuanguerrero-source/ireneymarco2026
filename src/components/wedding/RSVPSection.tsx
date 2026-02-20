@@ -189,11 +189,7 @@ const RSVPSection = () => {
                 transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
                 className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center"
               >
-                {attendingChoice ? (
-                  <Heart className="w-10 h-10 text-primary fill-primary" />
-                ) : (
-                  <span className="text-4xl">😢</span>
-                )}
+                <Heart className="w-10 h-10 text-primary fill-primary" />
               </motion.div>
               <h3 className="font-serif text-2xl text-foreground mb-3">
                 {attendingChoice ? t('sections.rsvp.successTitle') : t('sections.rsvp.successTitleNotAttending')}
