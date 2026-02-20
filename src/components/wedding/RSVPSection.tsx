@@ -81,6 +81,13 @@ const RSVPSection = () => {
     setIsSubmitting(true);
 
     try {
+      // Check if email already exists
+      const { data: existing } = await supabase
+        .from('guests')
+        .select('id')
+        .eq('email', result.data.email);
+      const isUpdate = existing && existing.length > 0;
+
       const { error } = await supabase.from('guests').insert({
         first_name: result.data.firstName,
         last_name: result.data.lastName,
@@ -103,20 +110,19 @@ const RSVPSection = () => {
         ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
       toast({
-        title: t('sections.rsvp.successTitle'),
-        description: result.data.rsvpStatus
-          ? t('sections.rsvp.successMessage')
-          : t('sections.rsvp.successNotAttending'),
+        title: isUpdate
+          ? t('sections.rsvp.alreadySubmittedTitle')
+          : t('sections.rsvp.successTitle'),
+        description: isUpdate
+          ? t('sections.rsvp.alreadySubmittedMessage')
+          : result.data.rsvpStatus
+            ? t('sections.rsvp.successMessage')
+            : t('sections.rsvp.successNotAttending'),
       });
     } catch (error: any) {
-      const isDuplicate = error?.code === '23505';
       toast({
-        title: isDuplicate
-          ? t('sections.rsvp.alreadySubmittedTitle')
-          : t('sections.rsvp.errorTitle'),
-        description: isDuplicate
-          ? t('sections.rsvp.alreadySubmittedMessage')
-          : t('sections.rsvp.errorMessage'),
+        title: t('sections.rsvp.errorTitle'),
+        description: t('sections.rsvp.errorMessage'),
         variant: 'destructive',
       });
     } finally {

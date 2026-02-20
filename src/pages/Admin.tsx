@@ -192,7 +192,7 @@ const Admin = () => {
     const { data, error } = await supabase
       .from('guests')
       .select('*')
-      .order('last_name', { ascending: true });
+      .order('created_at', { ascending: false });
 
     if (error) {
       toast({ title: 'Error', description: 'No se pudieron cargar los invitados', variant: 'destructive' });
