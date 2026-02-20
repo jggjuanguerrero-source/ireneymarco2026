@@ -19,7 +19,7 @@ interface GuestData {
   children_needs: string | null;
 }
 
-const IBAN = "ES12 3456 7890 1234 5678 9012";
+const IBAN = "DE74 7004 0048 0550 1671 00";
 
 function getAttendingTranslations(lang: string) {
   if (lang === "it") {
