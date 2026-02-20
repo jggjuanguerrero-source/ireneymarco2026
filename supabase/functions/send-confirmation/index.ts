@@ -9,7 +9,7 @@ interface GuestData {
   last_name: string;
   email: string;
   language: string;
-  rsvp_status: boolean;
+  rsvp_status: boolean | string;
   bus_ida: boolean;
   dietary_reqs: string | null;
   preboda: boolean;
@@ -45,7 +45,6 @@ function getAttendingTranslations(lang: string) {
       footer: "Con amore, Irene & Marco",
     };
   }
-  // Default: Spanish
   return {
     subject: "Confirmación recibida – Irene & Marco 2026",
     title: "¡Gracias por confirmar!",
@@ -82,7 +81,6 @@ function getDeclineTranslations(lang: string) {
       backToWeb: "Torna al sito",
     };
   }
-  // Default: Spanish
   return {
     subject: "Hemos recibido tu respuesta – Irene & Marco 2026",
     title: "Gracias por avisarnos",
@@ -123,7 +121,7 @@ function buildAttendingEmailHtml(guest: GuestData): string {
 
   return emailShell(guest.language, `
     <!-- Header -->
-    <tr><td style="background:linear-gradient(135deg,#D4A574,#C4956A);padding:48px 40px;text-align:center;">
+    <tr><td style="background:linear-gradient(135deg,#8B7355,#B8A07A);padding:48px 40px;text-align:center;">
       <h1 style="margin:0;color:#FFFFFF;font-size:28px;font-weight:400;letter-spacing:1px;line-height:1.4;">
         ${t.title}
       </h1>
@@ -131,34 +129,34 @@ function buildAttendingEmailHtml(guest: GuestData): string {
 
     <!-- Body -->
     <tr><td style="padding:40px;">
-      <p style="margin:0 0 16px;color:#5C4A3A;font-size:18px;">${t.greeting(guest.first_name)}</p>
-      <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;line-height:1.7;">${t.intro}</p>
+      <p style="margin:0 0 16px;color:#2C3E50;font-size:18px;">${t.greeting(guest.first_name)}</p>
+      <p style="margin:0 0 32px;color:#6B7B8C;font-size:15px;line-height:1.7;">${t.intro}</p>
 
       <!-- Summary -->
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAF7F2;border-radius:12px;margin-bottom:32px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8F5F0;border-radius:12px;margin-bottom:32px;">
         <tr><td style="padding:24px;">
-          <h2 style="margin:0 0 20px;color:#5C4A3A;font-size:16px;text-transform:uppercase;letter-spacing:2px;">${t.summaryTitle}</h2>
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="color:#7A6B5D;font-size:14px;">
+          <h2 style="margin:0 0 20px;color:#2C3E50;font-size:16px;text-transform:uppercase;letter-spacing:2px;">${t.summaryTitle}</h2>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="color:#6B7B8C;font-size:14px;">
             ${rows.join("")}
           </table>
         </td></tr>
       </table>
 
       <!-- IBAN -->
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5EFE7;border-radius:12px;margin-bottom:32px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F3EDE4;border-radius:12px;margin-bottom:32px;">
         <tr><td style="padding:24px;text-align:center;">
-          <h3 style="margin:0 0 12px;color:#5C4A3A;font-size:15px;text-transform:uppercase;letter-spacing:2px;">🎁 ${t.giftTitle}</h3>
-          <p style="margin:0 0 12px;color:#7A6B5D;font-size:14px;line-height:1.6;">${t.giftText}</p>
-          <p style="margin:0;color:#5C4A3A;font-size:16px;font-weight:bold;letter-spacing:1px;font-family:monospace;">${IBAN}</p>
+          <h3 style="margin:0 0 12px;color:#2C3E50;font-size:15px;text-transform:uppercase;letter-spacing:2px;">🎁 ${t.giftTitle}</h3>
+          <p style="margin:0 0 12px;color:#6B7B8C;font-size:14px;line-height:1.6;">${t.giftText}</p>
+          <p style="margin:0;color:#2C3E50;font-size:16px;font-weight:bold;letter-spacing:1px;font-family:monospace;">${IBAN}</p>
         </td></tr>
       </table>
 
-      <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;text-align:center;">${t.closing}</p>
+      <p style="margin:0 0 32px;color:#6B7B8C;font-size:15px;text-align:center;">${t.closing}</p>
 
       <!-- CTA -->
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
         <tr><td align="center">
-          <a href="https://ireneymarco2026.com" style="display:inline-block;background-color:#D4A574;color:#FFFFFF;text-decoration:none;padding:14px 40px;border-radius:8px;font-size:15px;letter-spacing:1px;">
+          <a href="https://ireneymarco2026.com" style="display:inline-block;background-color:#8B7355;color:#FFFFFF;text-decoration:none;padding:14px 40px;border-radius:8px;font-size:15px;letter-spacing:1px;">
             ${t.backToWeb}
           </a>
         </td></tr>
@@ -166,8 +164,8 @@ function buildAttendingEmailHtml(guest: GuestData): string {
     </td></tr>
 
     <!-- Footer -->
-    <tr><td style="padding:32px 40px;text-align:center;border-top:1px solid #F0E8E0;">
-      <p style="margin:0;color:#B8A89A;font-size:13px;font-style:italic;">${t.footer}</p>
+    <tr><td style="padding:32px 40px;text-align:center;border-top:1px solid #E8E2D8;">
+      <p style="margin:0;color:#B8A07A;font-size:13px;font-style:italic;">${t.footer}</p>
     </td></tr>
   `);
 }
@@ -177,7 +175,7 @@ function buildDeclineEmailHtml(guest: GuestData): string {
 
   return emailShell(guest.language, `
     <!-- Header -->
-    <tr><td style="background:linear-gradient(135deg,#B8A89A,#A89888);padding:48px 40px;text-align:center;">
+    <tr><td style="background:linear-gradient(135deg,#B8A07A,#C4B59A);padding:48px 40px;text-align:center;">
       <h1 style="margin:0;color:#FFFFFF;font-size:28px;font-weight:400;letter-spacing:1px;line-height:1.4;">
         ${t.title}
       </h1>
@@ -185,16 +183,16 @@ function buildDeclineEmailHtml(guest: GuestData): string {
 
     <!-- Body -->
     <tr><td style="padding:40px;">
-      <p style="margin:0 0 20px;color:#5C4A3A;font-size:18px;">${t.greeting(guest.first_name)}</p>
-      <p style="margin:0 0 20px;color:#7A6B5D;font-size:15px;line-height:1.8;">${t.body}</p>
-      <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;line-height:1.8;">${t.body2}</p>
+      <p style="margin:0 0 20px;color:#2C3E50;font-size:18px;">${t.greeting(guest.first_name)}</p>
+      <p style="margin:0 0 20px;color:#6B7B8C;font-size:15px;line-height:1.8;">${t.body}</p>
+      <p style="margin:0 0 32px;color:#6B7B8C;font-size:15px;line-height:1.8;">${t.body2}</p>
 
-      <p style="margin:0 0 8px;color:#5C4A3A;font-size:15px;font-style:italic;">${t.closing}</p>
+      <p style="margin:0 0 8px;color:#2C3E50;font-size:15px;font-style:italic;">${t.closing}</p>
 
       <!-- CTA -->
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:32px;">
         <tr><td align="center">
-          <a href="https://ireneymarco2026.com" style="display:inline-block;background-color:#B8A89A;color:#FFFFFF;text-decoration:none;padding:14px 40px;border-radius:8px;font-size:15px;letter-spacing:1px;">
+          <a href="https://ireneymarco2026.com" style="display:inline-block;background-color:#B8A07A;color:#FFFFFF;text-decoration:none;padding:14px 40px;border-radius:8px;font-size:15px;letter-spacing:1px;">
             ${t.backToWeb}
           </a>
         </td></tr>
@@ -202,16 +200,16 @@ function buildDeclineEmailHtml(guest: GuestData): string {
     </td></tr>
 
     <!-- Footer -->
-    <tr><td style="padding:32px 40px;text-align:center;border-top:1px solid #F0E8E0;">
-      <p style="margin:0;color:#B8A89A;font-size:13px;font-style:italic;">${t.footer}</p>
+    <tr><td style="padding:32px 40px;text-align:center;border-top:1px solid #E8E2D8;">
+      <p style="margin:0;color:#B8A07A;font-size:13px;font-style:italic;">${t.footer}</p>
     </td></tr>
   `);
 }
 
 function summaryRow(label: string, value: string): string {
   return `<tr>
-    <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;font-weight:bold;">${label}</td>
-    <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;text-align:right;">${value}</td>
+    <td style="padding:8px 0;border-bottom:1px solid #E8E2D8;font-weight:bold;">${label}</td>
+    <td style="padding:8px 0;border-bottom:1px solid #E8E2D8;text-align:right;">${value}</td>
   </tr>`;
 }
 
@@ -219,8 +217,8 @@ function emailShell(lang: string, content: string): string {
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#FAF7F2;font-family:Georgia,'Times New Roman',serif;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAF7F2;">
+<body style="margin:0;padding:0;background-color:#F8F5F0;font-family:Georgia,'Playfair Display','Times New Roman',serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F8F5F0;">
     <tr><td align="center" style="padding:40px 20px;">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);">
         ${content}
@@ -255,7 +253,10 @@ Deno.serve(async (req) => {
     const lang = guest.language === "it" ? "it" : "es";
     guest.language = lang;
 
-    const attending = guest.rsvp_status === true;
+    // Robust check: handle both boolean and string values
+    const attending = guest.rsvp_status === true || guest.rsvp_status === "true";
+    console.log("rsvp_status raw:", guest.rsvp_status, "type:", typeof guest.rsvp_status, "attending:", attending);
+
     const subject = attending
       ? getAttendingTranslations(lang).subject
       : getDeclineTranslations(lang).subject;
