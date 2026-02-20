@@ -22,7 +22,7 @@ const Hero = () => {
       {/* ═══════════════════════════════════════════════════════════════
           ZONA SUPERIOR (65%) — Texto exclusivo, padding agresivo arriba
           ═══════════════════════════════════════════════════════════════ */}
-      <div className="relative z-20 flex flex-col items-center text-center px-6 pt-24 md:pt-36 lg:pt-40 pb-4 min-h-[65vh]">
+      <div className="relative z-20 flex flex-col items-center text-center px-6 pt-24 md:pt-36 lg:pt-40 pb-4 h-[65vh]">
         {/* Save the date */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -97,7 +97,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.3, duration: 0.8 }}
-          className="mt-4"
+          className="mt-4 md:hidden"
         >
           <a
             href="#rsvp"
