@@ -9,11 +9,8 @@ interface GuestData {
   last_name: string;
   email: string;
   language: string;
-  rsvp_status: boolean | null;
+  rsvp_status: boolean;
   bus_ida: boolean;
-  bus_vuelta: boolean;
-  barco_ida: boolean;
-  barco_vuelta: boolean;
   dietary_reqs: string | null;
   preboda: boolean;
   plus_one: boolean | null;
@@ -22,23 +19,17 @@ interface GuestData {
   children_needs: string | null;
 }
 
-function getTranslations(lang: string) {
+const IBAN = "ES12 3456 7890 1234 5678 9012";
+
+function getAttendingTranslations(lang: string) {
   if (lang === "it") {
     return {
       subject: "Conferma ricevuta – Irene & Marco 2026",
       title: "Grazie per aver confermato!",
       greeting: (name: string) => `Ciao ${name}!`,
-      intro: "Siamo molto felici che possiate accompagnarci nel nostro grande giorno. Abbiamo ricevuto correttamente la vostra conferma.",
+      intro: "Siamo molto felici che possiate accompagnarci nel nostro grande giorno. Ecco un riepilogo della vostra conferma.",
       summaryTitle: "Riepilogo",
-      attendance: "Presenza",
-      attendanceYes: "Confermata ✓",
-      attendanceNo: "Non potrà venire",
       bus: "Autobus",
-      busIda: "Andata",
-      busVuelta: "Ritorno",
-      boat: "Barca",
-      boatIda: "Andata",
-      boatVuelta: "Ritorno",
       dietary: "Esigenze alimentari",
       none: "Nessuna",
       prewedding: "Pre-matrimonio",
@@ -47,38 +38,11 @@ function getTranslations(lang: string) {
       plusOne: "Accompagnatore",
       children: "Bambini",
       childrenNeeds: "Esigenze bambini",
+      giftTitle: "Regalo",
+      giftText: `Se desiderate farci un regalo, ecco il nostro IBAN:`,
       closing: "Non vediamo l'ora di vedervi! 💛",
       backToWeb: "Torna al sito",
       footer: "Con amore, Irene & Marco",
-    };
-  }
-  if (lang === "en") {
-    return {
-      subject: "Confirmation received – Irene & Marco 2026",
-      title: "Thank you for confirming!",
-      greeting: (name: string) => `Hi ${name}!`,
-      intro: "We are so happy you can join us on our special day. We have received your confirmation successfully.",
-      summaryTitle: "Summary",
-      attendance: "Attendance",
-      attendanceYes: "Confirmed ✓",
-      attendanceNo: "Unable to attend",
-      bus: "Bus",
-      busIda: "Outbound",
-      busVuelta: "Return",
-      boat: "Boat",
-      boatIda: "Outbound",
-      boatVuelta: "Return",
-      dietary: "Dietary requirements",
-      none: "None",
-      prewedding: "Pre-wedding",
-      yes: "Yes",
-      no: "No",
-      plusOne: "Plus one",
-      children: "Children",
-      childrenNeeds: "Children's needs",
-      closing: "We can't wait to see you! 💛",
-      backToWeb: "Back to website",
-      footer: "With love, Irene & Marco",
     };
   }
   // Default: Spanish
@@ -86,17 +50,9 @@ function getTranslations(lang: string) {
     subject: "Confirmación recibida – Irene & Marco 2026",
     title: "¡Gracias por confirmar!",
     greeting: (name: string) => `¡Hola ${name}!`,
-    intro: "Estamos muy felices de que podáis acompañarnos en nuestro gran día. Hemos recibido correctamente vuestra confirmación.",
+    intro: "Estamos muy felices de que podáis acompañarnos en nuestro gran día. Aquí tenéis un resumen de vuestra confirmación.",
     summaryTitle: "Resumen",
-    attendance: "Asistencia",
-    attendanceYes: "Confirmada ✓",
-    attendanceNo: "No podrá asistir",
     bus: "Autobús",
-    busIda: "Ida",
-    busVuelta: "Vuelta",
-    boat: "Barco",
-    boatIda: "Ida",
-    boatVuelta: "Vuelta",
     dietary: "Requisitos dietéticos",
     none: "Ninguno",
     prewedding: "Pre-boda",
@@ -105,28 +61,50 @@ function getTranslations(lang: string) {
     plusOne: "Acompañante",
     children: "Niños",
     childrenNeeds: "Necesidades niños",
+    giftTitle: "Regalo",
+    giftText: `Si queréis hacernos un regalo, aquí tenéis nuestro IBAN:`,
     closing: "¡Estamos deseando veros! 💛",
     backToWeb: "Volver a la web",
     footer: "Con cariño, Irene & Marco",
   };
 }
 
-function buildEmailHtml(guest: GuestData): string {
-  const t = getTranslations(guest.language);
+function getDeclineTranslations(lang: string) {
+  if (lang === "it") {
+    return {
+      subject: "Abbiamo ricevuto la tua risposta – Irene & Marco 2026",
+      title: "Grazie per averci risposto",
+      greeting: (name: string) => `Caro/a ${name},`,
+      body: "Ci dispiace tantissimo che non possiate essere con noi in questo giorno così speciale. Ci avrebbe fatto davvero piacere avervi al nostro fianco, ma apprezziamo moltissimo che abbiate trovato il tempo di farcelo sapere.",
+      body2: "Vi porteremo nel cuore quel giorno e speriamo di rivedervi prestissimo per festeggiare insieme! 🤍",
+      closing: "Un abbraccio forte,",
+      footer: "Con amore, Irene & Marco",
+      backToWeb: "Torna al sito",
+    };
+  }
+  // Default: Spanish
+  return {
+    subject: "Hemos recibido tu respuesta – Irene & Marco 2026",
+    title: "Gracias por avisarnos",
+    greeting: (name: string) => `Querido/a ${name},`,
+    body: "Nos da mucha pena que no podáis estar con nosotros en este día tan especial. Nos habría encantado teneros a nuestro lado, pero os agradecemos muchísimo que hayáis encontrado un momento para hacérnoslo saber.",
+    body2: "Os llevaremos en el corazón ese día y esperamos veros muy pronto para celebrar juntos. 🤍",
+    closing: "Un abrazo enorme,",
+    footer: "Con cariño, Irene & Marco",
+    backToWeb: "Volver a la web",
+  };
+}
 
-  const transportLines: string[] = [];
-  if (guest.bus_ida || guest.bus_vuelta) {
-    const parts = [];
-    if (guest.bus_ida) parts.push(t.busIda);
-    if (guest.bus_vuelta) parts.push(t.busVuelta);
-    transportLines.push(`🚌 ${t.bus}: ${parts.join(" + ")}`);
+function buildAttendingEmailHtml(guest: GuestData): string {
+  const t = getAttendingTranslations(guest.language);
+
+  const rows: string[] = [];
+
+  if (guest.bus_ida) {
+    rows.push(summaryRow(`🚌 ${t.bus}`, t.yes));
   }
-  if (guest.barco_ida || guest.barco_vuelta) {
-    const parts = [];
-    if (guest.barco_ida) parts.push(t.boatIda);
-    if (guest.barco_vuelta) parts.push(t.boatVuelta);
-    transportLines.push(`⛵ ${t.boat}: ${parts.join(" + ")}`);
-  }
+  rows.push(summaryRow(`🍽️ ${t.dietary}`, guest.dietary_reqs || t.none));
+  rows.push(summaryRow(`🎉 ${t.prewedding}`, guest.preboda ? t.yes : t.no));
 
   const plusOneText =
     guest.plus_one && guest.plus_one_name
@@ -134,79 +112,118 @@ function buildEmailHtml(guest: GuestData): string {
       : guest.plus_one
         ? t.yes
         : t.no;
+  rows.push(summaryRow(`💑 ${t.plusOne}`, plusOneText));
 
+  if ((guest.children_count ?? 0) > 0) {
+    rows.push(summaryRow(`👶 ${t.children}`, String(guest.children_count)));
+    if (guest.children_needs) {
+      rows.push(summaryRow(`📝 ${t.childrenNeeds}`, guest.children_needs));
+    }
+  }
+
+  return emailShell(guest.language, `
+    <!-- Header -->
+    <tr><td style="background:linear-gradient(135deg,#D4A574,#C4956A);padding:48px 40px;text-align:center;">
+      <h1 style="margin:0;color:#FFFFFF;font-size:28px;font-weight:400;letter-spacing:1px;line-height:1.4;">
+        ${t.title}
+      </h1>
+    </td></tr>
+
+    <!-- Body -->
+    <tr><td style="padding:40px;">
+      <p style="margin:0 0 16px;color:#5C4A3A;font-size:18px;">${t.greeting(guest.first_name)}</p>
+      <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;line-height:1.7;">${t.intro}</p>
+
+      <!-- Summary -->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAF7F2;border-radius:12px;margin-bottom:32px;">
+        <tr><td style="padding:24px;">
+          <h2 style="margin:0 0 20px;color:#5C4A3A;font-size:16px;text-transform:uppercase;letter-spacing:2px;">${t.summaryTitle}</h2>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="color:#7A6B5D;font-size:14px;">
+            ${rows.join("")}
+          </table>
+        </td></tr>
+      </table>
+
+      <!-- IBAN -->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5EFE7;border-radius:12px;margin-bottom:32px;">
+        <tr><td style="padding:24px;text-align:center;">
+          <h3 style="margin:0 0 12px;color:#5C4A3A;font-size:15px;text-transform:uppercase;letter-spacing:2px;">🎁 ${t.giftTitle}</h3>
+          <p style="margin:0 0 12px;color:#7A6B5D;font-size:14px;line-height:1.6;">${t.giftText}</p>
+          <p style="margin:0;color:#5C4A3A;font-size:16px;font-weight:bold;letter-spacing:1px;font-family:monospace;">${IBAN}</p>
+        </td></tr>
+      </table>
+
+      <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;text-align:center;">${t.closing}</p>
+
+      <!-- CTA -->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr><td align="center">
+          <a href="https://ireneymarco2026.com" style="display:inline-block;background-color:#D4A574;color:#FFFFFF;text-decoration:none;padding:14px 40px;border-radius:8px;font-size:15px;letter-spacing:1px;">
+            ${t.backToWeb}
+          </a>
+        </td></tr>
+      </table>
+    </td></tr>
+
+    <!-- Footer -->
+    <tr><td style="padding:32px 40px;text-align:center;border-top:1px solid #F0E8E0;">
+      <p style="margin:0;color:#B8A89A;font-size:13px;font-style:italic;">${t.footer}</p>
+    </td></tr>
+  `);
+}
+
+function buildDeclineEmailHtml(guest: GuestData): string {
+  const t = getDeclineTranslations(guest.language);
+
+  return emailShell(guest.language, `
+    <!-- Header -->
+    <tr><td style="background:linear-gradient(135deg,#B8A89A,#A89888);padding:48px 40px;text-align:center;">
+      <h1 style="margin:0;color:#FFFFFF;font-size:28px;font-weight:400;letter-spacing:1px;line-height:1.4;">
+        ${t.title}
+      </h1>
+    </td></tr>
+
+    <!-- Body -->
+    <tr><td style="padding:40px;">
+      <p style="margin:0 0 20px;color:#5C4A3A;font-size:18px;">${t.greeting(guest.first_name)}</p>
+      <p style="margin:0 0 20px;color:#7A6B5D;font-size:15px;line-height:1.8;">${t.body}</p>
+      <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;line-height:1.8;">${t.body2}</p>
+
+      <p style="margin:0 0 8px;color:#5C4A3A;font-size:15px;font-style:italic;">${t.closing}</p>
+
+      <!-- CTA -->
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:32px;">
+        <tr><td align="center">
+          <a href="https://ireneymarco2026.com" style="display:inline-block;background-color:#B8A89A;color:#FFFFFF;text-decoration:none;padding:14px 40px;border-radius:8px;font-size:15px;letter-spacing:1px;">
+            ${t.backToWeb}
+          </a>
+        </td></tr>
+      </table>
+    </td></tr>
+
+    <!-- Footer -->
+    <tr><td style="padding:32px 40px;text-align:center;border-top:1px solid #F0E8E0;">
+      <p style="margin:0;color:#B8A89A;font-size:13px;font-style:italic;">${t.footer}</p>
+    </td></tr>
+  `);
+}
+
+function summaryRow(label: string, value: string): string {
+  return `<tr>
+    <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;font-weight:bold;">${label}</td>
+    <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;text-align:right;">${value}</td>
+  </tr>`;
+}
+
+function emailShell(lang: string, content: string): string {
   return `<!DOCTYPE html>
-<html lang="${guest.language}">
+<html lang="${lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
 <body style="margin:0;padding:0;background-color:#FAF7F2;font-family:Georgia,'Times New Roman',serif;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAF7F2;">
     <tr><td align="center" style="padding:40px 20px;">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color:#FFFFFF;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);">
-        
-        <!-- Header -->
-        <tr><td style="background:linear-gradient(135deg,#D4A574,#C4956A);padding:48px 40px;text-align:center;">
-          <h1 style="margin:0;color:#FFFFFF;font-size:28px;font-weight:400;letter-spacing:1px;line-height:1.4;">
-            ${t.title}
-          </h1>
-        </td></tr>
-
-        <!-- Body -->
-        <tr><td style="padding:40px;">
-          <p style="margin:0 0 16px;color:#5C4A3A;font-size:18px;">${t.greeting(guest.first_name)}</p>
-          <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;line-height:1.7;">${t.intro}</p>
-
-          <!-- Summary -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAF7F2;border-radius:12px;padding:24px;margin-bottom:32px;">
-            <tr><td style="padding:24px;">
-              <h2 style="margin:0 0 20px;color:#5C4A3A;font-size:16px;text-transform:uppercase;letter-spacing:2px;">${t.summaryTitle}</h2>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="color:#7A6B5D;font-size:14px;">
-                <tr>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;font-weight:bold;">${t.attendance}</td>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;text-align:right;">${guest.rsvp_status !== false ? t.attendanceYes : t.attendanceNo}</td>
-                </tr>
-                ${transportLines.length > 0 ? transportLines.map((line) => `<tr><td colspan="2" style="padding:8px 0;border-bottom:1px solid #E8E0D8;">${line}</td></tr>`).join("") : ""}
-                <tr>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;font-weight:bold;">${t.dietary}</td>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;text-align:right;">${guest.dietary_reqs || t.none}</td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;font-weight:bold;">${t.prewedding}</td>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;text-align:right;">${guest.preboda ? t.yes : t.no}</td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;font-weight:bold;">${t.plusOne}</td>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;text-align:right;">${plusOneText}</td>
-                </tr>
-                ${(guest.children_count ?? 0) > 0 ? `
-                <tr>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;font-weight:bold;">${t.children}</td>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;text-align:right;">${guest.children_count}</td>
-                </tr>
-                ${guest.children_needs ? `<tr>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;font-weight:bold;">${t.childrenNeeds}</td>
-                  <td style="padding:8px 0;border-bottom:1px solid #E8E0D8;text-align:right;">${guest.children_needs}</td>
-                </tr>` : ""}` : ""}
-              </table>
-            </td></tr>
-          </table>
-
-          <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;text-align:center;">${t.closing}</p>
-
-          <!-- CTA -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr><td align="center">
-              <a href="https://ireneymarco2026.com" style="display:inline-block;background-color:#D4A574;color:#FFFFFF;text-decoration:none;padding:14px 40px;border-radius:8px;font-size:15px;letter-spacing:1px;">
-                ${t.backToWeb}
-              </a>
-            </td></tr>
-          </table>
-        </td></tr>
-
-        <!-- Footer -->
-        <tr><td style="padding:32px 40px;text-align:center;border-top:1px solid #F0E8E0;">
-          <p style="margin:0;color:#B8A89A;font-size:13px;font-style:italic;">${t.footer}</p>
-        </td></tr>
-
+        ${content}
       </table>
     </td></tr>
   </table>
@@ -234,8 +251,17 @@ Deno.serve(async (req) => {
       throw new Error("Missing required guest data (email, first_name)");
     }
 
-    const t = getTranslations(guest.language);
-    const html = buildEmailHtml(guest);
+    // Normalize language to es/it only (default to es)
+    const lang = guest.language === "it" ? "it" : "es";
+    guest.language = lang;
+
+    const attending = guest.rsvp_status === true;
+    const subject = attending
+      ? getAttendingTranslations(lang).subject
+      : getDeclineTranslations(lang).subject;
+    const html = attending
+      ? buildAttendingEmailHtml(guest)
+      : buildDeclineEmailHtml(guest);
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -246,7 +272,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         from: "Irene & Marco <invitaciones@ireneymarco2026.com>",
         to: [guest.email],
-        subject: t.subject,
+        subject,
         html,
       }),
     });
