@@ -5,7 +5,7 @@ const Footer = () => {
   const { t } = useTranslation();
 
   return (
-    <footer className="py-16 md:py-24 bg-secondary/50">
+    <footer className="py-12 md:py-16 bg-secondary/80">
       <div className="max-w-4xl mx-auto px-6 text-center">
         {/* Decorative line */}
         <motion.div

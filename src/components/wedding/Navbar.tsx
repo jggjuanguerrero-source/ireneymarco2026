@@ -7,6 +7,16 @@ const Navbar = () => {
   const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+
+  const navLinks = [
+    { href: '#wedding', label: t('nav.wedding') },
+    { href: '#prewedding', label: t('nav.prewedding') },
+    { href: '#travel', label: t('nav.travel') },
+    { href: '#rsvp', label: t('nav.rsvp') },
+    { href: '#gift', label: t('nav.gift') },
+    { href: '#music', label: t('nav.music') },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,14 +27,30 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { href: '#wedding', label: t('nav.wedding') },
-    { href: '#prewedding', label: t('nav.prewedding') },
-    { href: '#travel', label: t('nav.travel') },
-    { href: '#rsvp', label: t('nav.rsvp') },
-    { href: '#gift', label: t('nav.gift') },
-    { href: '#music', label: t('nav.music') },
-  ];
+  // IntersectionObserver for active section detection
+  useEffect(() => {
+    const sectionIds = ['wedding', 'prewedding', 'travel', 'rsvp', 'gift', 'music'];
+    const observers: IntersectionObserver[] = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveSection(id);
+            }
+          });
+        },
+        { rootMargin: '-40% 0px -55% 0px' }
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -67,7 +93,11 @@ const Navbar = () => {
               <button
                 key={link.href}
                 onClick={() => scrollToSection(link.href)}
-                className="font-body text-sm tracking-[0.15em] uppercase text-foreground/70 hover:text-primary link-elegant transition-colors"
+                className={`font-body text-sm tracking-[0.15em] uppercase link-elegant transition-colors ${
+                  activeSection === link.href.slice(1)
+                    ? 'text-primary'
+                    : 'text-foreground/70 hover:text-primary'
+                }`}
               >
                 {link.label}
               </button>

@@ -221,7 +221,7 @@ const WeddingSection = () => {
                         <img
                           src={item.image}
                           alt={item.label}
-                          className="mt-3 rounded-lg shadow-md w-full max-w-sm object-cover aspect-[16/10]"
+                          className="mt-3 rounded-lg shadow-md w-full max-w-sm object-cover aspect-[16/10] max-h-48 md:max-h-none"
                           loading="lazy"
                         />
                       )}

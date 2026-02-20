@@ -18,7 +18,7 @@ const Section = ({ id, title, subtitle, description, children, variant = 'defaul
     <section
       id={id}
       ref={ref}
-      className={`section-padding ${variant === 'alternate' ? 'bg-secondary/50' : 'bg-background'}`}
+      className={`section-padding ${variant === 'alternate' ? 'bg-secondary/80' : 'bg-background'}`}
     >
       <div className="max-w-3xl mx-auto text-center">
         {/* Decorative line top */}
