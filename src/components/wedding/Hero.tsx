@@ -22,7 +22,7 @@ const Hero = () => {
       {/* ═══════════════════════════════════════════════════════════════
           ZONA SUPERIOR (65%) — Texto exclusivo, padding agresivo arriba
           ═══════════════════════════════════════════════════════════════ */}
-      <div className="relative z-20 flex flex-col items-center text-center px-6 pt-24 md:pt-36 lg:pt-40 h-[65vh]">
+      <div className="relative z-20 flex flex-col items-center text-center px-6 pt-24 md:pt-36 lg:pt-40 pb-4 min-h-[65vh]">
         {/* Save the date */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
