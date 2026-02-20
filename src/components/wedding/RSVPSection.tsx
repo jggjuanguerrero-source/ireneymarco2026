@@ -99,6 +99,9 @@ const RSVPSection = () => {
       if (error) throw error;
 
       setIsSuccess(true);
+      setTimeout(() => {
+        ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
       toast({
         title: t('sections.rsvp.successTitle'),
         description: result.data.rsvpStatus
