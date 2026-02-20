@@ -1,41 +1,28 @@
 
-# Permitir reenvíos del formulario RSVP y deduplicar en el panel
+
+# Unificar fondo del countdown en mobile
 
 ## Problema
 
-Actualmente el campo `email` tiene una restricción de unicidad (`guests_email_key`), lo que impide que un invitado envíe el formulario más de una vez.
+El contenedor del countdown usa `bg-background/60 backdrop-blur-sm`, que genera un rectángulo con fondo semitransparente visible sobre el fondo crema. En desktop el blur ayuda a legibilidad contra la imagen, pero en mobile no hay imagen detrás del countdown, así que solo se ve un parche de color diferente.
 
-## Solución
+## Cambio
 
-### 1. Eliminar la restricción de unicidad en `email` (migración SQL)
+En `src/components/wedding/Hero.tsx` (línea 91), cambiar las clases del contenedor del countdown para que en mobile sea transparente y solo aplique el fondo con blur en pantallas más grandes donde la imagen puede quedar detrás:
 
-```sql
-ALTER TABLE public.guests DROP CONSTRAINT IF EXISTS guests_email_key;
+**Antes:**
+```
+bg-background/60 backdrop-blur-sm rounded-2xl px-6 py-4
 ```
 
-Esto permite que un mismo email envíe múltiples veces. Cada envío se guarda como registro independiente.
+**Después:**
+```
+md:bg-background/60 md:backdrop-blur-sm rounded-2xl px-6 py-4
+```
 
-### 2. Formulario RSVP (`src/components/wedding/RSVPSection.tsx`)
+Esto hace que en mobile el fondo sea completamente transparente (se funde con el crema), y en tablet/desktop se mantiene el efecto blur para legibilidad contra la imagen.
 
-Detectar si el email ya existe antes de insertar. Si existe, insertar igualmente pero mostrar un mensaje diferente:
+## Archivo afectado
 
-- Antes de insertar, hacer un `SELECT` rápido para comprobar si el email ya tiene registros.
-- Si es la primera vez: mostrar el mensaje actual de éxito ("Gracias por confirmar").
-- Si ya existía: mostrar un mensaje tipo "Gracias por actualizar tu confirmación".
-- Eliminar la lógica de `catch` para duplicados (ya no habrá error 23505).
+- `src/components/wedding/Hero.tsx` -- una sola línea (línea 91)
 
-### 3. Traducciones (3 archivos)
-
-Reutilizar las claves `alreadySubmittedTitle` y `alreadySubmittedMessage`, cambiando su texto a:
-
-- **es.json**: `"alreadySubmittedTitle": "Confirmación actualizada"`, `"alreadySubmittedMessage": "Gracias por actualizar vuestra confirmación."`
-- **en.json**: `"alreadySubmittedTitle": "RSVP updated"`, `"alreadySubmittedMessage": "Thank you for updating your confirmation."`
-- **it.json**: `"alreadySubmittedTitle": "Conferma aggiornata"`, `"alreadySubmittedMessage": "Grazie per aver aggiornato la vostra conferma."`
-
-### 4. Panel de admin (`src/pages/Admin.tsx`)
-
-Añadir un indicador visual para emails duplicados:
-
-- Al cargar los invitados, contar cuántas veces aparece cada email.
-- Si un email aparece más de una vez, mostrar un badge "Duplicado" junto al nombre para que el coordinador pueda revisarlo y deduplicar manualmente.
-- Ordenar por `created_at` descendente para ver los más recientes primero.
