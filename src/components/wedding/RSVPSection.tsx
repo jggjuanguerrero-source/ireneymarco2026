@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Check, X, Loader2, Heart, Users, Bus } from 'lucide-react';
+import { Check, X, Loader2, Heart, Users, Bus, Ship } from 'lucide-react';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ const rsvpSchema = z.object({
   childrenNeeds: z.string().trim().max(500).optional(),
   dietaryReqs: z.string().trim().max(500).optional(),
   busIda: z.boolean(),
+  preboda: z.boolean(),
 });
 
 type RSVPFormData = z.infer<typeof rsvpSchema>;
@@ -46,6 +47,7 @@ const RSVPSection = () => {
     childrenNeeds: '',
     dietaryReqs: '',
     busIda: false,
+    preboda: false,
   });
   const [errors, setErrors] = useState<Partial<Record<keyof RSVPFormData, string>>>({});
 
@@ -91,7 +93,8 @@ const RSVPSection = () => {
         dietary_reqs: result.data.dietaryReqs || null,
         language: i18n.language,
         bus_ida: result.data.busIda,
-      });
+        preboda: result.data.preboda,
+      } as any);
 
       if (error) throw error;
 
@@ -305,6 +308,29 @@ const RSVPSection = () => {
                     transition={{ duration: 0.3 }}
                     className="space-y-10 overflow-hidden"
                   >
+                    {/* Preboda Toggle */}
+                    <div className="space-y-3">
+                      <Label className="font-body text-foreground/80 text-base">
+                        {t('sections.rsvp.prebodaQuestion')}
+                      </Label>
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('preboda', true)}
+                          className={toggleBtn(formData.preboda)}
+                        >
+                          {t('sections.rsvp.yes')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('preboda', false)}
+                          className={toggleBtn(!formData.preboda)}
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
+
                     {/* Plus One Toggle */}
                     <div className="space-y-3">
                       <Label className="font-body text-foreground/80 text-base">
@@ -444,6 +470,12 @@ const RSVPSection = () => {
                       <Label className="font-body text-foreground/80 text-base">
                         {t('sections.rsvp.transport')}
                       </Label>
+                      <div className="flex items-start gap-2 bg-primary/5 border border-primary/15 rounded-lg px-3 py-2.5 mb-1">
+                        <Ship className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5" />
+                        <p className="font-body text-sm text-foreground/70 italic leading-snug">
+                          {t('sections.rsvp.transportNote')}
+                        </p>
+                      </div>
                       <p className="font-body text-sm text-muted-foreground">
                         {t('sections.rsvp.transportDescription')}
                       </p>

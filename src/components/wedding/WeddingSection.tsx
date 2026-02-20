@@ -1,7 +1,9 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView } from 'framer-motion';
-import { Bus, Ship, Church, AlertTriangle, UtensilsCrossed, PartyPopper, MapPin, Shirt } from 'lucide-react';
+import { Bus, Ship, Church, AlertTriangle, UtensilsCrossed, PartyPopper, MapPin, Shirt, Camera } from 'lucide-react';
+import iglesiaImg from '@/assets/iglesia.jpg';
+import restauranteImg from '@/assets/restaurante.jpg';
 
 const MAPS = {
   hotel: 'https://maps.google.com/?q=Hotel+Orizzonte+Viale+Venezia+5+Jesolo',
@@ -58,7 +60,17 @@ const WeddingSection = () => {
       label: t('sections.wedding.step3Label'),
       location: t('sections.wedding.step3Location'),
       mapsHref: MAPS.church,
+      image: iglesiaImg,
       note: null,
+      warning: false,
+    },
+    {
+      icon: Camera,
+      time: t('sections.wedding.step3bTime'),
+      label: t('sections.wedding.step3bLabel'),
+      location: null,
+      mapsHref: null,
+      note: t('sections.wedding.step3bNote'),
       warning: false,
     },
     {
@@ -76,6 +88,7 @@ const WeddingSection = () => {
       label: t('sections.wedding.step5Label'),
       location: t('sections.wedding.step5Location'),
       mapsHref: MAPS.restaurant,
+      image: restauranteImg,
       michelin: true,
       note: null,
       warning: false,
@@ -202,6 +215,15 @@ const WeddingSection = () => {
 
                       {item.mapsHref && (
                         <MapsButton href={item.mapsHref} label={t('sections.wedding.mapsButton')} />
+                      )}
+
+                      {'image' in item && item.image && (
+                        <img
+                          src={item.image}
+                          alt={item.label}
+                          className="mt-3 rounded-lg shadow-md w-full max-w-sm object-cover aspect-[16/10]"
+                          loading="lazy"
+                        />
                       )}
                     </div>
                   </motion.div>

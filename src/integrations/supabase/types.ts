@@ -32,6 +32,7 @@ export type Database = {
           notes: string | null
           plus_one: boolean | null
           plus_one_name: string | null
+          preboda: boolean
           rsvp_status: boolean | null
           song_processed: boolean
           song_request: string | null
@@ -55,6 +56,7 @@ export type Database = {
           notes?: string | null
           plus_one?: boolean | null
           plus_one_name?: string | null
+          preboda?: boolean
           rsvp_status?: boolean | null
           song_processed?: boolean
           song_request?: string | null
@@ -78,6 +80,7 @@ export type Database = {
           notes?: string | null
           plus_one?: boolean | null
           plus_one_name?: string | null
+          preboda?: boolean
           rsvp_status?: boolean | null
           song_processed?: boolean
           song_request?: string | null
