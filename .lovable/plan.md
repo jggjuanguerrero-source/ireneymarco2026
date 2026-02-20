@@ -1,68 +1,65 @@
 
-# Anadir seccion "Preboda" con datos provisionales (TBC)
 
-## Resumen
+# Actualizaciones solicitadas por la novia
 
-Crear una nueva seccion "Preboda" / "Pre-Wedding" / "Pre-Matrimonio" que se colocara justo despues de la seccion "La Boda" y antes de "Viaje y Hoteles". Mostrara la informacion confirmada (hora: 19:00, zona: Jesolo) y marcara el lugar exacto como "por confirmar" (TBC).
+## Cambios a realizar
+
+### 1. Timeline de la boda (WeddingSection.tsx)
+
+**1.1 Imagen de la iglesia debajo del boton de Google Maps en "Ceremonia"**
+- Copiar `user-uploads://iglesia.jpeg` a `src/assets/iglesia.jpg`
+- En el timeline, tras el boton de Maps del paso 3 (Ceremonia), mostrar la imagen con estilo redondeado y sombra suave
+
+**1.2 Imagen del restaurante debajo del boton de Google Maps en "Recepcion y Comida"**
+- Copiar `user-uploads://restaurante.jpeg` a `src/assets/restaurante.jpg`
+- En el timeline, tras el boton de Maps del paso 5 (Recepcion), mostrar la imagen
+
+**1.3 Nuevo punto "Fotos" a las 13:00 entre Ceremonia y Salida de la Iglesia**
+- Insertar un nuevo item en el array `timeline` entre el paso 3 (Ceremonia 12:00) y el paso 4 (Salida 13:30)
+- Icono: `Camera` de lucide-react
+- Hora: 13:00h
+- Texto descriptivo: "El fotografo inmortalizara los mejores momentos" (o similar, traducido a 3 idiomas)
+- Sin boton de Maps
+
+**Implementacion tecnica:** Anadir propiedades opcionales `image` a los items del timeline y renderizar `<img>` debajo del boton de Maps cuando exista. Anadir nuevas claves de traduccion para el paso de fotos (step3b).
+
+### 2. Cambio de wording en "El Gran Dia"
+
+- Cambiar `sections.wedding.description` en los 3 idiomas:
+  - ES: "Queremos compartir este dia tan especial para nosotros"
+  - EN: "We want to share this very special day with you"
+  - IT: "Vogliamo condividere questo giorno cosi speciale per noi"
+
+### 3. Formulario RSVP
+
+**3.1 Checkbox de asistencia a la Preboda**
+- Anadir campo `preboda` (boolean) al schema zod y al estado del formulario
+- Anadir nueva pregunta visible cuando el usuario confirma asistencia: "Asistiras a la Preboda?" con toggle Si/No
+- Guardar en la base de datos: requiere nueva columna `preboda boolean DEFAULT false` en la tabla `guests`
+- Migracion SQL necesaria
+
+**3.2 Nota informativa en la seccion de transporte**
+- Anadir debajo del titulo "Transporte" una nota: "Contamos con todos los invitados para el traslado en barco a la iglesia y de vuelta al restaurante"
+- Traducir a los 3 idiomas
+- Se mostrara como texto informativo (distinto del `transportDescription` que es la pregunta del bus)
+
+### 4. Base de datos
+
+- Migracion: `ALTER TABLE public.guests ADD COLUMN IF NOT EXISTS preboda boolean NOT NULL DEFAULT false;`
 
 ---
 
-## Que se vera en la seccion
+## Archivos afectados
 
-La seccion seguira el mismo estilo elegante del resto de la web. Incluira:
+| Archivo | Cambio |
+|---|---|
+| `src/assets/iglesia.jpg` | Nuevo (copia de upload) |
+| `src/assets/restaurante.jpg` | Nuevo (copia de upload) |
+| `src/components/wedding/WeddingSection.tsx` | Imagenes en timeline, nuevo paso "Fotos", import de imagenes |
+| `src/components/wedding/RSVPSection.tsx` | Campo preboda + nota transporte |
+| `src/i18n/locales/es.json` | Nuevas claves (fotos, preboda, transportNote) + cambio description |
+| `src/i18n/locales/en.json` | Idem en ingles |
+| `src/i18n/locales/it.json` | Idem en italiano |
+| `src/pages/Admin.tsx` | Nueva columna "Preboda" en tabla y CSV |
+| Migracion SQL | Columna `preboda` |
 
-- Titulo: "Preboda" (ES) / "Pre-Wedding" (EN) / "Pre-Matrimonio" (IT)
-- Subtitulo con la fecha o un mensaje invitando al evento previo
-- Una tarjeta informativa con dos bloques:
-  - **Hora:** 19:00h (confirmado)
-  - **Lugar:** Jesolo (por confirmar) -- con una etiqueta visual "TBC" / "Por confirmar" sutil
-- Un mensaje amigable indicando que se actualizara la ubicacion exacta pronto
-
----
-
-## Detalles tecnicos
-
-### 1. Nuevo componente: `src/components/wedding/PreWeddingSection.tsx`
-
-Se creara un componente dedicado que:
-- Usa `framer-motion` para animaciones de entrada (coherente con el resto de secciones)
-- Muestra iconos de `lucide-react` (Clock para hora, MapPin para ubicacion)
-- Incluye una etiqueta/badge "TBC" / "Por confirmar" al lado de la ubicacion
-- Sigue el espaciado "luxury" existente (py-32 a py-48)
-
-### 2. Actualizacion de `src/pages/Index.tsx`
-
-- Importar el nuevo componente `PreWeddingSection`
-- Colocarlo entre la seccion "La Boda" (`<Section id="wedding" .../>`) y `<TravelSection />`
-
-### 3. Actualizacion del Navbar (`src/components/wedding/Navbar.tsx`)
-
-- Anadir un nuevo enlace de navegacion "Preboda" con ancla `#prewedding`
-- Colocarlo como segundo item, justo despues de "La Boda" y antes de "Viaje y Hoteles"
-
-### 4. Traducciones (es.json, en.json, it.json)
-
-Nuevas claves:
-
-```
-nav.prewedding: "Preboda" / "Pre-Wedding" / "Pre-Matrimonio"
-
-sections.prewedding.title: "Preboda" / "Pre-Wedding" / "Pre-Matrimonio"
-sections.prewedding.subtitle: "Acompananos la vispera..." / "Join us the evening before..." / "Unisciti a noi la sera prima..."
-sections.prewedding.description: breve texto invitando al evento
-sections.prewedding.time: "19:00h"
-sections.prewedding.timeLabel: "Hora" / "Time" / "Ora"
-sections.prewedding.locationLabel: "Lugar" / "Location" / "Luogo"
-sections.prewedding.location: "Jesolo"
-sections.prewedding.tbc: "Por confirmar" / "To be confirmed" / "Da confermare"
-sections.prewedding.updateSoon: "Actualizaremos la ubicacion exacta pronto" / "We'll update the exact location soon" / "Aggiorneremo presto la posizione esatta"
-```
-
-### Archivos a crear/modificar
-
-1. **Crear** `src/components/wedding/PreWeddingSection.tsx` -- componente nuevo
-2. **Modificar** `src/pages/Index.tsx` -- importar y posicionar la nueva seccion
-3. **Modificar** `src/components/wedding/Navbar.tsx` -- anadir enlace de navegacion
-4. **Modificar** `src/i18n/locales/es.json` -- nuevas traducciones en espanol
-5. **Modificar** `src/i18n/locales/en.json` -- nuevas traducciones en ingles
-6. **Modificar** `src/i18n/locales/it.json` -- nuevas traducciones en italiano
