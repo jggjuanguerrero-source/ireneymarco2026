@@ -49,7 +49,7 @@ const GiftSection = () => {
   };
 
   return (
-    <section id="gift" ref={ref} className="section-padding bg-secondary/50">
+    <section id="gift" ref={ref} className="section-padding bg-secondary/80">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <motion.div
@@ -93,7 +93,7 @@ const GiftSection = () => {
             </p>
 
             <div className="inline-flex items-center gap-3 flex-wrap justify-center">
-              <span className="font-serif text-xl md:text-2xl tracking-widest text-foreground select-all">
+              <span className="font-serif text-lg md:text-2xl tracking-wider md:tracking-widest text-foreground select-all break-all md:break-normal">
                 {IBAN}
               </span>
 

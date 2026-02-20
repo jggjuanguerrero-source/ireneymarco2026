@@ -75,7 +75,7 @@ const MusicSection = () => {
   };
 
   return (
-    <section id="music" ref={ref} className="section-padding bg-secondary/50">
+    <section id="music" ref={ref} className="section-padding bg-secondary/80">
       <div className="max-w-3xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -89,7 +89,7 @@ const MusicSection = () => {
             <span className="text-primary/50 text-xs">✦</span>
             <div className="w-12 h-px bg-primary/40" />
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl tracking-wide text-foreground mb-4 font-sans">
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl tracking-wide text-foreground mb-4">
             {t('sections.music.title')}
           </h2>
           <p className="font-body italic text-lg md:text-xl text-muted-foreground">

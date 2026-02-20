@@ -88,7 +88,9 @@ const Hero = () => {
         </motion.p>
 
         {/* Countdown */}
-        <Countdown />
+        <div className="bg-background/60 backdrop-blur-sm rounded-2xl px-6 py-4">
+          <Countdown />
+        </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
