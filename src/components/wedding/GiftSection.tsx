@@ -92,8 +92,8 @@ const GiftSection = () => {
               {t('sections.gift.ibanLabel')}
             </p>
 
-            <div className="inline-flex items-center gap-3 flex-wrap justify-center">
-              <span className="font-serif text-lg md:text-2xl tracking-wider md:tracking-widest text-foreground select-all break-all md:break-normal">
+            <div className="flex flex-col items-center gap-3">
+              <span className="font-serif text-[clamp(0.9rem,4vw,1.5rem)] tracking-wider md:tracking-widest text-foreground select-all whitespace-nowrap">
                 {IBAN}
               </span>
 
