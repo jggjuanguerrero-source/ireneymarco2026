@@ -1,14 +1,13 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-function buildEmailHtml(guest: {
+interface GuestData {
   first_name: string;
   last_name: string;
+  email: string;
   language: string;
   rsvp_status: boolean | null;
   bus_ida: boolean;
@@ -21,45 +20,99 @@ function buildEmailHtml(guest: {
   plus_one_name: string | null;
   children_count: number | null;
   children_needs: string | null;
-}): string {
-  const isItalian = guest.language === "it";
+}
 
-  const t = {
-    title: isItalian
-      ? "Grazie per aver confermato!"
-      : "¡Gracias por confirmar!",
-    greeting: isItalian
-      ? `Ciao ${guest.first_name}!`
-      : `¡Hola ${guest.first_name}!`,
-    intro: isItalian
-      ? "Siamo molto felici che possiate accompagnarci nel nostro grande giorno. Abbiamo ricevuto correttamente la vostra conferma."
-      : "Estamos muy felices de que podáis acompañarnos en nuestro gran día. Hemos recibido correctamente vuestra confirmación.",
-    summaryTitle: isItalian ? "Riepilogo" : "Resumen",
-    attendance: isItalian ? "Presenza" : "Asistencia",
-    attendanceYes: isItalian ? "Confermata ✓" : "Confirmada ✓",
-    attendanceNo: isItalian ? "Non potrà venire" : "No podrá asistir",
-    bus: isItalian ? "Autobus" : "Autobús",
-    busIda: isItalian ? "Andata" : "Ida",
-    busVuelta: isItalian ? "Ritorno" : "Vuelta",
-    boat: isItalian ? "Barca" : "Barco",
-    boatIda: isItalian ? "Andata" : "Ida",
-    boatVuelta: isItalian ? "Ritorno" : "Vuelta",
-    dietary: isItalian ? "Esigenze alimentari" : "Requisitos dietéticos",
-    none: isItalian ? "Nessuna" : "Ninguno",
-    prewedding: isItalian ? "Pre-matrimonio" : "Pre-boda",
-    yes: isItalian ? "Sì" : "Sí",
+function getTranslations(lang: string) {
+  if (lang === "it") {
+    return {
+      subject: "Conferma ricevuta – Irene & Marco 2026",
+      title: "Grazie per aver confermato!",
+      greeting: (name: string) => `Ciao ${name}!`,
+      intro: "Siamo molto felici che possiate accompagnarci nel nostro grande giorno. Abbiamo ricevuto correttamente la vostra conferma.",
+      summaryTitle: "Riepilogo",
+      attendance: "Presenza",
+      attendanceYes: "Confermata ✓",
+      attendanceNo: "Non potrà venire",
+      bus: "Autobus",
+      busIda: "Andata",
+      busVuelta: "Ritorno",
+      boat: "Barca",
+      boatIda: "Andata",
+      boatVuelta: "Ritorno",
+      dietary: "Esigenze alimentari",
+      none: "Nessuna",
+      prewedding: "Pre-matrimonio",
+      yes: "Sì",
+      no: "No",
+      plusOne: "Accompagnatore",
+      children: "Bambini",
+      childrenNeeds: "Esigenze bambini",
+      closing: "Non vediamo l'ora di vedervi! 💛",
+      backToWeb: "Torna al sito",
+      footer: "Con amore, Irene & Marco",
+    };
+  }
+  if (lang === "en") {
+    return {
+      subject: "Confirmation received – Irene & Marco 2026",
+      title: "Thank you for confirming!",
+      greeting: (name: string) => `Hi ${name}!`,
+      intro: "We are so happy you can join us on our special day. We have received your confirmation successfully.",
+      summaryTitle: "Summary",
+      attendance: "Attendance",
+      attendanceYes: "Confirmed ✓",
+      attendanceNo: "Unable to attend",
+      bus: "Bus",
+      busIda: "Outbound",
+      busVuelta: "Return",
+      boat: "Boat",
+      boatIda: "Outbound",
+      boatVuelta: "Return",
+      dietary: "Dietary requirements",
+      none: "None",
+      prewedding: "Pre-wedding",
+      yes: "Yes",
+      no: "No",
+      plusOne: "Plus one",
+      children: "Children",
+      childrenNeeds: "Children's needs",
+      closing: "We can't wait to see you! 💛",
+      backToWeb: "Back to website",
+      footer: "With love, Irene & Marco",
+    };
+  }
+  // Default: Spanish
+  return {
+    subject: "Confirmación recibida – Irene & Marco 2026",
+    title: "¡Gracias por confirmar!",
+    greeting: (name: string) => `¡Hola ${name}!`,
+    intro: "Estamos muy felices de que podáis acompañarnos en nuestro gran día. Hemos recibido correctamente vuestra confirmación.",
+    summaryTitle: "Resumen",
+    attendance: "Asistencia",
+    attendanceYes: "Confirmada ✓",
+    attendanceNo: "No podrá asistir",
+    bus: "Autobús",
+    busIda: "Ida",
+    busVuelta: "Vuelta",
+    boat: "Barco",
+    boatIda: "Ida",
+    boatVuelta: "Vuelta",
+    dietary: "Requisitos dietéticos",
+    none: "Ninguno",
+    prewedding: "Pre-boda",
+    yes: "Sí",
     no: "No",
-    plusOne: isItalian ? "Accompagnatore" : "Acompañante",
-    children: isItalian ? "Bambini" : "Niños",
-    childrenNeeds: isItalian ? "Esigenze bambini" : "Necesidades niños",
-    closing: isItalian
-      ? "Non vediamo l'ora di vedervi! 💛"
-      : "¡Estamos deseando veros! 💛",
-    backToWeb: isItalian ? "Torna al sito" : "Volver a la web",
-    footer: isItalian
-      ? "Con amore, Irene & Marco"
-      : "Con cariño, Irene & Marco",
+    plusOne: "Acompañante",
+    children: "Niños",
+    childrenNeeds: "Necesidades niños",
+    closing: "¡Estamos deseando veros! 💛",
+    backToWeb: "Volver a la web",
+    footer: "Con cariño, Irene & Marco",
   };
+}
+
+function buildEmailHtml(guest: GuestData): string {
+  const t = getTranslations(guest.language);
 
   const transportLines: string[] = [];
   if (guest.bus_ida || guest.bus_vuelta) {
@@ -93,14 +146,13 @@ function buildEmailHtml(guest: {
         <!-- Header -->
         <tr><td style="background:linear-gradient(135deg,#D4A574,#C4956A);padding:48px 40px;text-align:center;">
           <h1 style="margin:0;color:#FFFFFF;font-size:28px;font-weight:400;letter-spacing:1px;line-height:1.4;">
-            ¡Gracias por confirmar!<br>
-            <span style="font-size:22px;opacity:0.9;">Grazie per aver confermato!</span>
+            ${t.title}
           </h1>
         </td></tr>
 
         <!-- Body -->
         <tr><td style="padding:40px;">
-          <p style="margin:0 0 16px;color:#5C4A3A;font-size:18px;">${t.greeting}</p>
+          <p style="margin:0 0 16px;color:#5C4A3A;font-size:18px;">${t.greeting(guest.first_name)}</p>
           <p style="margin:0 0 32px;color:#7A6B5D;font-size:15px;line-height:1.7;">${t.intro}</p>
 
           <!-- Summary -->
@@ -174,20 +226,15 @@ Deno.serve(async (req) => {
     }
 
     const payload = await req.json();
-    console.log("Webhook payload:", JSON.stringify(payload));
+    console.log("Payload received:", JSON.stringify(payload));
 
-    // Support both direct call and webhook trigger
-    const guest = payload.record || payload;
+    const guest: GuestData = payload.record || payload;
 
     if (!guest.email || !guest.first_name) {
       throw new Error("Missing required guest data (email, first_name)");
     }
 
-    const isItalian = guest.language === "it";
-    const subject = isItalian
-      ? `Conferma ricevuta – Irene & Marco 2026`
-      : `Confirmación recibida – Irene & Marco 2026`;
-
+    const t = getTranslations(guest.language);
     const html = buildEmailHtml(guest);
 
     const res = await fetch("https://api.resend.com/emails", {
@@ -199,7 +246,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         from: "Irene & Marco <invitaciones@ireneymarco2026.com>",
         to: [guest.email],
-        subject,
+        subject: t.subject,
         html,
       }),
     });

@@ -88,7 +88,7 @@ const RSVPSection = () => {
         .eq('email', result.data.email);
       const isUpdate = existing && existing.length > 0;
 
-      const { error } = await supabase.from('guests').insert({
+      const guestData = {
         first_name: result.data.firstName,
         last_name: result.data.lastName,
         email: result.data.email,
@@ -101,9 +101,20 @@ const RSVPSection = () => {
         language: i18n.language,
         bus_ida: result.data.busIda,
         preboda: result.data.preboda,
-      } as any);
+      };
 
+      const { error } = await supabase.from('guests').insert(guestData as any);
       if (error) throw error;
+
+      // Send confirmation email via edge function (fire and forget)
+      supabase.functions.invoke('send-confirmation', {
+        body: {
+          ...guestData,
+          barco_ida: false,
+          barco_vuelta: false,
+          bus_vuelta: false,
+        },
+      }).catch((err) => console.error('Email sending failed:', err));
 
       setIsSuccess(true);
       setTimeout(() => {
