@@ -1,92 +1,58 @@
 
+# Botón "Confirma tu asistencia" en el Hero
 
-# Mejoras del formulario RSVP + Alerta de duplicados en Admin
+## Objetivo
 
-## 1. Reordenar preguntas del formulario
+Añadir un botón CTA elegante en la sección Hero que haga scroll suave hasta el formulario RSVP.
 
-El orden actual es: Preboda → Pareja → Niños → Alergias → Transporte.
+## Diseño propuesto
 
-El nuevo orden sera mas logico (primero quien viene, luego necesidades, luego eventos):
+El botón se colocará justo debajo del contador (Countdown), dentro de la zona de texto del Hero. Será sutil y elegante para no romper la estética minimalista:
 
-1. **Pareja** (quien viene contigo)
-2. **Niños** (quien mas viene)
-3. **Alergias** (necesidades de todos los asistentes)
-4. **Preboda** (evento opcional)
-5. **Transporte** (logistica)
+- **Estilo:** Fondo transparente, borde fino dorado (primary), texto serif en color primary
+- **Hover:** El fondo se rellena suavemente con el color primary y el texto pasa a blanco
+- **Animación:** Aparece con fade-in tras el countdown (delay ~1.3s)
+- **Acción:** Scroll suave hasta la sección RSVP (`#rsvp`)
 
-## 2. Mejorar labels del formulario
+## Detalles técnicos
 
-- "Nombre de tu pareja" cambia a "Nombre y apellidos de tu pareja" (3 idiomas)
-- El placeholder largo de alergias se convierte en un texto descriptivo bajo el label, con un placeholder corto tipo "Ej: celiaco, vegetariano..."
+### Archivo: `src/components/wedding/Hero.tsx`
 
-## 3. Alerta de duplicados en el panel de Admin
+Añadir después del bloque del Countdown (línea 93), un nuevo `motion.div` con el botón:
 
-En vez de bloquear el envio por duplicado (lo cual podria confundir a invitados que necesitan corregir datos), se implementara una alerta visual en el panel de administracion:
-
-- Al cargar los invitados, detectar emails que aparecen mas de una vez
-- Mostrar un banner/alerta amarilla en la parte superior de la tabla: "Se han detectado X registros con emails duplicados"
-- Resaltar visualmente las filas duplicadas con un fondo amarillo sutil
-- Permitir gestion manual (el admin decide cual mantener/eliminar)
-
----
-
-## Detalles tecnicos
-
-### Archivos a modificar
-
-| Archivo | Cambio |
-|---------|--------|
-| `src/components/wedding/RSVPSection.tsx` | Reordenar bloques JSX (mover Preboda despues de Alergias), actualizar claves de traduccion |
-| `src/i18n/locales/es.json` | Cambiar `plusOneName`, añadir `dietaryDescription`, acortar `dietaryPlaceholder` |
-| `src/i18n/locales/en.json` | Mismos cambios en ingles |
-| `src/i18n/locales/it.json` | Mismos cambios en italiano |
-| `src/pages/Admin.tsx` | Añadir deteccion de duplicados y alerta visual |
-
-### Cambios en RSVPSection.tsx
-
-Reordenar los bloques dentro del `AnimatePresence` (lineas 302-486):
-
-```text
-ANTES:                    DESPUES:
-1. Preboda Toggle         1. Plus One Toggle
-2. Plus One Toggle        2. Plus One Name
-3. Plus One Name          3. Children Toggle
-4. Children Toggle        4. Children Details
-5. Children Details       5. Dietary Requirements
-6. Dietary Requirements   6. Preboda Toggle
-7. Transport              7. Transport
+```tsx
+<motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 1.3, duration: 0.8 }}
+  className="mt-4"
+>
+  <a
+    href="#rsvp"
+    onClick={(e) => {
+      e.preventDefault();
+      document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' });
+    }}
+    className="inline-block font-serif text-sm md:text-base tracking-widest 
+               border border-primary/60 text-primary px-8 py-3 rounded-full
+               transition-all duration-500 
+               hover:bg-primary hover:text-white hover:border-primary"
+  >
+    {t('hero.cta')}
+  </a>
+</motion.div>
 ```
 
-Tambien en Alergias, cambiar de solo placeholder a:
-- Label existente
-- Nuevo parrafo descriptivo (`dietaryDescription`)
-- Textarea con placeholder corto
+### Archivos de traducción
 
-### Cambios en Admin.tsx
+Añadir la clave `hero.cta` en los tres idiomas:
 
-Añadir despues de las metricas y antes de la tabla:
+| Idioma | Valor |
+|--------|-------|
+| `es.json` | "Confirma tu asistencia" |
+| `en.json` | "Confirm your attendance" |
+| `it.json` | "Conferma la tua presenza" |
 
-```typescript
-// Detectar duplicados por email
-const emailCounts = realGuests.reduce((acc, g) => {
-  acc[g.email] = (acc[g.email] || 0) + 1;
-  return acc;
-}, {} as Record<string, number>);
-const duplicateEmails = Object.entries(emailCounts)
-  .filter(([_, count]) => count > 1)
-  .map(([email]) => email);
-```
+### Requisito previo
 
-- Banner de alerta si `duplicateEmails.length > 0`
-- Fondo `bg-amber-50` en filas con email duplicado
-- Icono de advertencia junto al nombre del invitado duplicado
-
-### Traducciones nuevas/modificadas
-
-**es.json:**
-- `plusOneName`: "Nombre y apellidos de tu pareja"
-- `dietaryDescription`: "Indica las alergias o restricciones de todos los asistentes (tu, tu pareja y niños si los hay)"
-- `dietaryPlaceholder`: "Ej: celiaco, vegetariano..."
-
-**en.json / it.json:** equivalentes traducidos.
-
+Verificar que la sección RSVP tenga `id="rsvp"` en su elemento raíz (en `RSVPSection.tsx`) para que el scroll funcione correctamente.
