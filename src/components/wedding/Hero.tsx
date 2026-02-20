@@ -105,8 +105,8 @@ const Hero = () => {
               e.preventDefault();
               document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="inline-block font-serif text-sm md:text-base tracking-widest 
-                       border border-primary/60 text-primary px-8 py-3 rounded-full
+            className="inline-block font-serif text-xs md:text-sm tracking-widest 
+                       border border-primary/60 text-primary px-6 py-2 md:px-8 md:py-3 rounded-full
                        transition-all duration-500 
                        hover:bg-primary hover:text-white hover:border-primary"
           >
