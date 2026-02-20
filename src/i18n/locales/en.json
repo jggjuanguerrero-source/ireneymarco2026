@@ -113,6 +113,8 @@
       "successNotAttending": "We're sorry you can't join us. You'll be in our hearts!",
       "errorTitle": "Error sending",
       "errorMessage": "An error occurred. Please try again.",
+      "alreadySubmittedTitle": "We already received your RSVP",
+      "alreadySubmittedMessage": "If you need to make changes, please contact us.",
       "required": "This field is required",
       "invalidEmail": "Please enter a valid email"
     },

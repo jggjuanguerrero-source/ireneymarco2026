@@ -113,6 +113,8 @@
       "successNotAttending": "Lamentamos que no puedas acompañarnos. ¡Estarás en nuestros corazones!",
       "errorTitle": "Error al enviar",
       "errorMessage": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
+      "alreadySubmittedTitle": "Ya recibimos tu confirmación",
+      "alreadySubmittedMessage": "Si necesitas hacer cambios, contacta con nosotros.",
       "required": "Este campo es obligatorio",
       "invalidEmail": "Por favor, introduce un email válido"
     },

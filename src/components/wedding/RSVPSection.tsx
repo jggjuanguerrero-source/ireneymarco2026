@@ -108,10 +108,15 @@ const RSVPSection = () => {
           ? t('sections.rsvp.successMessage')
           : t('sections.rsvp.successNotAttending'),
       });
-    } catch (error) {
+    } catch (error: any) {
+      const isDuplicate = error?.code === '23505';
       toast({
-        title: t('sections.rsvp.errorTitle'),
-        description: t('sections.rsvp.errorMessage'),
+        title: isDuplicate
+          ? t('sections.rsvp.alreadySubmittedTitle')
+          : t('sections.rsvp.errorTitle'),
+        description: isDuplicate
+          ? t('sections.rsvp.alreadySubmittedMessage')
+          : t('sections.rsvp.errorMessage'),
         variant: 'destructive',
       });
     } finally {
