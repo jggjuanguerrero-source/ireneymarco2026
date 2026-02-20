@@ -7,7 +7,7 @@ import hotelImg from '@/assets/hotel-orizzonte.jpg';
 
 const HOTEL_EMAIL = 'booking@horizzonte.com';
 const HOTEL_PHONE = '+39 0421 380 004';
-const HOTEL_WEB = 'https://www.hotelorizzonte.it/';
+const HOTEL_WEB = 'https://www.horizzonte.com/';
 
 const placeholders: Record<string, { name: string; day: string; people: string }> = {
   es: { name: 'Nombre y Apellidos', day: 'Día', people: 'Número de adultos/niños' },
