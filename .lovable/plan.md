@@ -1,34 +1,31 @@
 
-# Cambiar el toggle del bus al mismo estilo Sí/No
+# Scroll al RSVP tras enviar el formulario
 
-## Cambio
+## Problema
 
-Reemplazar el componente `BusToggle` (líneas 128-148) y su uso (línea 485) por el mismo patrón de botones Sí/No que usan las demás preguntas (pareja, niños, preboda), usando la función `toggleBtn` ya existente.
+Al enviar el formulario RSVP, aparece la notificación de éxito pero la vista se desplaza a otra sección, impidiendo ver el mensaje de confirmación "Gracias por confirmar".
+
+## Solución
+
+Tras el envío exitoso (línea 101 en `handleSubmit`), añadir un `scrollIntoView` al contenedor de la sección RSVP usando el `ref` que ya existe en el componente.
 
 ## Detalle técnico
 
 **Archivo:** `src/components/wedding/RSVPSection.tsx`
 
-1. **Eliminar** el componente `BusToggle` (líneas 128-148).
-2. **Reemplazar** `<BusToggle />` en la línea 485 por:
+Después de `setIsSuccess(true)` (línea 101), añadir:
 
 ```tsx
-<div className="flex gap-3">
-  <button
-    type="button"
-    onClick={() => handleInputChange('busIda', true)}
-    className={toggleBtn(formData.busIda)}
-  >
-    {t('sections.rsvp.yes')}
-  </button>
-  <button
-    type="button"
-    onClick={() => handleInputChange('busIda', false)}
-    className={toggleBtn(!formData.busIda)}
-  >
-    No
-  </button>
-</div>
+ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 ```
 
-Esto unifica el estilo con las demás preguntas del formulario sin añadir ni quitar texto.
+Con un pequeño `setTimeout` para que el estado se actualice primero y se renderice el mensaje de confirmación antes de hacer scroll:
+
+```tsx
+setIsSuccess(true);
+setTimeout(() => {
+  ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}, 100);
+```
+
+Es un cambio de 3 líneas. El `ref` ya apunta al `<section id="rsvp">`, así que scrolleará directamente a la sección donde el usuario verá el mensaje de confirmación.
