@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Check, X, Loader2, Heart, Users, Bus, Ship } from 'lucide-react';
+import { Check, X, Loader2, Heart, Users, Ship } from 'lucide-react';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -124,28 +124,6 @@ const RSVPSection = () => {
         : 'border-primary/30 bg-transparent text-foreground/70 hover:border-primary/60'
     }`;
 
-  // Simple bus toggle button
-  const BusToggle = () => (
-    <button
-      type="button"
-      onClick={() => handleInputChange('busIda', !formData.busIda)}
-      className={`flex items-center gap-2.5 px-4 py-3 border transition-all duration-300 font-body text-sm w-full ${
-        formData.busIda
-          ? 'border-primary bg-primary/10 text-primary'
-          : 'border-primary/20 bg-transparent text-foreground/60 hover:border-primary/50'
-      }`}
-    >
-      <div
-        className={`w-4 h-4 border flex items-center justify-center shrink-0 transition-colors ${
-          formData.busIda ? 'border-primary bg-primary' : 'border-primary/40'
-        }`}
-      >
-        {formData.busIda && <Check className="w-3 h-3 text-primary-foreground" />}
-      </div>
-      <Bus className="w-3.5 h-3.5 shrink-0" />
-      <span>{t('sections.rsvp.busIda')}</span>
-    </button>
-  );
 
   return (
     <section id="rsvp" ref={ref} className="section-padding bg-background">
@@ -482,7 +460,22 @@ const RSVPSection = () => {
                       <p className="font-body text-sm text-muted-foreground">
                         {t('sections.rsvp.transportDescription')}
                       </p>
-                      <BusToggle />
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('busIda', true)}
+                          className={toggleBtn(formData.busIda)}
+                        >
+                          {t('sections.rsvp.yes')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('busIda', false)}
+                          className={toggleBtn(!formData.busIda)}
+                        >
+                          No
+                        </button>
+                      </div>
                     </div>
                   </motion.div>
                 )}
