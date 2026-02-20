@@ -308,29 +308,6 @@ const RSVPSection = () => {
                     transition={{ duration: 0.3 }}
                     className="space-y-10 overflow-hidden"
                   >
-                    {/* Preboda Toggle */}
-                    <div className="space-y-3">
-                      <Label className="font-body text-foreground/80 text-base">
-                        {t('sections.rsvp.prebodaQuestion')}
-                      </Label>
-                      <div className="flex gap-3">
-                        <button
-                          type="button"
-                          onClick={() => handleInputChange('preboda', true)}
-                          className={toggleBtn(formData.preboda)}
-                        >
-                          {t('sections.rsvp.yes')}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleInputChange('preboda', false)}
-                          className={toggleBtn(!formData.preboda)}
-                        >
-                          No
-                        </button>
-                      </div>
-                    </div>
-
                     {/* Plus One Toggle */}
                     <div className="space-y-3">
                       <Label className="font-body text-foreground/80 text-base">
@@ -456,6 +433,9 @@ const RSVPSection = () => {
                       <Label htmlFor="dietary" className="font-body text-foreground/80 text-base">
                         {t('sections.rsvp.dietary')}
                       </Label>
+                      <p className="font-body text-sm text-muted-foreground">
+                        {t('sections.rsvp.dietaryDescription')}
+                      </p>
                       <textarea
                         id="dietary"
                         value={formData.dietaryReqs}
@@ -463,6 +443,29 @@ const RSVPSection = () => {
                         placeholder={t('sections.rsvp.dietaryPlaceholder')}
                         className="input-underline w-full text-lg min-h-[80px] resize-none"
                       />
+                    </div>
+
+                    {/* Preboda Toggle */}
+                    <div className="space-y-3">
+                      <Label className="font-body text-foreground/80 text-base">
+                        {t('sections.rsvp.prebodaQuestion')}
+                      </Label>
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('preboda', true)}
+                          className={toggleBtn(formData.preboda)}
+                        >
+                          {t('sections.rsvp.yes')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('preboda', false)}
+                          className={toggleBtn(!formData.preboda)}
+                        >
+                          No
+                        </button>
+                      </div>
                     </div>
 
                     {/* Transport */}

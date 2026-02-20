@@ -320,6 +320,17 @@ const Admin = () => {
 
   const realGuests = guests.filter((g) => !isAnonymousSuggestion(g));
   const allSongRequests = guests.filter((g) => g.song_request && g.song_request.trim() !== '');
+
+  // Detect duplicate emails
+  const emailCounts = realGuests.reduce((acc, g) => {
+    acc[g.email] = (acc[g.email] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  const duplicateEmails = new Set(
+    Object.entries(emailCounts)
+      .filter(([_, count]) => count > 1)
+      .map(([email]) => email)
+  );
   const pendingSongs = allSongRequests.filter((g) => !g.song_processed);
   const addedSongs = allSongRequests.filter((g) => g.song_processed);
 
@@ -394,6 +405,16 @@ const Admin = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Duplicate Email Alert */}
+        {duplicateEmails.size > 0 && (
+          <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+            <p className="text-sm text-amber-800">
+              Se han detectado <strong>{duplicateEmails.size}</strong> email(s) con registros duplicados. Las filas afectadas están resaltadas en amarillo.
+            </p>
+          </div>
+        )}
 
         {/* Guest Table */}
         <Card>
@@ -497,10 +518,11 @@ const Admin = () => {
                   </TableHeader>
                   <TableBody>
                     {realGuests.map((guest) => (
-                      <TableRow key={guest.id}>
+                      <TableRow key={guest.id} className={duplicateEmails.has(guest.email) ? 'bg-amber-50' : ''}>
                         <TableCell>
                           <div>
-                            <p className="font-medium text-slate-800">
+                            <p className="font-medium text-slate-800 flex items-center gap-1.5">
+                              {duplicateEmails.has(guest.email) && <AlertCircle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />}
                               {guest.first_name} {guest.last_name}
                             </p>
                             <p className="text-xs text-slate-500">{guest.email}</p>
