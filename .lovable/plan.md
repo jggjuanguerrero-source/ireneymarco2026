@@ -1,58 +1,18 @@
 
-# Botón "Confirma tu asistencia" en el Hero
+# Mostrar el botón CTA solo en móvil
 
-## Objetivo
+## Razonamiento
 
-Añadir un botón CTA elegante en la sección Hero que haga scroll suave hasta el formulario RSVP.
+En desktop y tablet, la sección RSVP ya es visible al hacer un poco de scroll, por lo que el botón CTA no aporta valor y además queda tapado por la imagen de Venecia. En móvil sí tiene sentido porque hay más distancia hasta el formulario.
 
-## Diseño propuesto
+## Cambio
 
-El botón se colocará justo debajo del contador (Countdown), dentro de la zona de texto del Hero. Será sutil y elegante para no romper la estética minimalista:
+En `src/components/wedding/Hero.tsx`, añadir `md:hidden` al contenedor del botón CTA (línea 100) para que solo se muestre en pantallas pequeñas:
 
-- **Estilo:** Fondo transparente, borde fino dorado (primary), texto serif en color primary
-- **Hover:** El fondo se rellena suavemente con el color primary y el texto pasa a blanco
-- **Animación:** Aparece con fade-in tras el countdown (delay ~1.3s)
-- **Acción:** Scroll suave hasta la sección RSVP (`#rsvp`)
-
-## Detalles técnicos
-
-### Archivo: `src/components/wedding/Hero.tsx`
-
-Añadir después del bloque del Countdown (línea 93), un nuevo `motion.div` con el botón:
-
-```tsx
-<motion.div
-  initial={{ opacity: 0, y: 10 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: 1.3, duration: 0.8 }}
-  className="mt-4"
->
-  <a
-    href="#rsvp"
-    onClick={(e) => {
-      e.preventDefault();
-      document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' });
-    }}
-    className="inline-block font-serif text-sm md:text-base tracking-widest 
-               border border-primary/60 text-primary px-8 py-3 rounded-full
-               transition-all duration-500 
-               hover:bg-primary hover:text-white hover:border-primary"
-  >
-    {t('hero.cta')}
-  </a>
-</motion.div>
+```
+className="mt-4"  -->  className="mt-4 md:hidden"
 ```
 
-### Archivos de traducción
+Esto es un cambio de una sola clase CSS. El botón seguirá visible en móvil (menos de 768px) y se ocultará en tablet y desktop.
 
-Añadir la clave `hero.cta` en los tres idiomas:
-
-| Idioma | Valor |
-|--------|-------|
-| `es.json` | "Confirma tu asistencia" |
-| `en.json` | "Confirm your attendance" |
-| `it.json` | "Conferma la tua presenza" |
-
-### Requisito previo
-
-Verificar que la sección RSVP tenga `id="rsvp"` en su elemento raíz (en `RSVPSection.tsx`) para que el scroll funcione correctamente.
+Además, revertir el cambio de `min-h-[65vh]` a `h-[65vh]` en la zona de texto (línea 25) para restaurar la altura fija original del Hero en desktop, ya que el botón ya no necesitará espacio extra.
