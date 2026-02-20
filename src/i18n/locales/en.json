@@ -10,7 +10,8 @@
   "hero": {
     "date": "October 10th, 2026",
     "location": "Venice",
-    "scrollDown": "Discover more"
+    "scrollDown": "Discover more",
+    "cta": "Confirm your attendance"
   },
   "countdown": {
     "days": "Days",

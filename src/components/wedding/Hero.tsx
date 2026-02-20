@@ -91,6 +91,28 @@ const Hero = () => {
         <div className="bg-background/60 backdrop-blur-sm rounded-2xl px-6 py-4">
           <Countdown />
         </div>
+
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.3, duration: 0.8 }}
+          className="mt-4"
+        >
+          <a
+            href="#rsvp"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="inline-block font-serif text-sm md:text-base tracking-widest 
+                       border border-primary/60 text-primary px-8 py-3 rounded-full
+                       transition-all duration-500 
+                       hover:bg-primary hover:text-white hover:border-primary"
+          >
+            {t('hero.cta')}
+          </a>
+        </motion.div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
