@@ -68,6 +68,7 @@ interface Guest {
   bus_vuelta: boolean;
   barco_ida: boolean;
   barco_vuelta: boolean;
+  preboda: boolean;
 }
 
 interface Metrics {
@@ -121,6 +122,7 @@ const downloadCSV = (guests: Guest[]) => {
     'Idioma',
     'Fecha Registro',
     'Bus',
+    'Preboda',
   ];
 
   const rows = guests.map((g) => [
@@ -137,6 +139,7 @@ const downloadCSV = (guests: Guest[]) => {
     g.language ?? '',
     formatDate(g.created_at),
     g.bus_ida ? 'Sí' : 'No',
+    g.preboda ? 'Sí' : 'No',
   ]);
 
   const escape = (v: string | number) => `"${String(v).replace(/"/g, '""')}"`;
@@ -487,6 +490,7 @@ const Admin = () => {
                       <TableHead>Alergias/Dieta</TableHead>
                       <TableHead className="text-center">Idioma</TableHead>
                       <TableHead className="text-center">🚌 Bus</TableHead>
+                      <TableHead className="text-center">🎉 Preboda</TableHead>
                       <TableHead className="text-center">Registro</TableHead>
                       <TableHead className="w-12"></TableHead>
                     </TableRow>
@@ -531,6 +535,7 @@ const Admin = () => {
                           <span className="text-sm">{langLabel(guest.language)}</span>
                         </TableCell>
                         <TableCell className="text-center">{boolCell(guest.bus_ida)}</TableCell>
+                        <TableCell className="text-center">{boolCell(guest.preboda)}</TableCell>
                         <TableCell className="text-center text-xs text-slate-500 whitespace-nowrap">
                           {formatDate(guest.created_at)}
                         </TableCell>
