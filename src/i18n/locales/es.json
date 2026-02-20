@@ -109,6 +109,7 @@
       "submit": "Confirmar Asistencia",
       "submitting": "Enviando...",
       "successTitle": "¡Gracias por confirmar!",
+      "successTitleNotAttending": "¡Te echaremos de menos!",
       "successMessage": "Hemos recibido tu confirmación. ¡Nos vemos en Venecia!",
       "successNotAttending": "Lamentamos que no puedas acompañarnos. ¡Estarás en nuestros corazones!",
       "errorTitle": "Error al enviar",

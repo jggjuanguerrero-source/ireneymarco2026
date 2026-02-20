@@ -109,6 +109,7 @@
       "submit": "Conferma Presenza",
       "submitting": "Invio in corso...",
       "successTitle": "Grazie per la conferma!",
+      "successTitleNotAttending": "Ci mancherai!",
       "successMessage": "Abbiamo ricevuto la tua conferma. Ci vediamo a Venezia!",
       "successNotAttending": "Ci dispiace che non possa unirti a noi. Sarai nei nostri cuori!",
       "errorTitle": "Errore nell'invio",

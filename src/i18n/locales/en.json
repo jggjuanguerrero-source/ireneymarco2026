@@ -109,6 +109,7 @@
       "submit": "Confirm Attendance",
       "submitting": "Sending...",
       "successTitle": "Thank you for confirming!",
+      "successTitleNotAttending": "We'll miss you!",
       "successMessage": "We've received your confirmation. See you in Venice!",
       "successNotAttending": "We're sorry you can't join us. You'll be in our hearts!",
       "errorTitle": "Error sending",
