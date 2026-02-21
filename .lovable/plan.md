@@ -1,23 +1,23 @@
 
-## Update "Our Story" welcome text
 
-The current text in the "Nuestra Historia" section ends with:
-> "...celebrarlo con toda la gente que nos ha acompañado durante este tiempo?"
+## Remove duplicate warning icons in the timeline
 
-The new ending should be:
-> "...celebrarlo rodeados de las personas que más queremos y que han formado parte de nuestro camino?"
+The warning boxes at 11:00 and 13:30 currently show two warning symbols: a `⚠️` emoji embedded in the translation text AND an `AlertTriangle` Lucide icon rendered by the component. The fix is to remove the emoji from the translation strings, keeping only the component icon.
 
-### Changes required
+### Changes
 
-**1. Spanish (`src/i18n/locales/es.json`)**
-- Update `sections.ourstory.description` replacing the last sentence with the new text provided.
+**1. `src/i18n/locales/es.json`**
+- `step2Warning`: Remove leading `⚠️ ` from the string
+- `step4Warning`: Remove leading `⚠️ ` from the string
 
-**2. English (`src/i18n/locales/en.json`)**
-- Update the English translation to match the new meaning: "...surrounded by the people we love most and who have been part of our journey?"
+**2. `src/i18n/locales/en.json`**
+- `step2Warning`: Remove leading `⚠️ `
+- `step4Warning`: Remove leading `⚠️ `
 
-**3. Italian (`src/i18n/locales/it.json`)**
-- Update the Italian translation similarly: "...circondati dalle persone che amiamo di piu e che hanno fatto parte del nostro cammino?"
+**3. `src/i18n/locales/it.json`**
+- `step2Warning`: Remove leading `⚠️ `
+- `step4Warning`: Remove leading `⚠️ `
 
 ### Technical details
-- Only 3 translation files need a single string value change each.
-- No component or layout changes required.
+- 3 files, 2 string edits each (6 total micro-edits)
+- No component changes needed -- the `AlertTriangle` icon in `WeddingSection.tsx` already provides the visual warning indicator
