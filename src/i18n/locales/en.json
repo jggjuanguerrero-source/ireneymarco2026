@@ -126,7 +126,7 @@
       "dietaryDescription": "List allergies or dietary restrictions for all attendees (you, your partner, and children if applicable)",
       "dietaryPlaceholder": "E.g.: celiac, vegetarian...",
       "transport": "Transport",
-      "transportDescription": "Do you need the bus service?",
+      "transportDescription": "Do you need the bus service? (from hotel to port and from port to restaurant)",
       "transportNote": "We are counting on all guests for the boat transfer to the church and back to the restaurant",
       "busIda": "Yes, for all transfers",
       "prebodaQuestion": "Will you attend the Pre-Wedding?",
