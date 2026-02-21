@@ -1,23 +1,25 @@
 
 
-## Remove duplicate warning icons in the timeline
+## Actualizar botones de Google Maps para mostrar rutas predefinidas
 
-The warning boxes at 11:00 and 13:30 currently show two warning symbols: a `⚠️` emoji embedded in the translation text AND an `AlertTriangle` Lucide icon rendered by the component. The fix is to remove the emoji from the translation strings, keeping only the component icon.
+Actualmente los botones abren Google Maps en modo "buscar ubicación", lo que solo muestra un pin. Se cambiarán para que abran rutas completas con origen y destino predefinidos.
 
-### Changes
+### Que cambia para el usuario
 
-**1. `src/i18n/locales/es.json`**
-- `step2Warning`: Remove leading `⚠️ ` from the string
-- `step4Warning`: Remove leading `⚠️ ` from the string
+- Al pulsar el boton en la tarjeta del aeropuerto Marco Polo, se abre Google Maps con la ruta desde el aeropuerto hasta Jesolo Autostazione.
+- Lo mismo para Treviso Airport.
+- La tarjeta de alquiler de coches abre la ruta sin origen fijo, permitiendo que Google use la ubicacion del usuario.
 
-**2. `src/i18n/locales/en.json`**
-- `step2Warning`: Remove leading `⚠️ `
-- `step4Warning`: Remove leading `⚠️ `
+### Cambios tecnicos
 
-**3. `src/i18n/locales/it.json`**
-- `step2Warning`: Remove leading `⚠️ `
-- `step4Warning`: Remove leading `⚠️ `
+**`src/components/wedding/GettingThereSection.tsx`**
 
-### Technical details
-- 3 files, 2 string edits each (6 total micro-edits)
-- No component changes needed -- the `AlertTriangle` icon in `WeddingSection.tsx` already provides the visual warning indicator
+- Eliminar la constante compartida `GOOGLE_MAPS_URL`.
+- Agregar una propiedad `mapsUrl` a cada tarjeta en el array `cards`:
+  - VCE: `https://www.google.com/maps/dir/?api=1&origin=Venice+Marco+Polo+Airport&destination=Jesolo+Autostazione`
+  - TSF: `https://www.google.com/maps/dir/?api=1&origin=Treviso+Airport&destination=Jesolo+Autostazione`
+  - Car: `https://www.google.com/maps/dir/?api=1&destination=Jesolo+Autostazione`
+- Actualizar el `onClick` del boton para usar `card.mapsUrl` en lugar de la constante global.
+
+Solo se modifica 1 archivo. No se necesitan cambios en las traducciones.
+
