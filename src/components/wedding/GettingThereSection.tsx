@@ -102,10 +102,12 @@ const GettingThereSection = () => {
                     variant="outline"
                     size="sm"
                     className="w-full gap-2"
-                    onClick={() => window.open(card.mapsUrl, '_blank')}
+                    asChild
                   >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    {t('sections.gettingThere.mapsButton')}
+                    <a href={card.mapsUrl} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      {t('sections.gettingThere.mapsButton')}
+                    </a>
                   </Button>
                 </div>
               </motion.div>
