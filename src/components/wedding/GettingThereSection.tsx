@@ -16,7 +16,7 @@ const GettingThereSection = () => {
       codeKey: 'sections.gettingThere.airport1Code',
       descKey: 'sections.gettingThere.airport1Desc',
       routeKey: 'sections.gettingThere.airport1Route',
-      mapsUrl: 'https://www.google.com/maps/dir/?api=1&origin=Venice+Marco+Polo+Airport&destination=Jesolo+Autostazione',
+      mapsUrl: 'https://www.google.com/maps/dir/?api=1&origin=Venice+Marco+Polo+Airport&destination=Jesolo+Autostazione&travelmode=transit',
     },
     {
       icon: Plane,
@@ -24,7 +24,7 @@ const GettingThereSection = () => {
       codeKey: 'sections.gettingThere.airport2Code',
       descKey: 'sections.gettingThere.airport2Desc',
       routeKey: 'sections.gettingThere.airport2Route',
-      mapsUrl: 'https://www.google.com/maps/dir/?api=1&origin=Treviso+Airport&destination=Jesolo+Autostazione',
+      mapsUrl: 'https://www.google.com/maps/dir/?api=1&origin=Treviso+Airport&destination=Jesolo+Autostazione&travelmode=transit',
     },
     {
       icon: Car,
