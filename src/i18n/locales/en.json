@@ -20,6 +20,13 @@
     "seconds": "Seconds"
   },
   "sections": {
+    "ourstory": {
+      "title": "Our Story",
+      "subtitle": "7 years of adventures together",
+      "description": "Hellooo!\n\nAfter 7 years starting in Cranfield, settling in Germany, travelling the world, taking part in many races and with 'Itañol' as our main language, the long-awaited moment has arrived. We're getting married! And what better plan than celebrating it with all the people who have been with us along the way?",
+      "infoNote": "Here you'll find all the information you need to organise your trip.",
+      "imageAlt": "Irene and Marco at the Taj Mahal"
+    },
     "wedding": {
       "title": "The Big Day",
       "subtitle": "Celebrate with us in the city of Venice",

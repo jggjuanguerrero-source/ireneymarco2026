@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import Navbar from '@/components/wedding/Navbar';
 import Hero from '@/components/wedding/Hero';
+import OurStorySection from '@/components/wedding/OurStorySection';
 import WeddingSection from '@/components/wedding/WeddingSection';
 import PreWeddingSection from '@/components/wedding/PreWeddingSection';
 import TravelSection from '@/components/wedding/TravelSection';
@@ -16,6 +17,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <OurStorySection />
       <WeddingSection />
       <PreWeddingSection />
       <TravelSection />
