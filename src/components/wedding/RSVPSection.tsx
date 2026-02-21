@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Check, X, Loader2, Heart, Users, Ship } from 'lucide-react';
@@ -50,6 +50,15 @@ const RSVPSection = () => {
     preboda: false,
   });
   const [errors, setErrors] = useState<Partial<Record<keyof RSVPFormData, string>>>({});
+  const formViewTracked = useRef(false);
+
+  // Track form view once
+  useEffect(() => {
+    if (isInView && !formViewTracked.current) {
+      formViewTracked.current = true;
+      window.umami?.track('rsvp_form_view');
+    }
+  }, [isInView]);
 
   const handleInputChange = (field: keyof RSVPFormData, value: string | boolean | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -60,6 +69,7 @@ const RSVPSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    window.umami?.track('rsvp_submit_attempt');
 
     const dataToValidate = {
       ...formData,
@@ -75,6 +85,7 @@ const RSVPSection = () => {
         fieldErrors[field] = t(`sections.rsvp.${err.message}`);
       });
       setErrors(fieldErrors);
+      window.umami?.track('rsvp_validation_error', { fields: Object.keys(fieldErrors) });
       return;
     }
 
@@ -116,6 +127,8 @@ const RSVPSection = () => {
         },
       }).catch((err) => console.error('Email sending failed:', err));
 
+      window.umami?.track('rsvp_submit_success');
+      if (isUpdate) window.umami?.track('rsvp_update');
       setIsSuccess(true);
       setTimeout(() => {
         ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -131,6 +144,7 @@ const RSVPSection = () => {
             : t('sections.rsvp.successNotAttending'),
       });
     } catch (error: any) {
+      window.umami?.track('rsvp_submit_error');
       toast({
         title: t('sections.rsvp.errorTitle'),
         description: t('sections.rsvp.errorMessage'),
@@ -273,6 +287,7 @@ const RSVPSection = () => {
                     onClick={() => {
                       setAttendingChoice(true);
                       handleInputChange('rsvpStatus', true);
+                      window.umami?.track('rsvp_attending_yes');
                     }}
                     className={`flex-1 py-3 px-6 border transition-all duration-300 flex items-center justify-center gap-3 font-serif tracking-wide ${
                       attendingChoice === true
@@ -288,6 +303,7 @@ const RSVPSection = () => {
                     onClick={() => {
                       setAttendingChoice(false);
                       handleInputChange('rsvpStatus', false);
+                      window.umami?.track('rsvp_attending_no');
                     }}
                     className={`flex-1 py-3 px-6 border transition-all duration-300 flex items-center justify-center gap-3 font-serif tracking-wide ${
                       attendingChoice === false
