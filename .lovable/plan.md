@@ -1,40 +1,81 @@
 
-## Integrar eventos de Umami en el formulario RSVP
 
-### Que se va a hacer
-Anadir llamadas a `umami.track()` en los puntos clave del flujo RSVP para tener visibilidad completa del embudo de confirmacion.
+## Anadir eventos de Umami a toda la web
 
-### Eventos a implementar
+### Resumen
+Integrar llamadas `window.umami?.track()` en todas las secciones de la web para tener visibilidad completa de como interactuan los invitados.
 
-1. **`rsvp_form_view`** - Se dispara cuando la seccion RSVP entra en el viewport (aprovechando el `useInView` que ya existe)
-2. **`rsvp_attending_yes`** - Click en el boton "Asistiré"
-3. **`rsvp_attending_no`** - Click en "No puedo asistir"
-4. **`rsvp_submit_attempt`** - Al inicio de `handleSubmit`, antes de cualquier validacion
-5. **`rsvp_validation_error`** - Cuando Zod rechaza el formulario, incluyendo los campos que fallaron
-6. **`rsvp_submit_success`** - Tras insertar exitosamente en la base de datos
-7. **`rsvp_submit_error`** - Si la llamada a la base de datos falla
-8. **`rsvp_update`** - Cuando se detecta que el email ya existia
+### Eventos por seccion
 
-### Cambios tecnicos
+**1. Selector de idioma (`LanguageSelector.tsx`)**
+- `language_change` con datos `{ from, to }` -- en la funcion `changeLanguage`
 
-**Archivo: `src/components/wedding/RSVPSection.tsx`**
+**2. Hero (`Hero.tsx`)**
+- `hero_cta_click` -- en el boton CTA que lleva al RSVP (el `<a href="#rsvp">`)
 
-Se anadiran llamadas a `umami.track()` en los siguientes puntos del codigo existente:
+**3. Hotel / Alojamiento (`TravelSection.tsx`)**
+- `hotel_book_email_click` -- click en el boton "Reservar por email" (mailto)
+- `hotel_call_click` -- click en el boton de telefono
+- `hotel_web_click` -- click en el enlace a la web del hotel
+- `hotel_email_template_open` -- click en el desplegable de la plantilla de email
+- `hotel_email_template_copy` -- click en copiar la plantilla
 
-- **En el `useInView` effect**: Un nuevo `useEffect` que observe `isInView` y dispare `rsvp_form_view` una sola vez.
-- **En los botones de asistencia (lineas ~273-300)**: Llamada a `umami.track('rsvp_attending_yes')` o `umami.track('rsvp_attending_no')` en los `onClick`.
-- **En `handleSubmit` (linea ~62)**: Llamada a `umami.track('rsvp_submit_attempt')` al inicio de la funcion.
-- **En el bloque de error de validacion (linea ~71-78)**: Llamada a `umami.track('rsvp_validation_error', { fields: ... })` con los nombres de los campos que fallaron.
-- **Tras el insert exitoso (linea ~119)**: Llamada a `umami.track('rsvp_submit_success')` y si era update, tambien `umami.track('rsvp_update')`.
-- **En el catch de error (linea ~133)**: Llamada a `umami.track('rsvp_submit_error')`.
+**4. Como llegar (`GettingThereSection.tsx`)**
+- `getting_there_maps_click` con datos `{ transport }` -- click en cualquier boton de Google Maps, identificando si es aeropuerto Marco Polo, Treviso o coche
 
-Para evitar errores si Umami no esta cargado, cada llamada usara optional chaining: `window.umami?.track(...)`.
+**5. Regalo (`GiftSection.tsx`)**
+- `gift_iban_copy` -- click en el boton de copiar IBAN
 
-Se anadira tambien una declaracion de tipo para `window.umami` al inicio del archivo o en un archivo de tipos, para evitar errores de TypeScript.
+**6. Musica (`MusicSection.tsx`)**
+- `music_spotify_click` -- click en el boton de abrir Spotify
+- `music_song_submit` -- envio exitoso de una sugerencia de cancion
+- `music_song_error` -- error al enviar la sugerencia
 
-### Archivos modificados
-- `src/components/wedding/RSVPSection.tsx` - Anadir las llamadas de tracking
-- `src/vite-env.d.ts` - Anadir tipado de `window.umami`
+---
+
+### Cambios tecnicos por archivo
+
+**`src/components/wedding/LanguageSelector.tsx`**
+- En la funcion `changeLanguage` (linea 44), anadir:
+  ```
+  window.umami?.track('language_change', { from: i18n.language, to: code });
+  ```
+
+**`src/components/wedding/Hero.tsx`**
+- En el `onClick` del enlace CTA (linea 104), anadir:
+  ```
+  window.umami?.track('hero_cta_click');
+  ```
+
+**`src/components/wedding/TravelSection.tsx`**
+- En el `onClick` del boton de email (linea 133), anadir `hotel_book_email_click`
+- En el `<a>` del telefono (linea 143), envolver con `onClick` para `hotel_call_click`
+- En el `<a>` de la web (linea 101), envolver con `onClick` para `hotel_web_click`
+- En el boton de mostrar/ocultar plantilla (linea 154), anadir `hotel_email_template_open` (solo al abrir)
+- En el boton de copiar plantilla (linea 188), anadir `hotel_email_template_copy`
+
+**`src/components/wedding/GettingThereSection.tsx`**
+- En cada `<a>` de Maps (linea 107), envolver con `onClick` para `getting_there_maps_click` con `{ transport: 'marco_polo' | 'treviso' | 'car' }`
+- Se usara un array de identificadores `['marco_polo', 'treviso', 'car']` alineado con el array `cards`
+
+**`src/components/wedding/GiftSection.tsx`**
+- En la funcion `handleCopy` (linea 14), tras el `if (success)` (linea 45), anadir:
+  ```
+  window.umami?.track('gift_iban_copy');
+  ```
+
+**`src/components/wedding/MusicSection.tsx`**
+- En `handleSpotifyClick` (linea 31), anadir `music_spotify_click`
+- Tras el insert exitoso (linea 57), anadir `music_song_submit`
+- En el catch de error (linea 66), anadir `music_song_error`
+
+### Archivos modificados (6 archivos)
+1. `src/components/wedding/LanguageSelector.tsx`
+2. `src/components/wedding/Hero.tsx`
+3. `src/components/wedding/TravelSection.tsx`
+4. `src/components/wedding/GettingThereSection.tsx`
+5. `src/components/wedding/GiftSection.tsx`
+6. `src/components/wedding/MusicSection.tsx`
 
 ### Sin dependencias nuevas
-No se instala ningun paquete. Umami ya esta cargado via el script en `index.html`.
+El tipado de `window.umami` ya existe en `src/vite-env.d.ts`. Todas las llamadas usan optional chaining para evitar errores si el script no esta cargado.
