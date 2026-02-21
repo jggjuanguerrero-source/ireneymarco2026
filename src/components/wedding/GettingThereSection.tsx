@@ -12,6 +12,7 @@ const GettingThereSection = () => {
   const cards = [
     {
       icon: Plane,
+      trackId: 'marco_polo',
       titleKey: 'sections.gettingThere.airport1Title',
       codeKey: 'sections.gettingThere.airport1Code',
       descKey: 'sections.gettingThere.airport1Desc',
@@ -20,6 +21,7 @@ const GettingThereSection = () => {
     },
     {
       icon: Plane,
+      trackId: 'treviso',
       titleKey: 'sections.gettingThere.airport2Title',
       codeKey: 'sections.gettingThere.airport2Code',
       descKey: 'sections.gettingThere.airport2Desc',
@@ -28,6 +30,7 @@ const GettingThereSection = () => {
     },
     {
       icon: Car,
+      trackId: 'car',
       titleKey: 'sections.gettingThere.carTitle',
       codeKey: null,
       descKey: 'sections.gettingThere.carDesc',
@@ -104,7 +107,7 @@ const GettingThereSection = () => {
                     className="w-full gap-2"
                     asChild
                   >
-                    <a href={card.mapsUrl} target="_blank" rel="noopener noreferrer">
+                    <a href={card.mapsUrl} target="_blank" rel="noopener noreferrer" onClick={() => window.umami?.track('getting_there_maps_click', { transport: card.trackId })}>
                       <ExternalLink className="w-3.5 h-3.5" />
                       {t('sections.gettingThere.mapsButton')}
                     </a>

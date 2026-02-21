@@ -103,6 +103,7 @@ const Hero = () => {
             href="#rsvp"
             onClick={(e) => {
               e.preventDefault();
+              window.umami?.track('hero_cta_click');
               document.getElementById('rsvp')?.scrollIntoView({ behavior: 'smooth' });
             }}
             className="inline-block font-serif text-xs md:text-sm tracking-widest 

@@ -43,6 +43,7 @@ const GiftSection = () => {
     }
 
     if (success) {
+      window.umami?.track('gift_iban_copy');
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     }

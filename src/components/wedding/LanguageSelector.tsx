@@ -42,6 +42,7 @@ const LanguageSelector = () => {
   const currentLang = languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   const changeLanguage = (code: string) => {
+    window.umami?.track('language_change', { from: i18n.language, to: code });
     i18n.changeLanguage(code);
     localStorage.setItem('wedding-language', code);
     setIsOpen(false);
