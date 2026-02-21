@@ -4,8 +4,6 @@ import { motion, useInView } from 'framer-motion';
 import { Plane, Bus, Car, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const GOOGLE_MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=Jesolo+Autostazione';
-
 const GettingThereSection = () => {
   const { t } = useTranslation();
   const ref = useRef(null);
@@ -18,6 +16,7 @@ const GettingThereSection = () => {
       codeKey: 'sections.gettingThere.airport1Code',
       descKey: 'sections.gettingThere.airport1Desc',
       routeKey: 'sections.gettingThere.airport1Route',
+      mapsUrl: 'https://www.google.com/maps/dir/?api=1&origin=Venice+Marco+Polo+Airport&destination=Jesolo+Autostazione',
     },
     {
       icon: Plane,
@@ -25,6 +24,7 @@ const GettingThereSection = () => {
       codeKey: 'sections.gettingThere.airport2Code',
       descKey: 'sections.gettingThere.airport2Desc',
       routeKey: 'sections.gettingThere.airport2Route',
+      mapsUrl: 'https://www.google.com/maps/dir/?api=1&origin=Treviso+Airport&destination=Jesolo+Autostazione',
     },
     {
       icon: Car,
@@ -32,6 +32,7 @@ const GettingThereSection = () => {
       codeKey: null,
       descKey: 'sections.gettingThere.carDesc',
       routeKey: null,
+      mapsUrl: 'https://www.google.com/maps/dir/?api=1&destination=Jesolo+Autostazione',
     },
   ];
 
@@ -101,7 +102,7 @@ const GettingThereSection = () => {
                     variant="outline"
                     size="sm"
                     className="w-full gap-2"
-                    onClick={() => window.open(GOOGLE_MAPS_URL, '_blank')}
+                    onClick={() => window.open(card.mapsUrl, '_blank')}
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     {t('sections.gettingThere.mapsButton')}
