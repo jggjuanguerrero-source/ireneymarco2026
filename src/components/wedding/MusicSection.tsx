@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 // ============================================
 // EDITABLE CONFIG - Spotify Playlist Link
 // ============================================
-const SPOTIFY_PLAYLIST_URL = 'https://open.spotify.com/playlist/1XmSmiiqA7Gw5Oo42UY7np?si=hvkSii4RTDqoUB0LkkR26A&pi=0cBfY9oUTq6sR';
+const SPOTIFY_PLAYLIST_URL = 'https://open.spotify.com/playlist/1XmSmiiqA7Gw5Oo42UY7np?si=1pTfmeb_QkK_gdVkLjSI6w&pt=ed9023d56cd964ab7357418d2f26c393&pi=pxYCOWC3TRySM';
 
 // Validation schema for song suggestion
 const songSchema = z.object({
