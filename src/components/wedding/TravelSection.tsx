@@ -102,6 +102,7 @@ const TravelSection = () => {
                 href={HOTEL_WEB}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => window.umami?.track('hotel_web_click')}
                 className="inline-flex items-center gap-1.5 font-body text-sm text-primary hover:underline"
               >
                 <Globe className="w-4 h-4" />
@@ -130,7 +131,7 @@ const TravelSection = () => {
               <div className="flex flex-col sm:flex-row gap-3 mt-4">
                 <Button
                   className="flex-1 gap-2"
-                  onClick={() => window.open(mailtoLink, '_blank')}
+                  onClick={() => { window.umami?.track('hotel_book_email_click'); window.open(mailtoLink, '_blank'); }}
                 >
                   <Mail className="w-4 h-4" />
                   {t('sections.travel.bookByEmail')}
@@ -140,7 +141,7 @@ const TravelSection = () => {
                   className="flex-1 gap-2"
                   asChild
                 >
-                  <a href={`tel:${HOTEL_PHONE.replace(/\s/g, '')}`}>
+                  <a href={`tel:${HOTEL_PHONE.replace(/\s/g, '')}`} onClick={() => window.umami?.track('hotel_call_click')}>
                     <Phone className="w-4 h-4" />
                     {HOTEL_PHONE}
                   </a>
@@ -151,7 +152,7 @@ const TravelSection = () => {
             {/* Collapsible email template */}
             <div className="mt-6">
               <button
-                onClick={() => setShowEmailTemplate(!showEmailTemplate)}
+                onClick={() => { if (!showEmailTemplate) window.umami?.track('hotel_email_template_open'); setShowEmailTemplate(!showEmailTemplate); }}
                 className="flex items-center gap-2 font-body text-sm text-muted-foreground hover:text-foreground transition-colors w-full justify-center"
               >
                 <Mail className="w-3.5 h-3.5" />
@@ -185,7 +186,7 @@ const TravelSection = () => {
                         <div className="flex items-center gap-1.5">
                           <Paperclip className="w-3.5 h-3.5 text-muted-foreground/50" />
                           <button
-                            onClick={() => handleCopy(fullTemplate, 'template')}
+                            onClick={() => { window.umami?.track('hotel_email_template_copy'); handleCopy(fullTemplate, 'template'); }}
                             className="p-1 rounded hover:bg-primary/10 transition-colors"
                             title={t('sections.travel.copyTemplate')}
                           >

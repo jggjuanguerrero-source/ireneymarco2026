@@ -29,6 +29,7 @@ const MusicSection = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const handleSpotifyClick = () => {
+    window.umami?.track('music_spotify_click');
     window.open(SPOTIFY_PLAYLIST_URL, '_blank');
   };
 
@@ -54,6 +55,7 @@ const MusicSection = () => {
 
       if (error) throw error;
 
+      window.umami?.track('music_song_submit');
       setIsSuccess(true);
       setSongInput('');
       toast({
@@ -64,6 +66,7 @@ const MusicSection = () => {
       // Reset success state after 3 seconds
       setTimeout(() => setIsSuccess(false), 3000);
     } catch (error) {
+      window.umami?.track('music_song_error');
       toast({
         title: 'Error',
         description: 'Ha ocurrido un error. Por favor, inténtalo de nuevo.',
