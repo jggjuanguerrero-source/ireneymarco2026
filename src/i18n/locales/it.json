@@ -20,6 +20,13 @@
     "seconds": "Secondi"
   },
   "sections": {
+    "ourstory": {
+      "title": "La Nostra Storia",
+      "subtitle": "7 anni di avventure insieme",
+      "description": "Ciaooo!\n\nDopo 7 anni iniziando a Cranfield, stabilendoci in Germania, viaggiando per il mondo, partecipando a tante gare e con l'itañolo come lingua principale, è arrivato il momento tanto atteso. Ci sposiamo! E quale piano migliore che festeggiare con tutte le persone che ci hanno accompagnato in questo tempo?",
+      "infoNote": "Qui vi lasciamo tutte le informazioni per organizzare il vostro viaggio.",
+      "imageAlt": "Irene e Marco al Taj Mahal"
+    },
     "wedding": {
       "title": "Il Grande Giorno",
       "subtitle": "Festeggia con noi nella città di Venezia",
