@@ -21,8 +21,8 @@ const Index = () => {
       <OurStorySection />
       <WeddingSection />
       <PreWeddingSection />
-      <TravelSection />
       <GettingThereSection />
+      <TravelSection />
       <RSVPSection />
       <GiftSection />
       <MusicSection />
