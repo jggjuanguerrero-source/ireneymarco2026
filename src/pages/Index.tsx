@@ -5,6 +5,7 @@ import OurStorySection from '@/components/wedding/OurStorySection';
 import WeddingSection from '@/components/wedding/WeddingSection';
 import PreWeddingSection from '@/components/wedding/PreWeddingSection';
 import TravelSection from '@/components/wedding/TravelSection';
+import GettingThereSection from '@/components/wedding/GettingThereSection';
 import RSVPSection from '@/components/wedding/RSVPSection';
 import GiftSection from '@/components/wedding/GiftSection';
 import MusicSection from '@/components/wedding/MusicSection';
@@ -21,6 +22,7 @@ const Index = () => {
       <WeddingSection />
       <PreWeddingSection />
       <TravelSection />
+      <GettingThereSection />
       <RSVPSection />
       <GiftSection />
       <MusicSection />

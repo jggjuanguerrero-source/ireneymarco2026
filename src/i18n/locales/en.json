@@ -71,6 +71,21 @@
       "tbc": "To be confirmed",
       "updateSoon": "We'll update the exact location soon"
     },
+    "gettingThere": {
+      "title": "How to Get There",
+      "subtitle": "Transport options to Jesolo",
+      "airport1Title": "Marco Polo Airport",
+      "airport1Code": "VCE",
+      "airport1Desc": "The closest airport to Jesolo.",
+      "airport1Route": "Direct Line 10 → Jesolo Autostazione",
+      "airport2Title": "Treviso Airport",
+      "airport2Code": "TSF",
+      "airport2Desc": "A convenient option, though a bit further away.",
+      "airport2Route": "Bus 108 → Portegrandi, transfer to Bus 10 → Jesolo Autostazione",
+      "carTitle": "Car Rental",
+      "carDesc": "Both airports offer a wide range of car rental services for complete flexibility.",
+      "mapsButton": "View route on Google Maps"
+    },
     "travel": {
       "title": "Accommodation",
       "subtitle": "Our recommendation for your stay",
