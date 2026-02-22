@@ -41,6 +41,9 @@ import {
   Undo2,
   CheckSquare,
   Download,
+  RefreshCw,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 
 // ============================================
@@ -158,11 +161,13 @@ const Admin = () => {
   const { toast } = useToast();
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessCode, setAccessCode] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [codeError, setCodeError] = useState(false);
 
   const [guests, setGuests] = useState<Guest[]>([]);
   const [metrics, setMetrics] = useState<Metrics>({ total: 0, confirmed: 0, pending: 0, dietary: 0 });
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   // Collapsible states for song sections
   const [pendingSongsOpen, setPendingSongsOpen] = useState(true);
@@ -295,14 +300,24 @@ const Admin = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Input
-                type="password"
-                placeholder="Código de acceso..."
-                value={accessCode}
-                onChange={(e) => { setAccessCode(e.target.value); setCodeError(false); }}
-                onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
-                className={`text-center text-lg tracking-widest ${codeError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Código de acceso..."
+                  value={accessCode}
+                  onChange={(e) => { setAccessCode(e.target.value); setCodeError(false); }}
+                  onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
+                  className={`text-center text-lg tracking-widest pr-12 ${codeError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
               {codeError && (
                 <p className="text-red-500 text-sm text-center mt-2">
                   Código incorrecto. Inténtalo de nuevo.
@@ -421,6 +436,20 @@ const Admin = () => {
           <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
             <CardTitle className="text-lg">Gestión de Invitados</CardTitle>
             <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2 text-slate-600"
+                onClick={async () => {
+                  setRefreshing(true);
+                  await fetchGuests();
+                  setRefreshing(false);
+                  toast({ title: '✓ Datos actualizados', description: 'La lista de invitados se ha refrescado' });
+                }}
+              >
+                <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+                Refrescar
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
