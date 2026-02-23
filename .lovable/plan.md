@@ -1,28 +1,22 @@
 
 
-## Mejoras en el Panel de Coordinación
+## Restringir acceso público a rsvp_events
 
-### 1. Botón de refrescar datos
-Se añadirá un botón de "Refrescar" en la cabecera de la sección de gestión de invitados (junto a "Descargar CSV" y "Añadir Invitado") que llame a `fetchGuests()` sin necesidad de recargar la página completa. Usará el icono `RefreshCw` de Lucide.
+### Problema
+La tabla `rsvp_events` contiene nombres y correos electrónicos de invitados. Actualmente tiene una política SELECT pública que permite a cualquiera leer esos datos via API.
 
-### 2. Botón de mostrar/ocultar contraseña
-En la pantalla de acceso con código, se añadirá un botón con icono de ojo (`Eye` / `EyeOff` de Lucide) dentro del campo de contraseña para alternar entre `type="password"` y `type="text"`.
+### Cambio
+Reemplazar la política de lectura pública por una que bloquee todo acceso directo via SELECT. Solo el Service Role Key (usado internamente por las funciones del backend) podrá leer y escribir en esta tabla.
 
----
+### Impacto
+- El panel de coordinacion (`/coordinacion-interna-im`) **NO se ve afectado** porque actualmente no consulta esta tabla.
+- La edge function `send-confirmation` **sigue funcionando** porque usa el Service Role Key para insertar eventos.
+- Si en el futuro se quiere mostrar datos de esta tabla en el panel, se crearia una funcion backend que los lea de forma segura.
 
-### Detalles técnicos
+### Detalles tecnicos
 
-**Archivo a modificar:** `src/pages/Admin.tsx`
+**Migracion SQL:**
+- `DROP POLICY "Allow read from authenticated or anon" ON public.rsvp_events`
+- Crear nueva politica: `CREATE POLICY "Deny public read" ON public.rsvp_events FOR SELECT USING (false)`
 
-**Cambio 1 - Botón refrescar:**
-- Importar `RefreshCw` de `lucide-react`
-- Añadir un nuevo estado `refreshing` para feedback visual (spinner)
-- Colocar el botón junto a "Descargar CSV" en la cabecera de la tabla de invitados
-- Al hacer clic, ejecuta `fetchGuests()` y muestra un toast de confirmación
-
-**Cambio 2 - Toggle de visibilidad del código:**
-- Importar `Eye` y `EyeOff` de `lucide-react`
-- Añadir estado `showPassword` (boolean)
-- Cambiar el `type` del Input entre `"password"` y `"text"` según el estado
-- Añadir un botón con icono de ojo posicionado dentro del campo de entrada (usando un wrapper `relative` con el botón en `absolute right`)
-
+Esto bloquea toda lectura via el cliente publico (anon key). El Service Role Key bypasea RLS automaticamente, asi que las funciones backend siguen teniendo acceso completo.
