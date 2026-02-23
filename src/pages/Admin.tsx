@@ -45,6 +45,7 @@ import {
   Eye,
   EyeOff,
 } from 'lucide-react';
+import AnalyticsSection from '@/components/wedding/AnalyticsSection';
 
 // ============================================
 // ACCESS CODE - Change this to your secret code
@@ -716,6 +717,9 @@ const Admin = () => {
             </Collapsible>
           </CardContent>
         </Card>
+
+        {/* Analytics Section */}
+        <AnalyticsSection />
       </main>
     </div>
   );
