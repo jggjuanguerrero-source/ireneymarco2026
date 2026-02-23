@@ -89,6 +89,36 @@ export type Database = {
         }
         Relationships: []
       }
+      rsvp_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          guest_email: string | null
+          guest_name: string | null
+          id: string
+          metadata: Json | null
+          rsvp_status: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          guest_email?: string | null
+          guest_name?: string | null
+          id?: string
+          metadata?: Json | null
+          rsvp_status?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          guest_email?: string | null
+          guest_name?: string | null
+          id?: string
+          metadata?: Json | null
+          rsvp_status?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
