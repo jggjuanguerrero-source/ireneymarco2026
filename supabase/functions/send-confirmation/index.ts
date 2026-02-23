@@ -240,6 +240,12 @@ Deno.serve(async (req) => {
       throw new Error("RESEND_API_KEY not configured");
     }
 
+    // Supabase client for server-side tracking
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
+    const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
     const payload = await req.json();
     console.log("Payload received:", JSON.stringify(payload));
 
@@ -256,6 +262,29 @@ Deno.serve(async (req) => {
     // Robust check: handle both boolean and string values
     const attending = guest.rsvp_status === true || guest.rsvp_status === "true";
     console.log("rsvp_status raw:", guest.rsvp_status, "type:", typeof guest.rsvp_status, "attending:", attending);
+
+    // Server-side tracking: log RSVP event
+    const trackEvent = async (eventType: string, metadata: Record<string, unknown> = {}) => {
+      try {
+        await supabaseAdmin.from("rsvp_events").insert({
+          event_type: eventType,
+          guest_email: guest.email,
+          guest_name: `${guest.first_name} ${guest.last_name}`,
+          rsvp_status: attending,
+          metadata,
+        });
+      } catch (e) {
+        console.error("Tracking error:", e);
+      }
+    };
+
+    await trackEvent("rsvp_confirmation_requested", {
+      language: lang,
+      plus_one: guest.plus_one,
+      children_count: guest.children_count,
+      preboda: guest.preboda,
+      bus_ida: guest.bus_ida,
+    });
 
     const subject = attending
       ? getAttendingTranslations(lang).subject
@@ -282,8 +311,11 @@ Deno.serve(async (req) => {
     console.log("Resend response:", JSON.stringify(data));
 
     if (!res.ok) {
+      await trackEvent("rsvp_email_failed", { error: JSON.stringify(data) });
       throw new Error(`Resend error: ${JSON.stringify(data)}`);
     }
+
+    await trackEvent(attending ? "rsvp_confirm_email_sent" : "rsvp_decline_email_sent", { resend_id: data.id });
 
     return new Response(JSON.stringify({ success: true, id: data.id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
