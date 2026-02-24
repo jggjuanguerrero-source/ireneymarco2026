@@ -15,11 +15,21 @@ Deno.serve(async (req) => {
     const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
     const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-    // Fetch all rsvp_events
-    const { data: events, error } = await supabaseAdmin
+    // Parse date filters from query params or body
+    const url = new URL(req.url);
+    const from = url.searchParams.get("from");
+    const to = url.searchParams.get("to");
+
+    // Build query
+    let query = supabaseAdmin
       .from("rsvp_events")
       .select("event_type, rsvp_status, metadata, created_at")
       .order("created_at", { ascending: true });
+
+    if (from) query = query.gte("created_at", from);
+    if (to) query = query.lte("created_at", to);
+
+    const { data: events, error } = await query;
 
     if (error) throw error;
 
@@ -56,11 +66,9 @@ Deno.serve(async (req) => {
       if (t === "rsvp_confirm_email_sent" || t === "rsvp_decline_email_sent") emailsSent++;
       if (t === "rsvp_email_failed") emailsFailed++;
 
-      // Engagement events (from Umami-like tracking if added later)
       if (t === "iban_copy_click") ibanClicks++;
       if (t === "hotel_info_click") hotelClicks++;
 
-      // Funnel events
       if (t === "rsvp_form_view") formViews++;
       if (t === "rsvp_form_start") formStarts++;
       if (t === "rsvp_confirmation_requested") formSubmits++;
