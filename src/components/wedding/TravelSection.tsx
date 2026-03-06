@@ -68,116 +68,104 @@ const TravelSection = () => {
           </p>
         </motion.div>
 
-        {/* Hotel Card */}
+        {/* Alternative Accommodation Form — TOP PRIORITY */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="bg-background rounded-xl overflow-hidden border border-border shadow-sm"
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="bg-background rounded-xl overflow-hidden border border-border shadow-sm p-6 md:p-8 mb-8"
         >
-          {/* Hotel Image with SOLD OUT ribbon */}
-          <div className="relative h-56 md:h-72 overflow-hidden">
+          <h4 className="font-serif text-xl md:text-2xl text-foreground mb-2">{t('sections.travel.alternativeTitle')}</h4>
+          <p className="font-body text-sm text-muted-foreground mb-6">{t('sections.travel.alternativeDescription')}</p>
+
+          {submitted ? (
+            <div className="text-center py-6 bg-primary/5 rounded-lg border border-primary/20">
+              <p className="font-serif text-lg text-foreground">{t('sections.travel.requestSuccess')}</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label className="font-body text-sm">{t('sections.travel.guestName')} *</Label>
+                <Input
+                  value={form.guest_name}
+                  onChange={(e) => setForm({ ...form, guest_name: e.target.value })}
+                  placeholder={t('sections.travel.guestNamePlaceholder')}
+                  required
+                  maxLength={100}
+                />
+              </div>
+              <div>
+                <Label className="font-body text-sm">{t('sections.travel.peopleCount')} *</Label>
+                <Input
+                  type="number"
+                  min={1}
+                  max={20}
+                  value={form.people_count}
+                  onChange={(e) => setForm({ ...form, people_count: e.target.value })}
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="font-body text-sm">{t('sections.travel.checkIn')} *</Label>
+                  <Input
+                    type="date"
+                    value={form.check_in}
+                    onChange={(e) => setForm({ ...form, check_in: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label className="font-body text-sm">{t('sections.travel.checkOut')} *</Label>
+                  <Input
+                    type="date"
+                    value={form.check_out}
+                    onChange={(e) => setForm({ ...form, check_out: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+              <Button type="submit" className="w-full gap-2" disabled={submitting}>
+                <Send className="w-4 h-4" />
+                {submitting ? t('sections.rsvp.submitting') : t('sections.travel.submitRequest')}
+              </Button>
+            </form>
+          )}
+        </motion.div>
+
+        {/* Hotel Card — Reduced & greyed out */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="max-w-sm mx-auto bg-background rounded-xl overflow-hidden border border-border shadow-sm opacity-80"
+        >
+          <div className="relative h-36 overflow-hidden">
             <img
               src={hotelImg}
               alt="Hotel Orizzonte"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover grayscale brightness-50"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 to-transparent" />
-            <div className="absolute bottom-4 left-6">
-              <h3 className="font-serif text-2xl md:text-3xl text-background drop-shadow-lg">
-                Hotel Orizzonte
-              </h3>
-            </div>
-            {/* SOLD OUT Ribbon */}
-            <div className="absolute top-0 right-0 overflow-hidden w-32 h-32">
-              <div className="absolute top-[18px] right-[-35px] w-[170px] text-center rotate-45 bg-destructive text-destructive-foreground font-bold text-sm py-1.5 shadow-lg tracking-wider uppercase">
+            <div className="absolute top-0 right-0 overflow-hidden w-28 h-28">
+              <div className="absolute top-[14px] right-[-30px] w-[150px] text-center rotate-45 bg-destructive text-destructive-foreground font-bold text-xs py-1 shadow-lg tracking-wider uppercase">
                 {t('sections.travel.soldOut')}
               </div>
             </div>
           </div>
-
-          <div className="p-6 md:p-8 space-y-6">
-            {/* Description */}
-            <p className="font-body text-base md:text-lg text-foreground/80 leading-relaxed">
-              {t('sections.travel.hotelDescription')}
+          <div className="p-4 text-center space-y-2">
+            <h3 className="font-serif text-lg text-foreground/60">Hotel Orizzonte</h3>
+            <p className="font-body text-sm font-bold text-destructive">
+              {t('sections.travel.allRoomsBooked')}
             </p>
-
-            {/* Price (kept for info, but no booking) */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 p-4 bg-muted/50 rounded-lg border border-border">
-              <div className="flex-1">
-                <p className="font-serif text-lg text-foreground line-through opacity-60">75€ <span className="font-body text-sm text-muted-foreground">{t('sections.travel.perNight')}</span></p>
-                <p className="font-body text-sm text-muted-foreground">{t('sections.travel.soldOutNote')}</p>
-              </div>
-              <a
-                href={HOTEL_WEB}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 font-body text-sm text-primary hover:underline"
-              >
-                <Globe className="w-4 h-4" />
-                {t('sections.travel.visitWeb')}
-              </a>
-            </div>
-
-            {/* Alternative Accommodation Form */}
-            <div className="border-t border-border pt-6">
-              <h4 className="font-serif text-lg text-foreground mb-4">{t('sections.travel.alternativeTitle')}</h4>
-              <p className="font-body text-sm text-muted-foreground mb-4">{t('sections.travel.alternativeDescription')}</p>
-
-              {submitted ? (
-                <div className="text-center py-6 bg-primary/5 rounded-lg border border-primary/20">
-                  <p className="font-serif text-lg text-foreground">{t('sections.travel.requestSuccess')}</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <Label className="font-body text-sm">{t('sections.travel.guestName')} *</Label>
-                    <Input
-                      value={form.guest_name}
-                      onChange={(e) => setForm({ ...form, guest_name: e.target.value })}
-                      placeholder={t('sections.travel.guestNamePlaceholder')}
-                      required
-                      maxLength={100}
-                    />
-                  </div>
-                  <div>
-                    <Label className="font-body text-sm">{t('sections.travel.peopleCount')} *</Label>
-                    <Input
-                      type="number"
-                      min={1}
-                      max={20}
-                      value={form.people_count}
-                      onChange={(e) => setForm({ ...form, people_count: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label className="font-body text-sm">{t('sections.travel.checkIn')} *</Label>
-                      <Input
-                        type="date"
-                        value={form.check_in}
-                        onChange={(e) => setForm({ ...form, check_in: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label className="font-body text-sm">{t('sections.travel.checkOut')} *</Label>
-                      <Input
-                        type="date"
-                        value={form.check_out}
-                        onChange={(e) => setForm({ ...form, check_out: e.target.value })}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full gap-2" disabled={submitting}>
-                    <Send className="w-4 h-4" />
-                    {submitting ? t('sections.rsvp.submitting') : t('sections.travel.submitRequest')}
-                  </Button>
-                </form>
-              )}
-            </div>
+            <a
+              href={HOTEL_WEB}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-body text-xs text-muted-foreground hover:underline"
+            >
+              <Globe className="w-3 h-3" />
+              {t('sections.travel.visitWeb')}
+            </a>
           </div>
         </motion.div>
       </div>

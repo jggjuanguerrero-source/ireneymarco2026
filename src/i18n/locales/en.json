@@ -96,6 +96,7 @@
       "visitWeb": "Visit hotel website",
       "soldOut": "SOLD OUT",
       "soldOutNote": "All rooms are fully booked",
+      "allRoomsBooked": "Unfortunately, all rooms are already booked.",
       "alternativeTitle": "🔍 Looking for alternative accommodation",
       "alternativeDescription": "If you need accommodation, fill out this form and we'll help you find an alternative near the hotel.",
       "guestName": "Guest name",
