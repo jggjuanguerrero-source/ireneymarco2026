@@ -446,344 +446,373 @@ const Admin = () => {
           </div>
         )}
 
-        {/* Guest Table */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
-            <CardTitle className="text-lg">Gestión de Invitados</CardTitle>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-2 text-slate-600"
-                onClick={async () => {
-                  setRefreshing(true);
-                  await fetchGuests();
-                  setRefreshing(false);
-                  toast({ title: '✓ Datos actualizados', description: 'La lista de invitados se ha refrescado' });
-                }}
-              >
-                <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-                Refrescar
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-2 text-slate-600"
-                onClick={() => downloadCSV(realGuests)}
-                disabled={realGuests.length === 0}
-              >
-                <Download className="w-4 h-4" />
-                Descargar CSV
-              </Button>
-              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button size="sm" className="gap-2">
-                    <UserPlus className="w-4 h-4" />
-                    Añadir Invitado
+        {/* Tabs */}
+        <Tabs defaultValue="guests" className="space-y-6">
+          <TabsList className="w-full justify-start bg-white border border-slate-200 p-1 h-auto flex-wrap">
+            <TabsTrigger value="guests" className="gap-2 data-[state=active]:bg-slate-100">
+              <Users className="w-4 h-4" />
+              Lista de Invitados
+            </TabsTrigger>
+            <TabsTrigger value="music" className="gap-2 data-[state=active]:bg-slate-100">
+              <Music className="w-4 h-4" />
+              Música
+            </TabsTrigger>
+            <TabsTrigger value="hotel" className="gap-2 data-[state=active]:bg-slate-100">
+              <Hotel className="w-4 h-4" />
+              Alojamiento alternativo
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="gap-2 data-[state=active]:bg-slate-100">
+              📊 Analítica
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Tab 1: Guest Table */}
+          <TabsContent value="guests">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
+                <CardTitle className="text-lg">Gestión de Invitados</CardTitle>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 text-slate-600"
+                    onClick={async () => {
+                      setRefreshing(true);
+                      await fetchGuests();
+                      setRefreshing(false);
+                      toast({ title: '✓ Datos actualizados', description: 'La lista de invitados se ha refrescado' });
+                    }}
+                  >
+                    <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+                    Refrescar
                   </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Añadir Nuevo Invitado</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4 pt-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label>Nombre *</Label>
-                        <Input
-                          value={newGuest.first_name}
-                          onChange={(e) => setNewGuest({ ...newGuest, first_name: e.target.value })}
-                          placeholder="Nombre"
-                        />
-                      </div>
-                      <div>
-                        <Label>Apellidos *</Label>
-                        <Input
-                          value={newGuest.last_name}
-                          onChange={(e) => setNewGuest({ ...newGuest, last_name: e.target.value })}
-                          placeholder="Apellidos"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label>Email *</Label>
-                      <Input
-                        type="email"
-                        value={newGuest.email}
-                        onChange={(e) => setNewGuest({ ...newGuest, email: e.target.value })}
-                        placeholder="email@ejemplo.com"
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Checkbox
-                        id="rsvp"
-                        checked={newGuest.rsvp_status}
-                        onCheckedChange={(checked) =>
-                          setNewGuest({ ...newGuest, rsvp_status: checked as boolean })
-                        }
-                      />
-                      <Label htmlFor="rsvp">Confirmado</Label>
-                    </div>
-                    <div>
-                      <Label>Restricciones Alimentarias</Label>
-                      <Input
-                        value={newGuest.dietary_reqs}
-                        onChange={(e) => setNewGuest({ ...newGuest, dietary_reqs: e.target.value })}
-                        placeholder="Alergias, vegetariano, etc."
-                      />
-                    </div>
-                    <Button onClick={handleAddGuest} className="w-full">
-                      Guardar Invitado
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="text-center py-8 text-slate-500">Cargando...</div>
-            ) : realGuests.length === 0 ? (
-              <div className="text-center py-8 text-slate-500">No hay invitados registrados</div>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nombre</TableHead>
-                      <TableHead className="text-center">Asistencia</TableHead>
-                      <TableHead>Alergias/Dieta</TableHead>
-                      <TableHead className="text-center">Idioma</TableHead>
-                      <TableHead className="text-center">🚌 Bus</TableHead>
-                      <TableHead className="text-center">🎉 Preboda</TableHead>
-                      <TableHead className="text-center">Registro</TableHead>
-                      <TableHead className="w-12"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {realGuests.map((guest) => (
-                      <TableRow key={guest.id} className={duplicateEmails.has(guest.email) ? 'bg-amber-50' : ''}>
-                        <TableCell>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 text-slate-600"
+                    onClick={() => downloadCSV(realGuests)}
+                    disabled={realGuests.length === 0}
+                  >
+                    <Download className="w-4 h-4" />
+                    Descargar CSV
+                  </Button>
+                  <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button size="sm" className="gap-2">
+                        <UserPlus className="w-4 h-4" />
+                        Añadir Invitado
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Añadir Nuevo Invitado</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4 pt-4">
+                        <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <p className="font-medium text-slate-800 flex items-center gap-1.5">
-                              {duplicateEmails.has(guest.email) && <AlertCircle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />}
-                              {guest.first_name} {guest.last_name}
-                            </p>
-                            <p className="text-xs text-slate-500">{guest.email}</p>
-                            {guest.plus_one && guest.plus_one_name && (
-                              <p className="text-xs text-slate-400 mt-1">+1: {guest.plus_one_name}</p>
-                            )}
+                            <Label>Nombre *</Label>
+                            <Input
+                              value={newGuest.first_name}
+                              onChange={(e) => setNewGuest({ ...newGuest, first_name: e.target.value })}
+                              placeholder="Nombre"
+                            />
                           </div>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {guest.rsvp_status === true ? (
-                            <span className="inline-flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded-full text-xs">
-                              <Check className="w-3 h-3" /> Sí
-                            </span>
-                          ) : guest.rsvp_status === false ? (
-                            <span className="inline-flex items-center gap-1 text-red-600 bg-red-50 px-2 py-1 rounded-full text-xs">
-                              <X className="w-3 h-3" /> No
-                            </span>
-                          ) : (
-                            <span className="text-slate-400 text-xs">Pendiente</span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {guest.dietary_reqs ? (
-                            <span className="text-sm text-slate-600 bg-rose-50 px-2 py-1 rounded">
-                              {guest.dietary_reqs}
-                            </span>
-                          ) : (
-                            <span className="text-slate-300">—</span>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <span className="text-sm">{langLabel(guest.language)}</span>
-                        </TableCell>
-                        <TableCell className="text-center">{boolCell(guest.bus_ida)}</TableCell>
-                        <TableCell className="text-center">{boolCell(guest.preboda)}</TableCell>
-                        <TableCell className="text-center text-xs text-slate-500 whitespace-nowrap">
-                          {formatDate(guest.created_at)}
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
-                            onClick={() =>
-                              handleDeleteGuest(guest.id, `${guest.first_name} ${guest.last_name}`)
+                          <div>
+                            <Label>Apellidos *</Label>
+                            <Input
+                              value={newGuest.last_name}
+                              onChange={(e) => setNewGuest({ ...newGuest, last_name: e.target.value })}
+                              placeholder="Apellidos"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <Label>Email *</Label>
+                          <Input
+                            type="email"
+                            value={newGuest.email}
+                            onChange={(e) => setNewGuest({ ...newGuest, email: e.target.value })}
+                            placeholder="email@ejemplo.com"
+                          />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Checkbox
+                            id="rsvp"
+                            checked={newGuest.rsvp_status}
+                            onCheckedChange={(checked) =>
+                              setNewGuest({ ...newGuest, rsvp_status: checked as boolean })
                             }
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Song Requests */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Music className="w-5 h-5" />
-              Peticiones de Canciones
-              <span className="text-sm font-normal text-slate-500">({allSongRequests.length} total)</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Pending Songs */}
-            <Collapsible open={pendingSongsOpen} onOpenChange={setPendingSongsOpen}>
-              <CollapsibleTrigger asChild>
-                <button className="flex items-center justify-between w-full p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
-                  <span className="flex items-center gap-2 font-medium text-amber-800">
-                    🎵 Pendientes
-                    <span className="bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full text-xs">
-                      {pendingSongs.length}
-                    </span>
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-amber-600 transition-transform ${pendingSongsOpen ? 'rotate-180' : ''}`}
-                  />
-                </button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="pt-3">
-                {pendingSongs.length === 0 ? (
-                  <p className="text-slate-500 text-center py-4 text-sm">¡Todas las canciones han sido añadidas! 🎉</p>
-                ) : (
-                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-                    {pendingSongs.map((guest) => (
-                      <div key={guest.id} className="bg-white rounded-lg p-3 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium text-slate-700 truncate">{guest.song_request}</p>
-                            <p className="text-xs text-slate-400 mt-1">
-                              — {isAnonymousSuggestion(guest) ? 'Anónimo' : `${guest.first_name} ${guest.last_name}`}
-                            </p>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="shrink-0 gap-1 text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700"
-                            onClick={() => handleToggleSongProcessed(guest.id, true)}
-                          >
-                            <CheckSquare className="w-3 h-3" />
-                            Añadir
-                          </Button>
+                          />
+                          <Label htmlFor="rsvp">Confirmado</Label>
                         </div>
+                        <div>
+                          <Label>Restricciones Alimentarias</Label>
+                          <Input
+                            value={newGuest.dietary_reqs}
+                            onChange={(e) => setNewGuest({ ...newGuest, dietary_reqs: e.target.value })}
+                            placeholder="Alergias, vegetariano, etc."
+                          />
+                        </div>
+                        <Button onClick={handleAddGuest} className="w-full">
+                          Guardar Invitado
+                        </Button>
                       </div>
-                    ))}
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="text-center py-8 text-slate-500">Cargando...</div>
+                ) : realGuests.length === 0 ? (
+                  <div className="text-center py-8 text-slate-500">No hay invitados registrados</div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Nombre</TableHead>
+                          <TableHead className="text-center">Asistencia</TableHead>
+                          <TableHead>Alergias/Dieta</TableHead>
+                          <TableHead className="text-center">Idioma</TableHead>
+                          <TableHead className="text-center">🚌 Bus</TableHead>
+                          <TableHead className="text-center">🎉 Preboda</TableHead>
+                          <TableHead className="text-center">Registro</TableHead>
+                          <TableHead className="w-12"></TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {realGuests.map((guest) => (
+                          <TableRow key={guest.id} className={duplicateEmails.has(guest.email) ? 'bg-amber-50' : ''}>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium text-slate-800 flex items-center gap-1.5">
+                                  {duplicateEmails.has(guest.email) && <AlertCircle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />}
+                                  {guest.first_name} {guest.last_name}
+                                </p>
+                                <p className="text-xs text-slate-500">{guest.email}</p>
+                                {guest.plus_one && guest.plus_one_name && (
+                                  <p className="text-xs text-slate-400 mt-1">+1: {guest.plus_one_name}</p>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {guest.rsvp_status === true ? (
+                                <span className="inline-flex items-center gap-1 text-green-600 bg-green-50 px-2 py-1 rounded-full text-xs">
+                                  <Check className="w-3 h-3" /> Sí
+                                </span>
+                              ) : guest.rsvp_status === false ? (
+                                <span className="inline-flex items-center gap-1 text-red-600 bg-red-50 px-2 py-1 rounded-full text-xs">
+                                  <X className="w-3 h-3" /> No
+                                </span>
+                              ) : (
+                                <span className="text-slate-400 text-xs">Pendiente</span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {guest.dietary_reqs ? (
+                                <span className="text-sm text-slate-600 bg-rose-50 px-2 py-1 rounded">
+                                  {guest.dietary_reqs}
+                                </span>
+                              ) : (
+                                <span className="text-slate-300">—</span>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <span className="text-sm">{langLabel(guest.language)}</span>
+                            </TableCell>
+                            <TableCell className="text-center">{boolCell(guest.bus_ida)}</TableCell>
+                            <TableCell className="text-center">{boolCell(guest.preboda)}</TableCell>
+                            <TableCell className="text-center text-xs text-slate-500 whitespace-nowrap">
+                              {formatDate(guest.created_at)}
+                            </TableCell>
+                            <TableCell>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                                onClick={() =>
+                                  handleDeleteGuest(guest.id, `${guest.first_name} ${guest.last_name}`)
+                                }
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </div>
                 )}
-              </CollapsibleContent>
-            </Collapsible>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-            {/* Added Songs */}
-            <Collapsible open={addedSongsOpen} onOpenChange={setAddedSongsOpen}>
-              <CollapsibleTrigger asChild>
-                <button className="flex items-center justify-between w-full p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                  <span className="flex items-center gap-2 font-medium text-green-800">
-                    ✅ Añadidas a Spotify
-                    <span className="bg-green-200 text-green-900 px-2 py-0.5 rounded-full text-xs">
-                      {addedSongs.length}
-                    </span>
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-green-600 transition-transform ${addedSongsOpen ? 'rotate-180' : ''}`}
-                  />
-                </button>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="pt-3">
-                {addedSongs.length === 0 ? (
-                  <p className="text-slate-500 text-center py-4 text-sm">No hay canciones añadidas todavía</p>
-                ) : (
-                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-                    {addedSongs.map((guest) => (
-                      <div key={guest.id} className="bg-green-50/50 rounded-lg p-3 border border-green-100">
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1 min-w-0">
-                            <p className="font-medium text-slate-600 truncate line-through decoration-green-400">
-                              {guest.song_request}
-                            </p>
-                            <p className="text-xs text-slate-400 mt-1">
-                              — {isAnonymousSuggestion(guest) ? 'Anónimo' : `${guest.first_name} ${guest.last_name}`}
-                            </p>
+          {/* Tab 2: Music */}
+          <TabsContent value="music">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Music className="w-5 h-5" />
+                  Peticiones de Canciones
+                  <span className="text-sm font-normal text-slate-500">({allSongRequests.length} total)</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Pending Songs */}
+                <Collapsible open={pendingSongsOpen} onOpenChange={setPendingSongsOpen}>
+                  <CollapsibleTrigger asChild>
+                    <button className="flex items-center justify-between w-full p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
+                      <span className="flex items-center gap-2 font-medium text-amber-800">
+                        🎵 Pendientes
+                        <span className="bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full text-xs">
+                          {pendingSongs.length}
+                        </span>
+                      </span>
+                      <ChevronDown
+                        className={`w-5 h-5 text-amber-600 transition-transform ${pendingSongsOpen ? 'rotate-180' : ''}`}
+                      />
+                    </button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3">
+                    {pendingSongs.length === 0 ? (
+                      <p className="text-slate-500 text-center py-4 text-sm">¡Todas las canciones han sido añadidas! 🎉</p>
+                    ) : (
+                      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        {pendingSongs.map((guest) => (
+                          <div key={guest.id} className="bg-white rounded-lg p-3 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-slate-700 truncate">{guest.song_request}</p>
+                                <p className="text-xs text-slate-400 mt-1">
+                                  — {isAnonymousSuggestion(guest) ? 'Anónimo' : `${guest.first_name} ${guest.last_name}`}
+                                </p>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="shrink-0 gap-1 text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700"
+                                onClick={() => handleToggleSongProcessed(guest.id, true)}
+                              >
+                                <CheckSquare className="w-3 h-3" />
+                                Añadir
+                              </Button>
+                            </div>
                           </div>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="shrink-0 gap-1 text-slate-400 hover:text-amber-600 hover:bg-amber-50"
-                            onClick={() => handleToggleSongProcessed(guest.id, false)}
-                          >
-                            <Undo2 className="w-3 h-3" />
-                            Deshacer
-                          </Button>
-                        </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
+                  </CollapsibleContent>
+                </Collapsible>
+
+                {/* Added Songs */}
+                <Collapsible open={addedSongsOpen} onOpenChange={setAddedSongsOpen}>
+                  <CollapsibleTrigger asChild>
+                    <button className="flex items-center justify-between w-full p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                      <span className="flex items-center gap-2 font-medium text-green-800">
+                        ✅ Añadidas a Spotify
+                        <span className="bg-green-200 text-green-900 px-2 py-0.5 rounded-full text-xs">
+                          {addedSongs.length}
+                        </span>
+                      </span>
+                      <ChevronDown
+                        className={`w-5 h-5 text-green-600 transition-transform ${addedSongsOpen ? 'rotate-180' : ''}`}
+                      />
+                    </button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3">
+                    {addedSongs.length === 0 ? (
+                      <p className="text-slate-500 text-center py-4 text-sm">No hay canciones añadidas todavía</p>
+                    ) : (
+                      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        {addedSongs.map((guest) => (
+                          <div key={guest.id} className="bg-green-50/50 rounded-lg p-3 border border-green-100">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-slate-600 truncate line-through decoration-green-400">
+                                  {guest.song_request}
+                                </p>
+                                <p className="text-xs text-slate-400 mt-1">
+                                  — {isAnonymousSuggestion(guest) ? 'Anónimo' : `${guest.first_name} ${guest.last_name}`}
+                                </p>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="shrink-0 gap-1 text-slate-400 hover:text-amber-600 hover:bg-amber-50"
+                                onClick={() => handleToggleSongProcessed(guest.id, false)}
+                              >
+                                <Undo2 className="w-3 h-3" />
+                                Deshacer
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CollapsibleContent>
+                </Collapsible>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Tab 3: Hotel */}
+          <TabsContent value="hotel">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Hotel className="w-5 h-5" />
+                  Solicitudes de Hotel Alternativo
+                  <span className="text-sm font-normal text-slate-500">({hotelRequests.length} total)</span>
+                </CardTitle>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 text-slate-600"
+                  onClick={fetchHotelRequests}
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Refrescar
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {hotelRequests.length === 0 ? (
+                  <p className="text-slate-500 text-center py-8 text-sm">No hay solicitudes de hotel alternativo</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Nombre</TableHead>
+                          <TableHead className="text-center">Personas</TableHead>
+                          <TableHead className="text-center">Check-in</TableHead>
+                          <TableHead className="text-center">Check-out</TableHead>
+                          <TableHead className="text-center">Fecha Solicitud</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {hotelRequests.map((req: any) => (
+                          <TableRow key={req.id}>
+                            <TableCell className="font-medium text-slate-800">{req.guest_name}</TableCell>
+                            <TableCell className="text-center">{req.people_count}</TableCell>
+                            <TableCell className="text-center text-sm">{req.check_in}</TableCell>
+                            <TableCell className="text-center text-sm">{req.check_out}</TableCell>
+                            <TableCell className="text-center text-xs text-slate-500">{formatDate(req.created_at)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </div>
                 )}
-              </CollapsibleContent>
-            </Collapsible>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        {/* Hotel Requests */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Hotel className="w-5 h-5" />
-              Solicitudes de Hotel Alternativo
-              <span className="text-sm font-normal text-slate-500">({hotelRequests.length} total)</span>
-            </CardTitle>
-            <Button
-              variant="outline"
-              size="sm"
-              className="gap-2 text-slate-600"
-              onClick={fetchHotelRequests}
-            >
-              <RefreshCw className="w-4 h-4" />
-              Refrescar
-            </Button>
-          </CardHeader>
-          <CardContent>
-            {hotelRequests.length === 0 ? (
-              <p className="text-slate-500 text-center py-8 text-sm">No hay solicitudes de hotel alternativo</p>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nombre</TableHead>
-                      <TableHead className="text-center">Personas</TableHead>
-                      <TableHead className="text-center">Check-in</TableHead>
-                      <TableHead className="text-center">Check-out</TableHead>
-                      <TableHead className="text-center">Fecha Solicitud</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {hotelRequests.map((req: any) => (
-                      <TableRow key={req.id}>
-                        <TableCell className="font-medium text-slate-800">{req.guest_name}</TableCell>
-                        <TableCell className="text-center">{req.people_count}</TableCell>
-                        <TableCell className="text-center text-sm">{req.check_in}</TableCell>
-                        <TableCell className="text-center text-sm">{req.check_out}</TableCell>
-                        <TableCell className="text-center text-xs text-slate-500">{formatDate(req.created_at)}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Analytics Section */}
-        <AnalyticsSection />
+          {/* Tab 4: Analytics */}
+          <TabsContent value="analytics">
+            <AnalyticsSection />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
