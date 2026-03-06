@@ -44,6 +44,7 @@ import {
   RefreshCw,
   Eye,
   EyeOff,
+  Hotel,
 } from 'lucide-react';
 import AnalyticsSection from '@/components/wedding/AnalyticsSection';
 
@@ -167,6 +168,8 @@ const Admin = () => {
 
   const [guests, setGuests] = useState<Guest[]>([]);
   const [metrics, setMetrics] = useState<Metrics>({ total: 0, confirmed: 0, pending: 0, dietary: 0 });
+  const [hotelRequests, setHotelRequests] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -220,8 +223,18 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    if (isUnlocked) fetchGuests();
+    if (isUnlocked) {
+      fetchGuests();
+      fetchHotelRequests();
+    }
   }, [isUnlocked]);
+
+  const fetchHotelRequests = async () => {
+    const { data } = await (supabase.from as any)('hotel_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+    setHotelRequests(data || []);
+  };
 
   const handleToggleSongProcessed = async (guestId: string, processed: boolean) => {
     const { error } = await supabase
@@ -715,6 +728,56 @@ const Admin = () => {
                 )}
               </CollapsibleContent>
             </Collapsible>
+          </CardContent>
+        </Card>
+
+        {/* Hotel Requests */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Hotel className="w-5 h-5" />
+              Solicitudes de Hotel Alternativo
+              <span className="text-sm font-normal text-slate-500">({hotelRequests.length} total)</span>
+            </CardTitle>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2 text-slate-600"
+              onClick={fetchHotelRequests}
+            >
+              <RefreshCw className="w-4 h-4" />
+              Refrescar
+            </Button>
+          </CardHeader>
+          <CardContent>
+            {hotelRequests.length === 0 ? (
+              <p className="text-slate-500 text-center py-8 text-sm">No hay solicitudes de hotel alternativo</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Nombre</TableHead>
+                      <TableHead className="text-center">Personas</TableHead>
+                      <TableHead className="text-center">Check-in</TableHead>
+                      <TableHead className="text-center">Check-out</TableHead>
+                      <TableHead className="text-center">Fecha Solicitud</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {hotelRequests.map((req: any) => (
+                      <TableRow key={req.id}>
+                        <TableCell className="font-medium text-slate-800">{req.guest_name}</TableCell>
+                        <TableCell className="text-center">{req.people_count}</TableCell>
+                        <TableCell className="text-center text-sm">{req.check_in}</TableCell>
+                        <TableCell className="text-center text-sm">{req.check_out}</TableCell>
+                        <TableCell className="text-center text-xs text-slate-500">{formatDate(req.created_at)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </CardContent>
         </Card>
 

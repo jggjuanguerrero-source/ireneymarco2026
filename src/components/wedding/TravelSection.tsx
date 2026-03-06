@@ -1,45 +1,49 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Mail, Phone, ExternalLink, Copy, Check, Globe, Paperclip, ChevronDown } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
+import { Globe, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import hotelImg from '@/assets/hotel-orizzonte.jpg';
 
-const HOTEL_EMAIL = 'booking@horizzonte.com';
-const HOTEL_PHONE = '+39 0421 380 004';
 const HOTEL_WEB = 'https://www.horizzonte.com/';
 
-const placeholders: Record<string, { name: string; day: string; people: string }> = {
-  es: { name: 'Nombre y Apellidos', day: 'Día', people: 'Número de adultos/niños' },
-  en: { name: 'Name and Surname', day: 'Day', people: 'Number of adults/children' },
-  it: { name: 'Nome e Cognome', day: 'Giorno', people: 'Numero di persone' },
-};
-
-const getEmailContent = (lang: string) => {
-  const p = placeholders[lang] || placeholders.es;
-  const subject = `Conferma prenotazione [${p.name}] per matrimonio Marco & Irene`;
-  const body = `Buongiorno,\nVorrei confermare una prenotazione per il matrimonio di Marco & Irene.\n- Nome e Cognome: [${p.name}]\n- Data di arrivo (Check-in): [${p.day}] Ottobre 2026\n- Data di partenza (Check-out): [${p.day}] Ottobre 2026\n- Numero di persone: [${p.people}]\nGrazie.`;
-  return { subject, body };
-};
-
 const TravelSection = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { toast } = useToast();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [copiedField, setCopiedField] = useState<string | null>(null);
-  const [showEmailTemplate, setShowEmailTemplate] = useState(false);
 
-  const lang = i18n.language?.substring(0, 2) || 'es';
-  const { subject, body } = getEmailContent(lang);
+  const [form, setForm] = useState({ guest_name: '', people_count: '', check_in: '', check_out: '' });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleCopy = (text: string, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2000);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.guest_name || !form.people_count || !form.check_in || !form.check_out) return;
+
+    setSubmitting(true);
+    const { error } = await (supabase.from as any)('hotel_requests').insert({
+      guest_name: form.guest_name.trim(),
+      people_count: parseInt(form.people_count),
+      check_in: form.check_in,
+      check_out: form.check_out,
+    });
+
+    setSubmitting(false);
+
+    if (error) {
+      toast({ title: t('sections.travel.requestError'), variant: 'destructive' });
+      return;
+    }
+
+    window.umami?.track('hotel_alternative_request');
+    setSubmitted(true);
+    toast({ title: t('sections.travel.requestSuccess') });
   };
-
-  const mailtoLink = `mailto:${HOTEL_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const fullTemplate = `${t('sections.travel.emailSubjectLabel')}: ${subject}\n\n${body}`;
 
   return (
     <section id="travel" ref={ref} className="section-padding bg-secondary/80">
@@ -71,7 +75,7 @@ const TravelSection = () => {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="bg-background rounded-xl overflow-hidden border border-border shadow-sm"
         >
-          {/* Hotel Image */}
+          {/* Hotel Image with SOLD OUT ribbon */}
           <div className="relative h-56 md:h-72 overflow-hidden">
             <img
               src={hotelImg}
@@ -84,6 +88,12 @@ const TravelSection = () => {
                 Hotel Orizzonte
               </h3>
             </div>
+            {/* SOLD OUT Ribbon */}
+            <div className="absolute top-0 right-0 overflow-hidden w-32 h-32">
+              <div className="absolute top-[18px] right-[-35px] w-[170px] text-center rotate-45 bg-destructive text-destructive-foreground font-bold text-sm py-1.5 shadow-lg tracking-wider uppercase">
+                {t('sections.travel.soldOut')}
+              </div>
+            </div>
           </div>
 
           <div className="p-6 md:p-8 space-y-6">
@@ -92,17 +102,16 @@ const TravelSection = () => {
               {t('sections.travel.hotelDescription')}
             </p>
 
-            {/* Price */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 p-4 bg-primary/5 rounded-lg border border-primary/20">
+            {/* Price (kept for info, but no booking) */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 p-4 bg-muted/50 rounded-lg border border-border">
               <div className="flex-1">
-                <p className="font-serif text-lg text-foreground">75€ <span className="font-body text-sm text-muted-foreground">{t('sections.travel.perNight')}</span></p>
-                <p className="font-body text-sm text-muted-foreground">{t('sections.travel.priceNote')}</p>
+                <p className="font-serif text-lg text-foreground line-through opacity-60">75€ <span className="font-body text-sm text-muted-foreground">{t('sections.travel.perNight')}</span></p>
+                <p className="font-body text-sm text-muted-foreground">{t('sections.travel.soldOutNote')}</p>
               </div>
               <a
                 href={HOTEL_WEB}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => window.umami?.track('hotel_web_click')}
                 className="inline-flex items-center gap-1.5 font-body text-sm text-primary hover:underline"
               >
                 <Globe className="w-4 h-4" />
@@ -110,117 +119,64 @@ const TravelSection = () => {
               </a>
             </div>
 
-            {/* Booking steps */}
-            <div className="space-y-3">
-              <h4 className="font-serif text-lg text-foreground">{t('sections.travel.howToBook')}</h4>
-              <div className="space-y-2 text-left">
-                <div className="flex gap-3 items-start">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
-                  <p className="font-body text-sm text-foreground/70">{t('sections.travel.bookingStep1')}</p>
+            {/* Alternative Accommodation Form */}
+            <div className="border-t border-border pt-6">
+              <h4 className="font-serif text-lg text-foreground mb-4">{t('sections.travel.alternativeTitle')}</h4>
+              <p className="font-body text-sm text-muted-foreground mb-4">{t('sections.travel.alternativeDescription')}</p>
+
+              {submitted ? (
+                <div className="text-center py-6 bg-primary/5 rounded-lg border border-primary/20">
+                  <p className="font-serif text-lg text-foreground">{t('sections.travel.requestSuccess')}</p>
                 </div>
-                <div className="flex gap-3 items-start">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
-                  <p className="font-body text-sm text-foreground/70">{t('sections.travel.bookingStep2')}</p>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
-                  <p className="font-body text-sm text-foreground/70">{t('sections.travel.bookingStep3')}</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                <Button
-                  className="flex-1 gap-2"
-                  onClick={() => { window.umami?.track('hotel_book_email_click'); window.open(mailtoLink, '_blank'); }}
-                >
-                  <Mail className="w-4 h-4" />
-                  {t('sections.travel.bookByEmail')}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="flex-1 gap-2"
-                  asChild
-                >
-                  <a href={`tel:${HOTEL_PHONE.replace(/\s/g, '')}`} onClick={() => window.umami?.track('hotel_call_click')}>
-                    <Phone className="w-4 h-4" />
-                    {HOTEL_PHONE}
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            {/* Collapsible email template */}
-            <div className="mt-6">
-              <button
-                onClick={() => { if (!showEmailTemplate) window.umami?.track('hotel_email_template_open'); setShowEmailTemplate(!showEmailTemplate); }}
-                className="flex items-center gap-2 font-body text-sm text-muted-foreground hover:text-foreground transition-colors w-full justify-center"
-              >
-                <Mail className="w-3.5 h-3.5" />
-                {t('sections.travel.fallbackNote')}
-                <motion.span
-                  animate={{ rotate: showEmailTemplate ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ChevronDown className="w-3.5 h-3.5" />
-                </motion.span>
-              </button>
-
-              <AnimatePresence>
-                {showEmailTemplate && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="mt-3 rounded-lg border border-border overflow-hidden shadow-sm">
-                      {/* Window title bar */}
-                      <div className="flex items-center justify-between bg-muted px-4 py-2.5 border-b border-border">
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Mail className="w-4 h-4" />
-                          <span className="font-body text-xs font-medium tracking-wide uppercase">
-                            {t('sections.travel.bookByEmail')}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Paperclip className="w-3.5 h-3.5 text-muted-foreground/50" />
-                          <button
-                            onClick={() => { window.umami?.track('hotel_email_template_copy'); handleCopy(fullTemplate, 'template'); }}
-                            className="p-1 rounded hover:bg-primary/10 transition-colors"
-                            title={t('sections.travel.copyTemplate')}
-                          >
-                            {copiedField === 'template' ? (
-                              <Check className="w-3.5 h-3.5 text-primary" />
-                            ) : (
-                              <Copy className="w-3.5 h-3.5 text-muted-foreground" />
-                            )}
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Header fields */}
-                      <div className="bg-background px-4 py-2.5 space-y-1.5 border-b border-border/50">
-                        <div className="flex items-center gap-2 font-body text-sm">
-                          <span className="text-muted-foreground font-medium w-12 shrink-0">{t('sections.travel.emailToLabel')}:</span>
-                          <span className="text-foreground">{HOTEL_EMAIL}</span>
-                        </div>
-                        <div className="flex items-start gap-2 font-body text-sm">
-                          <span className="text-muted-foreground font-medium w-12 shrink-0">{t('sections.travel.emailSubjectLabel')}:</span>
-                          <span className="text-foreground">{subject}</span>
-                        </div>
-                      </div>
-
-                      {/* Body */}
-                      <div className="bg-card/60 px-4 py-4">
-                        <p className="font-body text-sm text-foreground/80 whitespace-pre-line leading-relaxed">
-                          {body}
-                        </p>
-                      </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <Label className="font-body text-sm">{t('sections.travel.guestName')} *</Label>
+                    <Input
+                      value={form.guest_name}
+                      onChange={(e) => setForm({ ...form, guest_name: e.target.value })}
+                      placeholder={t('sections.travel.guestNamePlaceholder')}
+                      required
+                      maxLength={100}
+                    />
+                  </div>
+                  <div>
+                    <Label className="font-body text-sm">{t('sections.travel.peopleCount')} *</Label>
+                    <Input
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={form.people_count}
+                      onChange={(e) => setForm({ ...form, people_count: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="font-body text-sm">{t('sections.travel.checkIn')} *</Label>
+                      <Input
+                        type="date"
+                        value={form.check_in}
+                        onChange={(e) => setForm({ ...form, check_in: e.target.value })}
+                        required
+                      />
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    <div>
+                      <Label className="font-body text-sm">{t('sections.travel.checkOut')} *</Label>
+                      <Input
+                        type="date"
+                        value={form.check_out}
+                        onChange={(e) => setForm({ ...form, check_out: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <Button type="submit" className="w-full gap-2" disabled={submitting}>
+                    <Send className="w-4 h-4" />
+                    {submitting ? t('sections.rsvp.submitting') : t('sections.travel.submitRequest')}
+                  </Button>
+                </form>
+              )}
             </div>
           </div>
         </motion.div>
