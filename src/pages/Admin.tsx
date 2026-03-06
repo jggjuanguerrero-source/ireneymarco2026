@@ -223,8 +223,18 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    if (isUnlocked) fetchGuests();
+    if (isUnlocked) {
+      fetchGuests();
+      fetchHotelRequests();
+    }
   }, [isUnlocked]);
+
+  const fetchHotelRequests = async () => {
+    const { data } = await (supabase.from as any)('hotel_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+    setHotelRequests(data || []);
+  };
 
   const handleToggleSongProcessed = async (guestId: string, processed: boolean) => {
     const { error } = await supabase
