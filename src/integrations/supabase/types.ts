@@ -89,6 +89,33 @@ export type Database = {
         }
         Relationships: []
       }
+      hotel_requests: {
+        Row: {
+          check_in: string
+          check_out: string
+          created_at: string
+          guest_name: string
+          id: string
+          people_count: number
+        }
+        Insert: {
+          check_in: string
+          check_out: string
+          created_at?: string
+          guest_name: string
+          id?: string
+          people_count: number
+        }
+        Update: {
+          check_in?: string
+          check_out?: string
+          created_at?: string
+          guest_name?: string
+          id?: string
+          people_count?: number
+        }
+        Relationships: []
+      }
       rsvp_events: {
         Row: {
           created_at: string

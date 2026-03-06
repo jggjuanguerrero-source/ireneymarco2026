@@ -26,7 +26,7 @@ const TravelSection = () => {
     if (!form.guest_name || !form.people_count || !form.check_in || !form.check_out) return;
 
     setSubmitting(true);
-    const { error } = await supabase.from('hotel_requests').insert({
+    const { error } = await (supabase.from as any)('hotel_requests').insert({
       guest_name: form.guest_name.trim(),
       people_count: parseInt(form.people_count),
       check_in: form.check_in,
