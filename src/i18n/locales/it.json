@@ -96,6 +96,7 @@
       "visitWeb": "Visita il sito dell'hotel",
       "soldOut": "ESAURITO",
       "soldOutNote": "Tutte le camere sono prenotate",
+      "allRoomsBooked": "Purtroppo tutte le camere sono già prenotate.",
       "alternativeTitle": "🔍 Cerchi un alloggio alternativo",
       "alternativeDescription": "Se hai bisogno di alloggio, compila questo modulo e ti aiuteremo a trovare un'alternativa vicino all'hotel.",
       "guestName": "Nome dell'ospite",
