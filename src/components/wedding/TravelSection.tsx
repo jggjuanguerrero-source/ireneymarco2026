@@ -53,7 +53,7 @@ const TravelSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="w-12 h-px bg-primary/40" />
