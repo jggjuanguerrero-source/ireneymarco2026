@@ -44,6 +44,7 @@ import {
   RefreshCw,
   Eye,
   EyeOff,
+  Hotel,
 } from 'lucide-react';
 import AnalyticsSection from '@/components/wedding/AnalyticsSection';
 
