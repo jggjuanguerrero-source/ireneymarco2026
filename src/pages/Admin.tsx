@@ -1058,6 +1058,7 @@ const Admin = () => {
                       </tfoot>
                     </Table>
                   </div>
+                  </>
                 )}
               </CardContent>
             </Card>
