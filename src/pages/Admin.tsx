@@ -46,6 +46,7 @@ import {
   Eye,
   EyeOff,
   Hotel,
+  Info,
 } from 'lucide-react';
 import AnalyticsSection from '@/components/wedding/AnalyticsSection';
 
