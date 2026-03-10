@@ -906,6 +906,113 @@ const Admin = () => {
                 {hotelRequests.length === 0 ? (
                   <p className="text-slate-500 text-center py-8 text-sm">No hay solicitudes de hotel alternativo</p>
                 ) : (
+                  <>
+                    {/* Timeline visualization */}
+                    {(() => {
+                      const dates = hotelRequests.flatMap((r: any) => [new Date(r.check_in), new Date(r.check_out)]);
+                      const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
+                      const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
+                      const totalDays = Math.round((maxDate.getTime() - minDate.getTime()) / (1000 * 60 * 60 * 24));
+                      
+                      // Generate day labels
+                      const dayLabels: string[] = [];
+                      for (let i = 0; i <= totalDays; i++) {
+                        const d = new Date(minDate);
+                        d.setDate(d.getDate() + i);
+                        dayLabels.push(d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }));
+                      }
+
+                      // Nightly occupancy (each night = date from col i to col i+1)
+                      const nightlyOccupancy: { label: string; people: number }[] = [];
+                      for (let i = 0; i < totalDays; i++) {
+                        const nightDate = new Date(minDate);
+                        nightDate.setDate(nightDate.getDate() + i);
+                        const nightStr = nightDate.toISOString().slice(0, 10);
+                        const nextStr = new Date(nightDate.getTime() + 86400000).toISOString().slice(0, 10);
+                        const people = hotelRequests
+                          .filter((r: any) => r.check_in <= nightStr && r.check_out >= nextStr)
+                          .reduce((sum: number, r: any) => sum + (r.people_count || 0), 0);
+                        nightlyOccupancy.push({
+                          label: `Noche del ${nightDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`,
+                          people,
+                        });
+                      }
+
+                      const colors = [
+                        'bg-blue-400', 'bg-emerald-400', 'bg-amber-400', 'bg-purple-400',
+                        'bg-rose-400', 'bg-cyan-400', 'bg-orange-400', 'bg-indigo-400',
+                      ];
+
+                      return (
+                        <div className="mb-6 space-y-4">
+                          {/* Timeline grid */}
+                          <div className="overflow-x-auto">
+                            <div className="min-w-[400px]">
+                              {/* Day headers */}
+                              <div className="flex">
+                                <div className="w-36 shrink-0" />
+                                <div className="flex-1 grid" style={{ gridTemplateColumns: `repeat(${totalDays}, 1fr)` }}>
+                                  {dayLabels.slice(0, -1).map((label, i) => (
+                                    <div key={i} className="text-xs text-slate-500 text-center py-1 border-l border-slate-200 first:border-l-0">
+                                      {label}
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="w-10 shrink-0 text-xs text-slate-500 text-center py-1">{dayLabels[dayLabels.length - 1]}</div>
+                              </div>
+
+                              {/* Guest rows */}
+                              {hotelRequests.map((req: any, idx: number) => {
+                                const startDay = Math.round((new Date(req.check_in).getTime() - minDate.getTime()) / 86400000);
+                                const endDay = Math.round((new Date(req.check_out).getTime() - minDate.getTime()) / 86400000);
+                                const span = endDay - startDay;
+                                const color = colors[idx % colors.length];
+
+                                return (
+                                  <div key={req.id} className="flex items-center border-t border-slate-100">
+                                    <div className="w-36 shrink-0 pr-2 py-2">
+                                      <p className="text-sm font-medium text-slate-700 truncate">{req.guest_name}</p>
+                                      <p className="text-xs text-slate-400">{req.people_count} pers.</p>
+                                    </div>
+                                    <div className="flex-1 relative py-2 grid" style={{ gridTemplateColumns: `repeat(${totalDays}, 1fr)` }}>
+                                      {/* Background grid lines */}
+                                      {Array.from({ length: totalDays }).map((_, i) => (
+                                        <div key={i} className="border-l border-slate-100 first:border-l-0 h-8" />
+                                      ))}
+                                      {/* Bar */}
+                                      <div
+                                        className={`absolute top-2 h-8 ${color} rounded-md opacity-85 flex items-center justify-center`}
+                                        style={{
+                                          left: `${(startDay / totalDays) * 100}%`,
+                                          width: `${(span / totalDays) * 100}%`,
+                                        }}
+                                      >
+                                        <span className="text-xs text-white font-medium drop-shadow-sm">
+                                          {span} {span === 1 ? 'noche' : 'noches'}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className="w-10 shrink-0" />
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* Nightly summary */}
+                          <div className="flex flex-wrap gap-3">
+                            {nightlyOccupancy.map((night, i) => (
+                              <div key={i} className="bg-slate-100 rounded-lg px-3 py-2 text-center">
+                                <p className="text-xs text-slate-500">{night.label}</p>
+                                <p className="text-lg font-bold text-slate-700">{night.people}</p>
+                                <p className="text-xs text-slate-400">personas</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
                   <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
@@ -951,6 +1058,7 @@ const Admin = () => {
                       </tfoot>
                     </Table>
                   </div>
+                  </>
                 )}
               </CardContent>
             </Card>
