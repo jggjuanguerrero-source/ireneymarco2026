@@ -404,7 +404,7 @@ const Admin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-slate-800">{metrics.total}</p>
-                  <p className="text-sm text-slate-500">Total Invitados</p>
+                  <p className="text-sm text-slate-500">Total Personas</p>
                 </div>
               </div>
             </CardContent>
