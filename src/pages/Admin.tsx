@@ -798,9 +798,29 @@ const Admin = () => {
                             <TableCell className="text-center text-sm">{req.check_in}</TableCell>
                             <TableCell className="text-center text-sm">{req.check_out}</TableCell>
                             <TableCell className="text-center text-xs text-slate-500">{formatDate(req.created_at)}</TableCell>
+                            <TableCell className="text-center">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                onClick={() => handleDeleteHotelRequest(req.id, req.guest_name)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
+                      <tfoot>
+                        <tr className="border-t-2 border-slate-300">
+                          <td className="p-4 font-semibold text-slate-800">Total</td>
+                          <td className="p-4 text-center font-bold text-slate-800">
+                            {hotelRequests.reduce((sum: number, req: any) => sum + (req.people_count || 0), 0)}
+                          </td>
+                          <td colSpan={3}></td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
                     </Table>
                   </div>
                 )}
