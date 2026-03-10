@@ -648,11 +648,51 @@ const Admin = () => {
                   </Dialog>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                {/* Filter bar */}
+                <div className="space-y-3">
+                  <Input
+                    placeholder="Buscar por nombre, email o dieta..."
+                    value={filterText}
+                    onChange={(e) => setFilterText(e.target.value)}
+                    className="max-w-sm"
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    {([
+                      { key: 'all' as const, label: 'Todos' },
+                      { key: 'confirmed' as const, label: '✅ Confirmados' },
+                      { key: 'pending' as const, label: '⏳ Pendientes' },
+                      { key: 'dietary' as const, label: '🍽️ Con dieta' },
+                      { key: 'plusOne' as const, label: '👫 +1' },
+                      { key: 'bus' as const, label: '🚌 Bus' },
+                      { key: 'preboda' as const, label: '🎉 Preboda' },
+                    ]).map(({ key, label }) => (
+                      <button
+                        key={key}
+                        onClick={() => setActiveFilter(key)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                          activeFilter === key
+                            ? 'bg-slate-800 text-white'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                      >
+                        {label} ({filterCounts[key]})
+                      </button>
+                    ))}
+                  </div>
+                  {(activeFilter !== 'all' || filterText) && (
+                    <p className="text-xs text-slate-500">
+                      Mostrando {filteredGuests.length} de {realGuests.length} invitados
+                    </p>
+                  )}
+                </div>
+
                 {loading ? (
                   <div className="text-center py-8 text-slate-500">Cargando...</div>
-                ) : realGuests.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">No hay invitados registrados</div>
+                ) : filteredGuests.length === 0 ? (
+                  <div className="text-center py-8 text-slate-500">
+                    {realGuests.length === 0 ? 'No hay invitados registrados' : 'No hay resultados con los filtros actuales'}
+                  </div>
                 ) : (
                   <div className="overflow-x-auto">
                     <Table>
@@ -669,7 +709,7 @@ const Admin = () => {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {realGuests.map((guest) => (
+                        {filteredGuests.map((guest) => (
                           <TableRow key={guest.id} className={duplicateEmails.has(guest.email) ? 'bg-amber-50' : ''}>
                             <TableCell>
                               <div>
