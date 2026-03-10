@@ -803,6 +803,7 @@ const Admin = () => {
                           <TableHead className="text-center">Check-out</TableHead>
                           <TableHead className="text-center">Fecha Solicitud</TableHead>
                           <TableHead className="text-center">Acciones</TableHead>
+                        </TableRow>
                       </TableHeader>
                       <TableBody>
                         {hotelRequests.map((req: any) => (
