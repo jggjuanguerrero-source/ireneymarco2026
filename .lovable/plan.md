@@ -1,22 +1,27 @@
 
 
-## Problem
+## Plan: Página 404 multiidioma con i18n
 
-At common laptop resolutions (1366x768 and similar), the Hero text content overflows its `h-[65vh]` container, pushing the countdown into the Venice image zone. The `overflow-hidden` on the parent `section` clips the bottom of the countdown, making labels partially obscured by the overlapping image.
+Tienes razón: el idioma ya se guarda en `localStorage` cuando el usuario selecciona idioma en la web, así que la mayoría de visitantes ya tendrán su idioma configurado. El fallback será inglés como pides.
 
-The root cause is:
-- The text zone has a fixed `h-[65vh]` but uses `flex-col` without `justify-between` or overflow handling
-- Large paddings (`pt-36`/`pt-40`) combined with names, date, location, and countdown don't fit in 65vh on shorter screens
-- The image zone (`h-[35vh]`) starts at the bottom and overlaps with the countdown area
+### Cambios
 
-## Plan
+**1. Añadir traducciones en los 3 JSON de idioma** (`es.json`, `en.json`, `it.json`):
 
-**Single file change: `src/components/wedding/Hero.tsx`**
+Clave `notFound` con: `messages` (array de frases graciosas), `backHome` (texto del botón), `footer` (el comentario del pie).
 
-1. **Remove the fixed height** from the text container (`h-[65vh]`) and instead use `min-h-[65vh]` or remove it entirely, letting content flow naturally
-2. **Add `justify-center`** to the flex column so content stays vertically centered regardless of viewport height
-3. **Reduce top padding** slightly at `md` breakpoint (e.g., `md:pt-28` instead of `md:pt-36`) to give more breathing room
-4. **Ensure the countdown stays above the image** by giving the countdown wrapper a higher `z-index` relative to the image section
+- **ES**: Las frases actuales de góndola + "Volver a la invitación" + "La boda sigue en pie, tranquilo/a"
+- **EN**: Versiones en inglés tipo "This gondola got lost in the canals...", "Not even the best gondolier could find this page..." + "Back to the invitation" + "The wedding is still on, don't worry"
+- **IT**: Versiones en italiano tipo "Questa gondola si è persa nei canali...", "Nemmeno il gondoliere più esperto troverebbe questa pagina..." + "Torna all'invito" + "Il matrimonio è ancora in piedi, tranquillo/a"
 
-The key fix: change the text zone from `h-[65vh]` to `min-h-[65vh]` with `justify-center`, and slightly reduce `lg:pt-40` → `lg:pt-32` to prevent content from being pushed too low on shorter viewports. This preserves the current look on tall screens while preventing clipping on shorter ones.
+**2. Actualizar `NotFound.tsx`**:
+
+- Importar `useTranslation` de `react-i18next`
+- Usar `t('notFound.messages', { returnObjects: true })` para obtener el array de mensajes y seleccionar uno aleatorio
+- Usar `t('notFound.backHome')` y `t('notFound.footer')` para los textos estáticos
+- El idioma se resolverá automáticamente desde lo que el usuario eligió (guardado en localStorage), con fallback a español (que es el `fallbackLng` configurado)
+
+### Nota sobre el fallback
+
+Tu `i18n/index.ts` tiene `fallbackLng: 'es'`. Si prefieres que el fallback sea inglés para visitantes nuevos, se puede cambiar a `'en'`, pero eso afectaría a toda la web. Alternativamente dejamos el fallback en español como está (ya que la mayoría de invitados son hispanohablantes).
 
