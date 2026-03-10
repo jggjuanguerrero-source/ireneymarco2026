@@ -1,19 +1,14 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-const gondolaMessages = [
-  "Esta góndola se ha perdido por los canales... 🛶",
-  "Ni el gondolero más experto encontraría esta página... 🇮🇹",
-  "¿Seguro que no te has caído al canal? 💦",
-  "Houston... digo, Venezia, tenemos un problema 🍝",
-  "Marco Polo exploró medio mundo, pero esta URL no existe 🗺️",
-];
+import { useTranslation } from "react-i18next";
 
 const NotFound = () => {
   const location = useLocation();
+  const { t } = useTranslation();
+  const messages = t('notFound.messages', { returnObjects: true }) as string[];
   const [message] = useState(
-    () => gondolaMessages[Math.floor(Math.random() * gondolaMessages.length)]
+    () => messages[Math.floor(Math.random() * messages.length)]
   );
 
   useEffect(() => {
@@ -96,7 +91,7 @@ const NotFound = () => {
           to="/"
           className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full text-sm font-medium hover:bg-primary/90 transition-colors shadow-lg"
         >
-          🏠 Volver a la invitación
+          {t('notFound.backHome')}
         </Link>
       </motion.div>
 
@@ -107,7 +102,7 @@ const NotFound = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
       >
-        (La boda sigue en pie, tranquilo/a 😅)
+        ({t('notFound.footer')})
       </motion.p>
     </div>
   );

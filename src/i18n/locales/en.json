@@ -171,5 +171,16 @@
   },
   "footer": {
     "madeWith": "With love from Venice"
+  },
+  "notFound": {
+    "messages": [
+      "This gondola got lost in the canals... 🛶",
+      "Not even the best gondolier could find this page... 🇮🇹",
+      "Are you sure you didn't fall into the canal? 💦",
+      "Houston... I mean, Venezia, we have a problem 🍝",
+      "Marco Polo explored half the world, but this URL doesn't exist 🗺️"
+    ],
+    "backHome": "🏠 Back to the invitation",
+    "footer": "The wedding is still on, don't worry 😅"
   }
 }
