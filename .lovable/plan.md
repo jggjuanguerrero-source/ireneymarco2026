@@ -1,30 +1,22 @@
 
 
-## Plan: Mostrar total real de personas (incluyendo parejas y niños)
+## Problem
 
-### Cambio
+At common laptop resolutions (1366x768 and similar), the Hero text content overflows its `h-[65vh]` container, pushing the countdown into the Venice image zone. The `overflow-hidden` on the parent `section` clips the bottom of the countdown, making labels partially obscured by the overlapping image.
 
-En `src/pages/Admin.tsx`, modificar el cálculo de `metrics.total` para que sume:
-- **1** por cada invitado
-- **+1** si `plus_one === true`
-- **+ `children_count`** si tiene valor
+The root cause is:
+- The text zone has a fixed `h-[65vh]` but uses `flex-col` without `justify-between` or overflow handling
+- Large paddings (`pt-36`/`pt-40`) combined with names, date, location, and countdown don't fit in 65vh on shorter screens
+- The image zone (`h-[35vh]`) starts at the bottom and overlaps with the countdown area
 
-Actualizar la línea 217 de:
-```ts
-total: realGuests.length,
-```
-a:
-```ts
-total: realGuests.reduce((sum, g) => sum + 1 + (g.plus_one ? 1 : 0) + (g.children_count ?? 0), 0),
-```
+## Plan
 
-También actualizar el KPI de "Confirmados" (línea 218) con la misma lógica, pero solo para los que tienen `rsvp_status === true`.
+**Single file change: `src/components/wedding/Hero.tsx`**
 
-Opcionalmente, añadir un segundo indicador que muestre "X registros" vs "Y personas" para mayor claridad.
+1. **Remove the fixed height** from the text container (`h-[65vh]`) and instead use `min-h-[65vh]` or remove it entirely, letting content flow naturally
+2. **Add `justify-center`** to the flex column so content stays vertically centered regardless of viewport height
+3. **Reduce top padding** slightly at `md` breakpoint (e.g., `md:pt-28` instead of `md:pt-36`) to give more breathing room
+4. **Ensure the countdown stays above the image** by giving the countdown wrapper a higher `z-index` relative to the image section
 
-### Detalle de implementación
-
-- Cambiar `metrics.total` para sumar personas reales
-- Cambiar `metrics.confirmed` para sumar personas confirmadas reales
-- Añadir label "(personas)" bajo el total para que quede claro
+The key fix: change the text zone from `h-[65vh]` to `min-h-[65vh]` with `justify-center`, and slightly reduce `lg:pt-40` → `lg:pt-32` to prevent content from being pushed too low on shorter viewports. This preserves the current look on tall screens while preventing clipping on shorter ones.
 

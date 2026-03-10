@@ -214,9 +214,9 @@ const Admin = () => {
 
     const realGuests = guestsData.filter((g) => !isAnonymousSuggestion(g));
     setMetrics({
-      total: realGuests.length,
-      confirmed: realGuests.filter((g) => g.rsvp_status === true).length,
-      pending: realGuests.filter((g) => g.rsvp_status === null || g.rsvp_status === false).length,
+      total: realGuests.reduce((sum, g) => sum + 1 + (g.plus_one ? 1 : 0) + (g.children_count ?? 0), 0),
+      confirmed: realGuests.filter((g) => g.rsvp_status === true).reduce((sum, g) => sum + 1 + (g.plus_one ? 1 : 0) + (g.children_count ?? 0), 0),
+      pending: realGuests.filter((g) => g.rsvp_status === null || g.rsvp_status === false).reduce((sum, g) => sum + 1 + (g.plus_one ? 1 : 0) + (g.children_count ?? 0), 0),
       dietary: realGuests.filter((g) => g.dietary_reqs && g.dietary_reqs.trim() !== '').length,
     });
 
@@ -404,7 +404,7 @@ const Admin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-slate-800">{metrics.total}</p>
-                  <p className="text-sm text-slate-500">Total Invitados</p>
+                  <p className="text-sm text-slate-500">Total Personas</p>
                 </div>
               </div>
             </CardContent>
