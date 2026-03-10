@@ -179,6 +179,10 @@ const Admin = () => {
   const [pendingSongsOpen, setPendingSongsOpen] = useState(true);
   const [addedSongsOpen, setAddedSongsOpen] = useState(false);
 
+  // Filter state
+  const [filterText, setFilterText] = useState('');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'confirmed' | 'pending' | 'dietary' | 'plusOne' | 'bus' | 'preboda'>('all');
+
   // Add guest dialog state
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newGuest, setNewGuest] = useState({
