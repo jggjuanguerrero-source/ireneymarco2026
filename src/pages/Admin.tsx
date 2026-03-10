@@ -46,6 +46,7 @@ import {
   Eye,
   EyeOff,
   Hotel,
+  Info,
 } from 'lucide-react';
 import AnalyticsSection from '@/components/wedding/AnalyticsSection';
 
@@ -404,7 +405,15 @@ const Admin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-slate-800">{metrics.total}</p>
-                  <p className="text-sm text-slate-500">Total Personas</p>
+                  <p className="text-sm text-slate-500 flex items-center gap-1">
+                    Total Personas
+                    <span className="relative group">
+                      <Info className="w-3.5 h-3.5 text-slate-400 cursor-help" />
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-50">
+                        Suma de invitados + parejas + niños
+                      </span>
+                    </span>
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -417,7 +426,15 @@ const Admin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-slate-800">{metrics.confirmed}</p>
-                  <p className="text-sm text-slate-500">Confirmados</p>
+                  <p className="text-sm text-slate-500 flex items-center gap-1">
+                    Confirmados
+                    <span className="relative group">
+                      <Info className="w-3.5 h-3.5 text-slate-400 cursor-help" />
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-50">
+                        Personas con RSVP confirmado (incl. parejas y niños)
+                      </span>
+                    </span>
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -430,7 +447,15 @@ const Admin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-slate-800">{metrics.pending}</p>
-                  <p className="text-sm text-slate-500">Pendientes</p>
+                  <p className="text-sm text-slate-500 flex items-center gap-1">
+                    Pendientes
+                    <span className="relative group">
+                      <Info className="w-3.5 h-3.5 text-slate-400 cursor-help" />
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-50">
+                        Personas sin confirmar o con RSVP negativo
+                      </span>
+                    </span>
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -443,7 +468,15 @@ const Admin = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-slate-800">{metrics.dietary}</p>
-                  <p className="text-sm text-slate-500">Dietas Especiales</p>
+                  <p className="text-sm text-slate-500 flex items-center gap-1">
+                    Dietas Especiales
+                    <span className="relative group">
+                      <Info className="w-3.5 h-3.5 text-slate-400 cursor-help" />
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-50">
+                        Invitados que indicaron requisitos dietéticos
+                      </span>
+                    </span>
+                  </p>
                 </div>
               </div>
             </CardContent>
