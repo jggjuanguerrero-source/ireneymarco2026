@@ -171,5 +171,16 @@
   },
   "footer": {
     "madeWith": "Con amore da Venezia"
+  },
+  "notFound": {
+    "messages": [
+      "Questa gondola si è persa nei canali... 🛶",
+      "Nemmeno il gondoliere più esperto troverebbe questa pagina... 🇮🇹",
+      "Sei sicuro di non essere caduto nel canale? 💦",
+      "Houston... cioè, Venezia, abbiamo un problema 🍝",
+      "Marco Polo ha esplorato mezzo mondo, ma questo URL non esiste 🗺️"
+    ],
+    "backHome": "🏠 Torna all'invito",
+    "footer": "Il matrimonio è ancora in piedi, tranquillo/a 😅"
   }
 }
