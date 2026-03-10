@@ -237,6 +237,20 @@ const Admin = () => {
     setHotelRequests(data || []);
   };
 
+  const handleDeleteHotelRequest = async (id: string, guestName: string) => {
+    if (!confirm(`¿Seguro que quieres eliminar la solicitud de ${guestName}?`)) return;
+
+    const { error } = await (supabase.from as any)('hotel_requests').delete().eq('id', id);
+
+    if (error) {
+      toast({ title: 'Error', description: 'No se pudo eliminar la solicitud', variant: 'destructive' });
+      return;
+    }
+
+    toast({ title: '✓ Solicitud eliminada', description: `La solicitud de ${guestName} ha sido eliminada` });
+    fetchHotelRequests();
+  };
+
   const handleToggleSongProcessed = async (guestId: string, processed: boolean) => {
     const { error } = await supabase
       .from('guests')
@@ -788,6 +802,7 @@ const Admin = () => {
                           <TableHead className="text-center">Check-in</TableHead>
                           <TableHead className="text-center">Check-out</TableHead>
                           <TableHead className="text-center">Fecha Solicitud</TableHead>
+                          <TableHead className="text-center">Acciones</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -798,9 +813,29 @@ const Admin = () => {
                             <TableCell className="text-center text-sm">{req.check_in}</TableCell>
                             <TableCell className="text-center text-sm">{req.check_out}</TableCell>
                             <TableCell className="text-center text-xs text-slate-500">{formatDate(req.created_at)}</TableCell>
+                            <TableCell className="text-center">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                onClick={() => handleDeleteHotelRequest(req.id, req.guest_name)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
+                      <tfoot>
+                        <tr className="border-t-2 border-slate-300">
+                          <td className="p-4 font-semibold text-slate-800">Total</td>
+                          <td className="p-4 text-center font-bold text-slate-800">
+                            {hotelRequests.reduce((sum: number, req: any) => sum + (req.people_count || 0), 0)}
+                          </td>
+                          <td colSpan={3}></td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
                     </Table>
                   </div>
                 )}

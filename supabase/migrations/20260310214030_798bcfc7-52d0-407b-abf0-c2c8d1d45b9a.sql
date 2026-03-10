@@ -1,0 +1,1 @@
+CREATE POLICY "Allow public delete" ON public.hotel_requests FOR DELETE TO public USING (true);
