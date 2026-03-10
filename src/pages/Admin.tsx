@@ -370,6 +370,42 @@ const Admin = () => {
   const realGuests = guests.filter((g) => !isAnonymousSuggestion(g));
   const allSongRequests = guests.filter((g) => g.song_request && g.song_request.trim() !== '');
 
+  // Filtered guests
+  const filteredGuests = realGuests.filter((g) => {
+    // Text filter
+    if (filterText) {
+      const search = filterText.toLowerCase();
+      const matchesText = 
+        g.first_name.toLowerCase().includes(search) ||
+        g.last_name.toLowerCase().includes(search) ||
+        g.email.toLowerCase().includes(search) ||
+        (g.plus_one_name && g.plus_one_name.toLowerCase().includes(search)) ||
+        (g.dietary_reqs && g.dietary_reqs.toLowerCase().includes(search));
+      if (!matchesText) return false;
+    }
+    // Category filter
+    switch (activeFilter) {
+      case 'confirmed': return g.rsvp_status === true;
+      case 'pending': return g.rsvp_status === null || g.rsvp_status === false;
+      case 'dietary': return !!(g.dietary_reqs && g.dietary_reqs.trim());
+      case 'plusOne': return g.plus_one === true;
+      case 'bus': return g.bus_ida || g.bus_vuelta;
+      case 'preboda': return g.preboda === true;
+      default: return true;
+    }
+  });
+
+  // Filter counts
+  const filterCounts = {
+    all: realGuests.length,
+    confirmed: realGuests.filter(g => g.rsvp_status === true).length,
+    pending: realGuests.filter(g => g.rsvp_status === null || g.rsvp_status === false).length,
+    dietary: realGuests.filter(g => g.dietary_reqs && g.dietary_reqs.trim()).length,
+    plusOne: realGuests.filter(g => g.plus_one === true).length,
+    bus: realGuests.filter(g => g.bus_ida || g.bus_vuelta).length,
+    preboda: realGuests.filter(g => g.preboda === true).length,
+  };
+
   // Detect duplicate emails
   const emailCounts = realGuests.reduce((acc, g) => {
     acc[g.email] = (acc[g.email] || 0) + 1;
