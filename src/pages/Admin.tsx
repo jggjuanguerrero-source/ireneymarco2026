@@ -237,6 +237,20 @@ const Admin = () => {
     setHotelRequests(data || []);
   };
 
+  const handleDeleteHotelRequest = async (id: string, guestName: string) => {
+    if (!confirm(`¿Seguro que quieres eliminar la solicitud de ${guestName}?`)) return;
+
+    const { error } = await (supabase.from as any)('hotel_requests').delete().eq('id', id);
+
+    if (error) {
+      toast({ title: 'Error', description: 'No se pudo eliminar la solicitud', variant: 'destructive' });
+      return;
+    }
+
+    toast({ title: '✓ Solicitud eliminada', description: `La solicitud de ${guestName} ha sido eliminada` });
+    fetchHotelRequests();
+  };
+
   const handleToggleSongProcessed = async (guestId: string, processed: boolean) => {
     const { error } = await supabase
       .from('guests')
