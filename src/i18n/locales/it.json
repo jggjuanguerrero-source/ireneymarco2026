@@ -2,7 +2,7 @@
   "nav": {
     "ourstory": "La Nostra Storia",
     "wedding": "Il Grande Giorno",
-    "prewedding": "Pre-Matrimonio",
+    "prewedding": "Aperitivo pre matrimonio",
     "travel": "Hotel",
     "gettingThere": "Come Arrivare",
     "rsvp": "RSVP",
@@ -62,7 +62,7 @@
       "dresscodeDescription": "Si prega di indossare un abbigliamento formale da giorno. Si prega di notare che il colore bianco è riservato esclusivamente alla sposa."
     },
     "prewedding": {
-      "title": "Pre-Matrimonio",
+      "title": "Aperitivo pre matrimonio",
       "subtitle": "Unisciti a noi la sera prima del nostro matrimonio",
       "description": "La sera prima del matrimonio, ci piacerebbe fare un incontro informale con tutti voi. Sarà il modo perfetto per iniziare il weekend!",
       "time": "19:00",
@@ -132,7 +132,7 @@
       "transportDescription": "Hai bisogno del servizio bus? (dall'hotel al porto e dal porto al ristorante)",
       "transportNote": "Contiamo su tutti gli invitati per il trasferimento in barca alla chiesa e ritorno al ristorante",
       "busIda": "Sì, per tutti i trasferimenti",
-      "prebodaQuestion": "Parteciperai al Pre-Matrimonio?",
+      "prebodaQuestion": "Parteciperai all'Aperitivo pre matrimonio?",
       "submit": "Conferma Presenza",
       "submitting": "Invio in corso...",
       "successTitle": "Grazie per la conferma!",
@@ -169,11 +169,11 @@
       "songAdded": "Abbiamo aggiunto la tua canzone alla nostra lista."
     },
     "prebodaRsvp": {
-      "title": "Conferma la tua presenza alla Prematrimoniale",
+      "title": "Conferma la tua presenza all'Aperitivo pre matrimonio",
       "subtitle": "La sera prima delle nozze, un incontro informale a Jesolo",
       "name": "Nome e cognome",
       "namePlaceholder": "Nome e cognome",
-      "willAttend": "Parteciperete alla Prematrimoniale?",
+      "willAttend": "Parteciperete all'Aperitivo pre matrimonio?",
       "attending": "Sì, ci saremo",
       "notAttending": "Purtroppo no",
       "guestCount": "Quanti sarete in totale?",
@@ -183,8 +183,8 @@
       "submitting": "Invio in corso...",
       "successTitle": "Grazie per la conferma!",
       "successTitleNotAttending": "Ci mancherai!",
-      "successMessage": "Abbiamo ricevuto la tua conferma per la prematrimoniale. Ci vediamo a Jesolo!",
-      "successNotAttending": "Ci dispiace che non possiate essere con noi alla prematrimoniale.",
+      "successMessage": "Abbiamo ricevuto la tua conferma per l'Aperitivo pre matrimonio. Ci vediamo a Jesolo!",
+      "successNotAttending": "Ci dispiace che non possiate essere con noi all'Aperitivo pre matrimonio.",
       "errorTitle": "Errore nell'invio",
       "errorMessage": "Si è verificato un errore. Riprova per favore.",
       "required": "Questo campo è obbligatorio"
