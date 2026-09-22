@@ -167,6 +167,27 @@
       "sending": "Sending...",
       "thankYou": "Thank you for your suggestion!",
       "songAdded": "We've added your song to our list."
+    },
+    "prebodaRsvp": {
+      "title": "Confirm your attendance to the Pre-Wedding",
+      "subtitle": "The night before the wedding, an informal get-together in Jesolo",
+      "name": "Full name",
+      "namePlaceholder": "Full name",
+      "willAttend": "Will you attend the Pre-Wedding?",
+      "attending": "Yes, we'll be there",
+      "notAttending": "Unfortunately not",
+      "guestCount": "How many of you in total?",
+      "allergies": "Allergies or intolerances",
+      "allergiesPlaceholder": "E.g.: celiac, vegetarian...",
+      "submit": "Confirm attendance",
+      "submitting": "Sending...",
+      "successTitle": "Thank you for confirming!",
+      "successTitleNotAttending": "We'll miss you!",
+      "successMessage": "We've received your pre-wedding confirmation. See you in Jesolo!",
+      "successNotAttending": "We're sorry you can't join us at the pre-wedding.",
+      "errorTitle": "Error sending",
+      "errorMessage": "An error occurred. Please try again.",
+      "required": "This field is required"
     }
   },
   "footer": {

@@ -167,6 +167,27 @@
       "sending": "Enviando...",
       "thankYou": "¡Gracias por tu sugerencia!",
       "songAdded": "Hemos añadido tu canción a nuestra lista."
+    },
+    "prebodaRsvp": {
+      "title": "Confirma tu asistencia a la Preboda",
+      "subtitle": "La noche antes de la boda, un encuentro informal en Jesolo",
+      "name": "Nombre y apellidos",
+      "namePlaceholder": "Nombre y apellidos",
+      "willAttend": "¿Asistiréis a la Preboda?",
+      "attending": "Sí, allí estaremos",
+      "notAttending": "Lamentablemente no",
+      "guestCount": "¿Cuántos seréis en total?",
+      "allergies": "Alergias o intolerancias",
+      "allergiesPlaceholder": "Ej: celíaco, vegetariano...",
+      "submit": "Confirmar asistencia",
+      "submitting": "Enviando...",
+      "successTitle": "¡Gracias por confirmar!",
+      "successTitleNotAttending": "¡Te echaremos de menos!",
+      "successMessage": "Hemos recibido tu confirmación para la preboda. ¡Nos vemos en Jesolo!",
+      "successNotAttending": "Lamentamos que no puedas acompañarnos en la preboda.",
+      "errorTitle": "Error al enviar",
+      "errorMessage": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
+      "required": "Este campo es obligatorio"
     }
   },
   "footer": {
