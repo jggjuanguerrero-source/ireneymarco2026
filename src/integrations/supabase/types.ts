@@ -116,6 +116,33 @@ export type Database = {
         }
         Relationships: []
       }
+      preboda_rsvp: {
+        Row: {
+          allergies: string | null
+          attending: boolean
+          created_at: string
+          guest_count: number
+          id: string
+          name: string
+        }
+        Insert: {
+          allergies?: string | null
+          attending: boolean
+          created_at?: string
+          guest_count?: number
+          id?: string
+          name: string
+        }
+        Update: {
+          allergies?: string | null
+          attending?: boolean
+          created_at?: string
+          guest_count?: number
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       rsvp_events: {
         Row: {
           created_at: string
