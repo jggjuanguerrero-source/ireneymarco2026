@@ -1130,7 +1130,6 @@ const Admin = () => {
                             <TableHead>Nombre</TableHead>
                             <TableHead className="text-center">Asiste</TableHead>
                             <TableHead className="text-center">Personas</TableHead>
-                            <TableHead>Alergias / intolerancias</TableHead>
                             <TableHead>Fecha</TableHead>
                           </TableRow>
                         </TableHeader>
@@ -1146,7 +1145,6 @@ const Admin = () => {
                                 )}
                               </TableCell>
                               <TableCell className="text-center">{r.attending ? r.guest_count : '—'}</TableCell>
-                              <TableCell className="text-slate-600 text-sm">{r.allergies || '—'}</TableCell>
                               <TableCell className="text-slate-500 text-sm">{formatDate(r.created_at)}</TableCell>
                             </TableRow>
                           ))}
@@ -1162,7 +1160,7 @@ const Admin = () => {
                                 .filter((r: any) => r.attending)
                                 .reduce((sum: number, r: any) => sum + (r.guest_count || 0), 0)}
                             </td>
-                            <td colSpan={2}></td>
+                            <td></td>
                           </tr>
                         </tfoot>
                       </Table>

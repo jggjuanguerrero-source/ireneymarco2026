@@ -177,8 +177,6 @@
       "attending": "Yes, we'll be there",
       "notAttending": "Unfortunately not",
       "guestCount": "How many of you in total?",
-      "allergies": "Allergies or intolerances",
-      "allergiesPlaceholder": "E.g.: celiac, vegetarian...",
       "submit": "Confirm attendance",
       "submitting": "Sending...",
       "successTitle": "Thank you for confirming!",
