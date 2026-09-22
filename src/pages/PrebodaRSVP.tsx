@@ -13,7 +13,6 @@ const schema = z.object({
   name: z.string().trim().min(1, 'required').max(200),
   attending: z.boolean(),
   guestCount: z.number().min(1).max(20),
-  allergies: z.string().trim().max(500).optional(),
 });
 
 const inputClass =
@@ -26,7 +25,6 @@ const PrebodaRSVP = () => {
   const [name, setName] = useState('');
   const [attending, setAttending] = useState<boolean | null>(null);
   const [guestCount, setGuestCount] = useState(1);
-  const [allergies, setAllergies] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -43,7 +41,6 @@ const PrebodaRSVP = () => {
       name,
       attending,
       guestCount: attending ? guestCount : 1,
-      allergies,
     });
 
     if (!result.success) {
@@ -61,7 +58,6 @@ const PrebodaRSVP = () => {
         name: result.data.name,
         attending: result.data.attending,
         guest_count: result.data.attending ? result.data.guestCount : 0,
-        allergies: result.data.attending ? result.data.allergies || null : null,
       } as never);
       if (error) throw error;
       setIsSuccess(true);
@@ -217,20 +213,6 @@ const PrebodaRSVP = () => {
                             {errors.guestCount}
                           </p>
                         )}
-                      </div>
-
-                      <div>
-                        <Label className="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground">
-                          {t('sections.prebodaRsvp.allergies')}
-                        </Label>
-                        <textarea
-                          value={allergies}
-                          maxLength={500}
-                          rows={3}
-                          onChange={(e) => setAllergies(e.target.value)}
-                          placeholder={t('sections.prebodaRsvp.allergiesPlaceholder')}
-                          className={`${inputClass} mt-2 resize-none`}
-                        />
                       </div>
                     </motion.div>
                   )}
