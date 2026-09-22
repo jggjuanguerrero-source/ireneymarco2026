@@ -171,6 +171,7 @@ const Admin = () => {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [metrics, setMetrics] = useState<Metrics>({ total: 0, confirmed: 0, pending: 0, dietary: 0 });
   const [hotelRequests, setHotelRequests] = useState<any[]>([]);
+  const [prebodaRsvps, setPrebodaRsvps] = useState<any[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -232,8 +233,16 @@ const Admin = () => {
     if (isUnlocked) {
       fetchGuests();
       fetchHotelRequests();
+      fetchPrebodaRsvps();
     }
   }, [isUnlocked]);
+
+  const fetchPrebodaRsvps = async () => {
+    const { data } = await (supabase.from as any)('preboda_rsvp')
+      .select('*')
+      .order('created_at', { ascending: false });
+    setPrebodaRsvps(data || []);
+  };
 
   const fetchHotelRequests = async () => {
     const { data } = await (supabase.from as any)('hotel_requests')
@@ -547,6 +556,9 @@ const Admin = () => {
             <TabsTrigger value="hotel" className="gap-2 data-[state=active]:bg-slate-100">
               <Hotel className="w-4 h-4" />
               Alojamiento alternativo
+            </TabsTrigger>
+            <TabsTrigger value="preboda" className="gap-2 data-[state=active]:bg-slate-100">
+              🥂 Preboda
             </TabsTrigger>
             <TabsTrigger value="analytics" className="gap-2 data-[state=active]:bg-slate-100">
               📊 Analítica
