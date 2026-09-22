@@ -167,6 +167,27 @@
       "sending": "Invio in corso...",
       "thankYou": "Grazie per il tuo suggerimento!",
       "songAdded": "Abbiamo aggiunto la tua canzone alla nostra lista."
+    },
+    "prebodaRsvp": {
+      "title": "Conferma la tua presenza alla Prematrimoniale",
+      "subtitle": "La sera prima delle nozze, un incontro informale a Jesolo",
+      "name": "Nome e cognome",
+      "namePlaceholder": "Nome e cognome",
+      "willAttend": "Parteciperete alla Prematrimoniale?",
+      "attending": "Sì, ci saremo",
+      "notAttending": "Purtroppo no",
+      "guestCount": "Quanti sarete in totale?",
+      "allergies": "Allergie o intolleranze",
+      "allergiesPlaceholder": "Es: celiaco, vegetariano...",
+      "submit": "Conferma presenza",
+      "submitting": "Invio in corso...",
+      "successTitle": "Grazie per la conferma!",
+      "successTitleNotAttending": "Ci mancherai!",
+      "successMessage": "Abbiamo ricevuto la tua conferma per la prematrimoniale. Ci vediamo a Jesolo!",
+      "successNotAttending": "Ci dispiace che non possiate essere con noi alla prematrimoniale.",
+      "errorTitle": "Errore nell'invio",
+      "errorMessage": "Si è verificato un errore. Riprova per favore.",
+      "required": "Questo campo è obbligatorio"
     }
   },
   "footer": {
