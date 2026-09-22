@@ -1,0 +1,1 @@
+ALTER TABLE public.preboda_rsvp DROP COLUMN allergies;

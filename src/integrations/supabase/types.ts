@@ -118,7 +118,6 @@ export type Database = {
       }
       preboda_rsvp: {
         Row: {
-          allergies: string | null
           attending: boolean
           created_at: string
           guest_count: number
@@ -126,7 +125,6 @@ export type Database = {
           name: string
         }
         Insert: {
-          allergies?: string | null
           attending: boolean
           created_at?: string
           guest_count?: number
@@ -134,7 +132,6 @@ export type Database = {
           name: string
         }
         Update: {
-          allergies?: string | null
           attending?: boolean
           created_at?: string
           guest_count?: number
