@@ -171,6 +171,7 @@ const Admin = () => {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [metrics, setMetrics] = useState<Metrics>({ total: 0, confirmed: 0, pending: 0, dietary: 0 });
   const [hotelRequests, setHotelRequests] = useState<any[]>([]);
+  const [prebodaRsvps, setPrebodaRsvps] = useState<any[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -232,8 +233,16 @@ const Admin = () => {
     if (isUnlocked) {
       fetchGuests();
       fetchHotelRequests();
+      fetchPrebodaRsvps();
     }
   }, [isUnlocked]);
+
+  const fetchPrebodaRsvps = async () => {
+    const { data } = await (supabase.from as any)('preboda_rsvp')
+      .select('*')
+      .order('created_at', { ascending: false });
+    setPrebodaRsvps(data || []);
+  };
 
   const fetchHotelRequests = async () => {
     const { data } = await (supabase.from as any)('hotel_requests')
@@ -547,6 +556,9 @@ const Admin = () => {
             <TabsTrigger value="hotel" className="gap-2 data-[state=active]:bg-slate-100">
               <Hotel className="w-4 h-4" />
               Alojamiento alternativo
+            </TabsTrigger>
+            <TabsTrigger value="preboda" className="gap-2 data-[state=active]:bg-slate-100">
+              🥂 Preboda
             </TabsTrigger>
             <TabsTrigger value="analytics" className="gap-2 data-[state=active]:bg-slate-100">
               📊 Analítica
@@ -1064,7 +1076,104 @@ const Admin = () => {
             </Card>
           </TabsContent>
 
-          {/* Tab 4: Analytics */}
+          {/* Tab 4: Preboda */}
+          <TabsContent value="preboda">
+            <div className="space-y-6">
+              {/* KPIs */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Card>
+                  <CardContent className="p-5">
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Total Confirmados Preboda</p>
+                    <p className="text-3xl font-semibold text-slate-800 mt-1">
+                      {prebodaRsvps.filter((r: any) => r.attending).length}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">respuestas con “sí”</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-5">
+                    <p className="text-xs uppercase tracking-wide text-slate-500">Total Personas</p>
+                    <p className="text-3xl font-semibold text-slate-800 mt-1">
+                      {prebodaRsvps
+                        .filter((r: any) => r.attending)
+                        .reduce((sum: number, r: any) => sum + (r.guest_count || 0), 0)}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">suma de acompañantes indicados</p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    🥂 Confirmaciones de la Preboda
+                    <span className="text-sm font-normal text-slate-500">({prebodaRsvps.length} total)</span>
+                  </CardTitle>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 text-slate-600"
+                    onClick={fetchPrebodaRsvps}
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Refrescar
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  {prebodaRsvps.length === 0 ? (
+                    <p className="text-slate-500 text-center py-8 text-sm">Todavía no hay confirmaciones para la preboda</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Nombre</TableHead>
+                            <TableHead className="text-center">Asiste</TableHead>
+                            <TableHead className="text-center">Personas</TableHead>
+                            <TableHead>Alergias / intolerancias</TableHead>
+                            <TableHead>Fecha</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {prebodaRsvps.map((r: any) => (
+                            <TableRow key={r.id}>
+                              <TableCell className="font-medium text-slate-800">{r.name}</TableCell>
+                              <TableCell className="text-center">
+                                {r.attending ? (
+                                  <span className="text-emerald-600 font-medium">Sí</span>
+                                ) : (
+                                  <span className="text-slate-400">No</span>
+                                )}
+                              </TableCell>
+                              <TableCell className="text-center">{r.attending ? r.guest_count : '—'}</TableCell>
+                              <TableCell className="text-slate-600 text-sm">{r.allergies || '—'}</TableCell>
+                              <TableCell className="text-slate-500 text-sm">{formatDate(r.created_at)}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                        <tfoot>
+                          <tr className="border-t-2 border-slate-300">
+                            <td className="p-4 font-semibold text-slate-800">Total</td>
+                            <td className="p-4 text-center font-bold text-slate-800">
+                              {prebodaRsvps.filter((r: any) => r.attending).length}
+                            </td>
+                            <td className="p-4 text-center font-bold text-slate-800">
+                              {prebodaRsvps
+                                .filter((r: any) => r.attending)
+                                .reduce((sum: number, r: any) => sum + (r.guest_count || 0), 0)}
+                            </td>
+                            <td colSpan={2}></td>
+                          </tr>
+                        </tfoot>
+                      </Table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Tab 5: Analytics */}
           <TabsContent value="analytics">
             <AnalyticsSection />
           </TabsContent>
