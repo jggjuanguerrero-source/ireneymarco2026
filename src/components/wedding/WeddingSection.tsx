@@ -37,6 +37,15 @@ const WeddingSection = () => {
 
   const timeline = [
     {
+      icon: Hotel,
+      time: t('sections.wedding.step0Time'),
+      label: t('sections.wedding.step0Label'),
+      location: t('sections.wedding.step0Location'),
+      mapsHref: MAPS.hotel,
+      note: null,
+      warning: false,
+    },
+    {
       icon: Bus,
       time: t('sections.wedding.step1Time'),
       label: t('sections.wedding.step1Label'),

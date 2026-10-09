@@ -22,9 +22,7 @@ const Index = () => {
       <OurStorySection />
       <WeddingSection />
       <PreWeddingSection />
-      <GettingThereSection />
-      <TravelSection />
-      <RSVPSection />
+      {/* Ocultas a 1 día de la boda: GettingThereSection, TravelSection, RSVPSection */}
       <GiftSection />
       <MusicSection />
       <Footer />
