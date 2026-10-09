@@ -68,12 +68,15 @@
       "title": "Aperitivo pre matrimonio",
       "subtitle": "Unisciti a noi la sera prima del nostro matrimonio",
       "description": "La sera prima del matrimonio, ci piacerebbe fare un incontro informale con tutti voi. Sarà il modo perfetto per iniziare il weekend!",
-      "time": "19:00",
+      "date": "Venerdì 9 ottobre 2026",
+      "time": "18:45 – 21:15",
       "timeLabel": "Ora",
       "locationLabel": "Luogo",
-      "location": "Jesolo",
-      "tbc": "Da confermare",
-      "updateSoon": "Aggiorneremo presto la posizione esatta"
+      "location": "Ristorante Amante",
+      "address": "Via Goffredo Mameli, 22 · 30016 Lido di Jesolo VE, Italia",
+      "menu": "Apericena veneziana · Cicchetti · Spritz · Prosecco",
+      "endNote": "L'aperitivo pre matrimonio terminerà alle 21:15. Se volete continuare la serata, potete prenotare al +39 337 122 4648, indicando che venite dall'aperitivo pre matrimonio di I&M.",
+      "mapsButton": "Vedi su Google Maps"
     },
     "gettingThere": {
       "title": "Come Arrivare",

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Clock, MapPin } from 'lucide-react';
+import { Calendar, Clock, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const PreWeddingSection = () => {
@@ -73,6 +73,17 @@ const PreWeddingSection = () => {
           className="max-w-md mx-auto"
         >
           <div className="bg-secondary/30 border border-primary/10 rounded-2xl p-8 md:p-10 space-y-6">
+            {/* Date */}
+            <div className="flex items-center justify-center gap-3">
+              <Calendar className="w-5 h-5 text-primary/60" />
+              <span className="font-serif text-xl text-foreground">
+                {t('sections.prewedding.date')}
+              </span>
+            </div>
+
+            {/* Divider */}
+            <div className="w-8 h-px bg-primary/20 mx-auto" />
+
             {/* Time */}
             <div className="flex items-center justify-center gap-3">
               <Clock className="w-5 h-5 text-primary/60" />
@@ -91,28 +102,40 @@ const PreWeddingSection = () => {
             <div className="flex flex-col items-center gap-2">
               <div className="flex items-center justify-center gap-3">
                 <MapPin className="w-5 h-5 text-primary/60" />
-                <span className="font-body text-sm tracking-[0.1em] uppercase text-muted-foreground">
-                  {t('sections.prewedding.locationLabel')}
-                </span>
                 <span className="font-serif text-xl text-foreground">
                   {t('sections.prewedding.location')}
                 </span>
               </div>
-              {/* TBC Badge */}
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary/70 font-body text-xs tracking-[0.1em] uppercase">
-                {t('sections.prewedding.tbc')}
-              </span>
+              <p className="font-body text-sm text-muted-foreground">
+                {t('sections.prewedding.address')}
+              </p>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Ristorante+Amante+Via+Goffredo+Mameli+22+Lido+di+Jesolo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-1 font-body text-sm text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+              >
+                {t('sections.prewedding.mapsButton')}
+              </a>
             </div>
+
+            {/* Divider */}
+            <div className="w-8 h-px bg-primary/20 mx-auto" />
+
+            {/* Menu */}
+            <p className="font-body italic text-base text-foreground/80">
+              {t('sections.prewedding.menu')}
+            </p>
           </div>
 
-          {/* Update soon message */}
+          {/* End note */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ delay: 1.2, duration: 0.8 }}
-            className="font-body text-sm text-muted-foreground/70 italic mt-6"
+            className="font-body text-sm text-muted-foreground/70 italic mt-6 max-w-md mx-auto"
           >
-            {t('sections.prewedding.updateSoon')}
+            {t('sections.prewedding.endNote')}
           </motion.p>
         </motion.div>
       </div>
