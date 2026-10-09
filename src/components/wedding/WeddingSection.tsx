@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView } from 'framer-motion';
-import { Bus, Ship, Church, AlertTriangle, UtensilsCrossed, PartyPopper, MapPin, Shirt, Camera } from 'lucide-react';
+import { Bus, Ship, Church, AlertTriangle, UtensilsCrossed, PartyPopper, MapPin, Shirt, Camera, Hotel } from 'lucide-react';
 import iglesiaImg from '@/assets/iglesia.jpg';
 import restauranteImg from '@/assets/restaurante.jpg';
 
