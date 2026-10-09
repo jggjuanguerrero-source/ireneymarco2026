@@ -68,12 +68,15 @@
       "title": "Pre-Wedding",
       "subtitle": "Join us the evening before our wedding",
       "description": "The night before the wedding, we'd love to have an informal get-together with all of you. It'll be the perfect way to kick off the weekend!",
-      "time": "7:00 PM",
+      "date": "Friday, October 9, 2026",
+      "time": "6:45 PM – 9:15 PM",
       "timeLabel": "Time",
       "locationLabel": "Location",
-      "location": "Jesolo",
-      "tbc": "To be confirmed",
-      "updateSoon": "We'll update the exact location soon"
+      "location": "Ristorante Amante",
+      "address": "Via Goffredo Mameli, 22 · 30016 Lido di Jesolo VE, Italy",
+      "menu": "Venetian apericena · Cicchetti · Spritz · Prosecco",
+      "endNote": "The pre-wedding gathering ends at 9:15 PM. If you'd like to continue the evening, you can book at +39 337 122 4648, mentioning you're coming from I&M's pre-wedding party.",
+      "mapsButton": "View on Google Maps"
     },
     "gettingThere": {
       "title": "How to Get There",
