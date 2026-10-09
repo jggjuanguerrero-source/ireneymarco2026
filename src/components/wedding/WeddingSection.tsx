@@ -89,7 +89,7 @@ const WeddingSection = () => {
       location: null,
       warning: t('sections.wedding.step4Warning'),
       mapsHref: null,
-      note: null,
+      note: t('sections.wedding.step4Note'),
     },
     {
       icon: UtensilsCrossed,
