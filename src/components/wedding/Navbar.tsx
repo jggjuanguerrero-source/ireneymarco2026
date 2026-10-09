@@ -13,9 +13,7 @@ const Navbar = () => {
     { href: '#ourstory', label: t('nav.ourstory') },
     { href: '#wedding', label: t('nav.wedding') },
     { href: '#prewedding', label: t('nav.prewedding') },
-    { href: '#getting-there', label: t('nav.gettingThere') },
-    { href: '#travel', label: t('nav.travel') },
-    { href: '#rsvp', label: t('nav.rsvp') },
+    // Ocultas a 1 día de la boda: getting-there, travel, rsvp
     { href: '#gift', label: t('nav.gift') },
     { href: '#music', label: t('nav.music') },
   ];
@@ -31,7 +29,7 @@ const Navbar = () => {
 
   // IntersectionObserver for active section detection
   useEffect(() => {
-    const sectionIds = ['ourstory', 'wedding', 'prewedding', 'getting-there', 'travel', 'rsvp', 'gift', 'music'];
+    const sectionIds = ['ourstory', 'wedding', 'prewedding', 'gift', 'music'];
     const observers: IntersectionObserver[] = [];
 
     sectionIds.forEach((id) => {

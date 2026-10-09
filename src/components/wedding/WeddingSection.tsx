@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useInView } from 'framer-motion';
-import { Bus, Ship, Church, AlertTriangle, UtensilsCrossed, PartyPopper, MapPin, Shirt, Camera } from 'lucide-react';
+import { Bus, Ship, Church, AlertTriangle, UtensilsCrossed, PartyPopper, MapPin, Shirt, Camera, Hotel } from 'lucide-react';
 import iglesiaImg from '@/assets/iglesia.jpg';
 import restauranteImg from '@/assets/restaurante.jpg';
 
@@ -36,6 +36,15 @@ const WeddingSection = () => {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   const timeline = [
+    {
+      icon: Hotel,
+      time: t('sections.wedding.step0Time'),
+      label: t('sections.wedding.step0Label'),
+      location: t('sections.wedding.step0Location'),
+      mapsHref: MAPS.hotel,
+      note: null,
+      warning: false,
+    },
     {
       icon: Bus,
       time: t('sections.wedding.step1Time'),
