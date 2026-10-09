@@ -108,7 +108,7 @@ const WeddingSection = () => {
       label: t('sections.wedding.step6Label'),
       location: null,
       mapsHref: null,
-      note: null,
+      note: t('sections.wedding.step6Note'),
       warning: false,
     },
   ];
