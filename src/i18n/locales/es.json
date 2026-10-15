@@ -7,7 +7,8 @@
     "gettingThere": "Cómo Llegar",
     "rsvp": "RSVP",
     "gift": "Regalo",
-    "music": "Música"
+    "music": "Música",
+    "photos": "Fotos"
   },
   "hero": {
     "date": "10 de Octubre, 2026",
@@ -28,6 +29,16 @@
       "description": "¡Holaaaa!\n\nDespués de 7 años empezando en Cranfield, estableciéndonos en Alemania, viajando por el mundo, participando en muchas carreras y con el itañol como idioma principal ha llegado el momento tan esperado. ¡Nos casamos! ¿Y qué mejor plan que celebrarlo rodeados de las personas que más queremos y que han formado parte de nuestro camino?",
       "infoNote": "Aquí os dejamos toda la información para que podáis ir organizando vuestro viaje.",
       "imageAlt": "Irene y Marco en el Taj Mahal"
+    },
+    "photos": {
+      "title": "Comparte tus fotos",
+      "subtitle": "¡Gracias por haber formado parte de un día tan especial para nosotros! 🤍",
+      "description": "Hemos creado una carpeta para reunir todas las fotos y vídeos que hicisteis durante la boda, ¡y nos haría muchísima ilusión verlos! La calidad al enviarlas por WhatsApp, incluso en HD, es bastante inferior a la de los archivos originales, así que preferimos recopilarlas de esta forma.",
+      "feature1": "Sin apps ni registros: solo tienes que entrar en el enlace y subir todo lo que tengas.",
+      "feature2": "Plataforma de pago cubierta por nosotros, para mantener la privacidad y seguridad del contenido compartido.",
+      "feature3": "Las fotos y vídeos se guardan directamente en nuestro almacenamiento, sin ocupar espacio del tuyo.",
+      "cta": "Subir fotos y vídeos",
+      "ctaNote": "Os llevará apenas unos minutos 💛"
     },
     "wedding": {
       "title": "El Gran Día",

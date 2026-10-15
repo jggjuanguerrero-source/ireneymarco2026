@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import Navbar from '@/components/wedding/Navbar';
 import Hero from '@/components/wedding/Hero';
+import PhotosSection from '@/components/wedding/PhotosSection';
 import OurStorySection from '@/components/wedding/OurStorySection';
 import WeddingSection from '@/components/wedding/WeddingSection';
 import PreWeddingSection from '@/components/wedding/PreWeddingSection';
@@ -18,6 +19,7 @@ const Index = () => {
       <Navbar />
       <Hero />
       <div className="hidden md:block md:h-16 lg:h-24 bg-background" />
+      <PhotosSection />
       <OurStorySection />
       <WeddingSection />
       <PreWeddingSection />
