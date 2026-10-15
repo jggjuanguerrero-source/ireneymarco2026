@@ -23,17 +23,7 @@ const Hero = () => {
           ZONA SUPERIOR (65%) — Texto exclusivo, padding agresivo arriba
           ═══════════════════════════════════════════════════════════════ */}
       <div className="relative z-20 flex flex-col items-center justify-center text-center px-6 pt-24 md:pt-28 lg:pt-32 pb-4 min-h-[65vh]">
-        {/* Save the date */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="font-body italic text-base md:text-lg text-muted-foreground tracking-widest mb-4 md:mb-6"
-        >
-          save the date
-        </motion.p>
-
-        {/* Names */}
+        {/* Nombres */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -57,34 +47,14 @@ const Hero = () => {
           <div className="w-16 md:w-24 h-px bg-primary/60" />
         </motion.div>
 
-        {/* Date */}
+        {/* Línea conmemorativa (fecha y lugar) */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.8 }}
-          className="font-serif text-lg md:text-xl lg:text-2xl tracking-[0.1em] text-foreground mb-1 md:mb-2"
+          className="font-body text-sm md:text-base tracking-[0.15em] text-muted-foreground mb-6 md:mb-8"
         >
-          {t('hero.date')}
-        </motion.p>
-
-        {/* Small decorative line */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
-          className="flex items-center justify-center mb-1 md:mb-2"
-        >
-          <div className="w-10 md:w-14 h-px bg-primary/50" />
-        </motion.div>
-
-        {/* Location */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.8 }}
-          className="font-script text-2xl md:text-3xl text-primary mb-6 md:mb-8"
-        >
-          {t('hero.location')}
+          {t('hero.date')} · {t('hero.location')}
         </motion.p>
 
         {/* Mensaje celebrativo (sustituye a la cuenta atrás tras la boda) */}
