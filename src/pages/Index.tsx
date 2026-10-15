@@ -18,10 +18,10 @@ const Index = () => {
       <Hero />
       <div className="hidden md:block md:h-16 lg:h-24 bg-background" />
       <PhotosSection />
-      <OurStorySection />
       {/* Ocultas tras la boda: WeddingSection, PreWeddingSection, MusicSection */}
       {/* Ocultas a 1 día de la boda: GettingThereSection, TravelSection, RSVPSection */}
       <GiftSection />
+      <OurStorySection />
       <Footer />
     </div>
   );
