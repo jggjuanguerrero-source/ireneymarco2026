@@ -97,7 +97,8 @@ const Hero = () => {
           {t('hero.celebrate')}
         </motion.p>
 
-        {/* CTA Button */}
+        {/* CTA ocultado junto con la sección RSVP */}
+        {/*
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -119,6 +120,7 @@ const Hero = () => {
             {t('hero.cta')}
           </a>
         </motion.div>
+        */}
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
