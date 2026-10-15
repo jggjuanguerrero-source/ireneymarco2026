@@ -3,12 +3,10 @@ import Navbar from '@/components/wedding/Navbar';
 import Hero from '@/components/wedding/Hero';
 import PhotosSection from '@/components/wedding/PhotosSection';
 import OurStorySection from '@/components/wedding/OurStorySection';
-import WeddingSection from '@/components/wedding/WeddingSection';
-import PreWeddingSection from '@/components/wedding/PreWeddingSection';
+// Ocultas tras la boda: WeddingSection, PreWeddingSection, MusicSection
 // Ocultas a 1 día de la boda: GettingThereSection, TravelSection, RSVPSection
 
 import GiftSection from '@/components/wedding/GiftSection';
-import MusicSection from '@/components/wedding/MusicSection';
 import Footer from '@/components/wedding/Footer';
 
 const Index = () => {
@@ -21,11 +19,9 @@ const Index = () => {
       <div className="hidden md:block md:h-16 lg:h-24 bg-background" />
       <PhotosSection />
       <OurStorySection />
-      <WeddingSection />
-      <PreWeddingSection />
+      {/* Ocultas tras la boda: WeddingSection, PreWeddingSection, MusicSection */}
       {/* Ocultas a 1 día de la boda: GettingThereSection, TravelSection, RSVPSection */}
       <GiftSection />
-      <MusicSection />
       <Footer />
     </div>
   );
