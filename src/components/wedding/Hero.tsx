@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-import Countdown from './Countdown';
+// import Countdown from './Countdown'; // Oculto tras la boda
 import veniceWatercolor from '@/assets/venice-horizontal.jpg';
 
 const Hero = () => {
@@ -87,12 +87,18 @@ const Hero = () => {
           {t('hero.location')}
         </motion.p>
 
-        {/* Countdown */}
-        <div className="md:bg-background/60 md:backdrop-blur-sm rounded-2xl px-6 py-4">
-          <Countdown />
-        </div>
+        {/* Mensaje celebrativo (sustituye a la cuenta atrás tras la boda) */}
+        <motion.p
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.2, duration: 0.9 }}
+          className="font-script text-4xl md:text-6xl text-primary mt-2 md:mt-4"
+        >
+          {t('hero.celebrate')}
+        </motion.p>
 
-        {/* CTA Button */}
+        {/* CTA ocultado junto con la sección RSVP */}
+        {/*
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -114,6 +120,7 @@ const Hero = () => {
             {t('hero.cta')}
           </a>
         </motion.div>
+        */}
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
