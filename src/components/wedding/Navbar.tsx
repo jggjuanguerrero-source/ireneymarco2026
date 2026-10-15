@@ -11,10 +11,10 @@ const Navbar = () => {
 
   const navLinks = [
     { href: '#photos', label: t('nav.photos') },
-    { href: '#ourstory', label: t('nav.ourstory') },
     // Ocultas tras la boda: wedding, prewedding, music
     // Ocultas a 1 día de la boda: getting-there, travel, rsvp
     { href: '#gift', label: t('nav.gift') },
+    { href: '#ourstory', label: t('nav.ourstory') },
   ];
 
   useEffect(() => {
