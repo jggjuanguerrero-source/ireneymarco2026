@@ -10,6 +10,7 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState('');
 
   const navLinks = [
+    { href: '#photos', label: t('nav.photos') },
     { href: '#ourstory', label: t('nav.ourstory') },
     { href: '#wedding', label: t('nav.wedding') },
     { href: '#prewedding', label: t('nav.prewedding') },
@@ -29,7 +30,7 @@ const Navbar = () => {
 
   // IntersectionObserver for active section detection
   useEffect(() => {
-    const sectionIds = ['ourstory', 'wedding', 'prewedding', 'gift', 'music'];
+    const sectionIds = ['photos', 'ourstory', 'wedding', 'prewedding', 'gift', 'music'];
     const observers: IntersectionObserver[] = [];
 
     sectionIds.forEach((id) => {
